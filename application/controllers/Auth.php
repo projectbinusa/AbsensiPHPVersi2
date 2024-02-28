@@ -16,6 +16,20 @@ class Auth extends CI_Controller
 
     public function index()
     {
+        // Cek apakah pengguna sudah login
+        if ($this->session->userdata('logged_in') === true) {
+            // Jika sudah login, arahkan ke halaman yang sesuai dengan peran pengguna
+            $role = $this->session->userdata('role');
+            if ($role == 'superadmin') {
+                redirect(base_url('superadmin'));
+            } elseif ($role == 'admin') {
+                redirect(base_url('admin'));
+            } elseif ($role == 'user') {
+                redirect(base_url('user'));
+            }
+        }
+
+        // Jika belum login, tampilkan halaman login
         $this->load->view('auth/login');
     }
 

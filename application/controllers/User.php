@@ -175,73 +175,6 @@ class User extends CI_Controller
         $this->load->view('page/user/pulang', $data);
     }
 
-    public function aksi_pulang()
-    {
-        $id_user = $this->session->userdata('id_user');
-
-        setlocale(LC_TIME, 'id_ID');
-        date_default_timezone_set('Asia/Jakarta');
-        $tanggal = date('Y-m-d');
-
-        // Cek apakah absen masuk belum selesai
-        $absensi_belum_selesai = $this->user_model->getAbsensiBelumSelesai(
-            $tanggal,
-            $id_user
-        );
-
-        if ($absensi_belum_selesai) {
-            $username = $this->session->userdata('username');
-            $currentDateTime = date('Y-m-d H:i:s');
-
-            $this->db->where('tanggal_absen', $tanggal);
-            $this->db->where('status', 0);
-            date_default_timezone_set('Asia/Jakarta');
-            $jam = date('H:i:s');
-            $image_data = $this->input->post('image_data');
-
-            $img = str_replace('data:image/png;base64,', '', $image_data);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-
-            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
-            file_put_contents($foto_pulang, $data);
-
-            // Menyimpan jam pulang
-            $data = [
-                'status' => 1,
-                'jam_pulang' => $jam,
-                'foto_pulang' => $foto_pulang,
-                'lokasi_pulang' => $this->input->post('lokasi_pulang'),
-                'keterangan_pulang_awal' => $this->input->post(
-                    'keterangan_pulang_awal'
-                ),
-            ];
-
-            // Contoh update status absensi pulang
-            $this->user_model->updateStatusAbsenPulang($tanggal, $data);
-
-            // Get absen masuk time
-            $absen_masuk = $this->user_model->getAbsenMasuk($tanggal, $id_user); // Anda perlu mengimplementasikan fungsi ini di model Anda
-
-            // Hitung jam kerja
-            $jam_kerja = $this->hitungJamKerja($absen_masuk->jam_masuk, $jam); // Anda perlu mengimplementasikan fungsi ini
-
-            // Set flashdata untuk berhasil pulang dengan jam kerja
-            $this->session->set_flashdata(
-                'berhasil_pulang',
-                'Berhasil Pulang. Jam kerja hari ini: ' . $jam_kerja
-            );
-
-            redirect('user');
-        } else {
-            $this->session->set_flashdata(
-                'gagal_pulang',
-                'Anda tidak bisa melakukan absen pulang sekarang.'
-            );
-            redirect('user');
-        }
-    }
-
     public function profile()
     {
         if ($this->session->userdata('id')) {
@@ -469,6 +402,78 @@ class User extends CI_Controller
                 );
                 redirect(base_url('user'));
             }
+        }
+    }
+    
+    public function aksi_pulang()
+    {
+        $id_user = $this->session->userdata('id');
+        $email = $this->session->userdata('email');
+        date_default_timezone_set('Asia/Jakarta');
+        $tanggal = date('Y-m-d');
+        $jam_masuk = date('H:i:s');
+
+        // Check jika user sudah melakukan absen atau izin pada hari ini
+        $already_absent = $this->user_model->cek_absen($id_user, $tanggal);
+        var_dump($already_absent);
+
+        // Periksa absensi terlambat atau lebih awal berdasarkan shift
+        $shiftInfo = $this->user_model->get_shift_info($id_user);
+        $shiftStart = strtotime($shiftInfo['jam_masuk']);
+        $shiftEnd = strtotime($shiftInfo['jam_pulang']);
+
+        $absensiTimestamp = strtotime($jam_masuk);
+
+        if ($already_absent) {
+            $username = $this->session->userdata('username');
+            $currentDateTime = date('Y-m-d H:i:s');
+
+            $this->db->where('tanggal_absen', $tanggal);
+            $this->db->where('status', 0);
+            date_default_timezone_set('Asia/Jakarta');
+            $jam = date('H:i:s');
+            $image_data = $this->input->post('image_data');
+
+            $img = str_replace('data:image/png;base64,', '', $image_data);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+
+            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
+            file_put_contents($foto_pulang, $data);
+
+            // Menyimpan jam pulang
+            $data = [
+                'status' => 1,
+                'jam_pulang' => $jam,
+                'foto_pulang' => $foto_pulang,
+                'lokasi_pulang' => $this->input->post('lokasi_pulang'),
+                'keterangan_pulang_awal' => $this->input->post(
+                    'keterangan_pulang_awal'
+                ),
+            ];
+
+            // Contoh update status absensi pulang
+            $this->user_model->updateStatusAbsenPulang($tanggal, $data);
+
+            // Get absen masuk time
+            $absen_masuk = $this->user_model->getAbsenMasuk($tanggal, $id_user); // Anda perlu mengimplementasikan fungsi ini di model Anda
+
+            // Hitung jam kerja
+            // $jam_kerja = $this->hitungJamKerja($absen_masuk->jam_masuk, $jam); // Anda perlu mengimplementasikan fungsi ini
+
+            // Set flashdata untuk berhasil pulang dengan jam kerja
+            $this->session->set_flashdata(
+                'berhasil_pulang',
+                'Berhasil Pulang'
+            );
+
+            redirect('user');
+        } else {
+            $this->session->set_flashdata(
+                'gagal_pulang',
+                'Anda tidak bisa melakukan absen pulang sekarang.'
+            );
+            redirect('user');
         }
     }
 
