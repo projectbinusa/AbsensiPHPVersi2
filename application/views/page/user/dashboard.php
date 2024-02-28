@@ -15,14 +15,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
-    @media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
     .disable-mobile {
-        pointer-events: none; 
-        opacity: 0.6; 
-        cursor: not-allowed; 
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 }
 </style>
+
 <body>
     <?php $this->load->view('components/sidebar_user'); ?>
     <div class="p-2 sm:ml-64">
@@ -43,7 +44,7 @@
                             <div>
                                 <?php if (!$absens): ?>
                                 <a href="<?= base_url('user/absen') ?>"
-                                    class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2">
+                                    class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2 disable-mobile">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i>
                                     </div>
@@ -53,8 +54,8 @@
                                     </div>
                                 </a>
                                 <?php else: ?>
-                                <div class="md:flex w-full flex-col cursor-not-allowed items-center bg-green-400 border-green-200 rounded-lg shadow  md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2 disable-mobile"
-                                    style="opacity: 0.6;">
+                                <div
+                                    class="md:flex w-full flex-col items-center bg-green-300 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl px-5 py-2 opacity-50 cursor-not-allowed">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i>
                                     </div>
@@ -65,9 +66,8 @@
                                 </div>
                                 <?php endif; ?>
                             </div>
-
                             <div>
-                                <?php if ($absens): ?>
+                                <?php if ($absensi->foto_pulang === '-'): ?>
                                 <a href="<?= base_url('user/pulang') ?>"
                                     class="md:flex w-full flex-col items-center bg-red-500 border-red-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-red-100 dark:border-red-400 dark:bg-red-500 dark:hover:bg-red-500 px-5 py-2">
                                     <div class="hidden md:block w-2/5">
@@ -123,6 +123,7 @@
                     <div class="md:hidden">
                         <div class="grid grid-cols-4 md:grid-cols-4 gap-4">
                             <div class="mb-4">
+                                <?php if (!$absens): ?>
                                 <a href="<?= base_url('user/absen') ?>"
                                     class="w-full flex flex-col items-center bg-green-400 border-green-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
@@ -132,9 +133,21 @@
                                 <div class="text-center md:text-left">
                                     <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Masuk</h3>
                                 </div>
+                                <?php else: ?>
+                                <button
+                                    class="w-full flex flex-col items-center bg-green-300 border-green-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2">
+                                    <div class="w-2/5 md:w-auto my-4">
+                                        <i class="fa-solid fa-arrow-right-to-bracket fa-2xl mb-2 md:mb-0"></i>
+                                    </div>
+                                </button>
+                                <div class="text-center md:text-left">
+                                    <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Masuk</h3>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mb-4">
+                                <?php if ($absensi->foto_pulang === '-'): ?>
                                 <a href="<?= base_url('user/pulang') ?>"
                                     class="w-full flex flex-col items-center bg-red-500 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-red-100 dark:border-red-400 dark:bg-red-500 dark:hover:bg-red-500 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
@@ -144,6 +157,17 @@
                                 <div class="text-center md:text-left">
                                     <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Pulang</h3>
                                 </div>
+                                <?php else: ?>
+                                <button
+                                    class="w-full flex flex-col items-center bg-red-400 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-red-100 dark:border-red-400 dark:bg-red-500 dark:hover:bg-red-500 px-5 py-2">
+                                    <div class="w-2/5 md:w-auto my-4">
+                                        <i class="fa-solid fa-arrow-right-from-bracket fa-2xl mb-2 md:mb-0"></i>
+                                    </div>
+                                </button>
+                                <div class="text-center md:text-left">
+                                    <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Pulang</h3>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mb-4">
