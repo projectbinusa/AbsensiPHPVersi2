@@ -15,14 +15,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
-    @media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
     .disable-mobile {
-        pointer-events: none; 
-        opacity: 0.6; 
-        cursor: not-allowed; 
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 }
 </style>
+
 <body>
     <?php $this->load->view('components/sidebar_user'); ?>
     <div class="p-2 sm:ml-64">
@@ -43,7 +44,7 @@
                             <div>
                                 <?php if (!$absens): ?>
                                 <a href="<?= base_url('user/absen') ?>"
-                                    class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2">
+                                    class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2 disable-mobile">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i>
                                     </div>
@@ -53,8 +54,8 @@
                                     </div>
                                 </a>
                                 <?php else: ?>
-                                <div class="md:flex w-full flex-col cursor-not-allowed items-center bg-green-400 border-green-200 rounded-lg shadow  md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2 disable-mobile"
-                                    style="opacity: 0.6;">
+                                <div
+                                    class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl px-5 py-2 opacity-50 cursor-not-allowed">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i>
                                     </div>
@@ -65,7 +66,20 @@
                                 </div>
                                 <?php endif; ?>
                             </div>
-
+                            <script>
+                            window.onload = function() {
+                                var screenWidth = window.innerWidth;
+                                if (screenWidth <= 768) {
+                                    <?php if (!$absens): ?>
+                                    var absenButton = document.querySelector('.bg-green-400');
+                                    <?php else: ?>
+                                    var absenButton = document.querySelector('.bg-red-500');
+                                    <?php endif; ?>
+                                    absenButton.style.pointerEvents = 'none';
+                                    absenButton.style.opacity = '0.6';
+                                }
+                            };
+                            </script>
                             <div>
                                 <?php if ($absens): ?>
                                 <a href="<?= base_url('user/pulang') ?>"
