@@ -353,165 +353,158 @@
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
-
-            <footer class="bg-indigo-500 shadow dark:bg-gray-900">
-                <div class="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-                    <span class="text-sm text-gray-900 sm:text-center dark:text-gray-400">© 2024 <a href=""
-                            class="hover:underline">Absensi</a> by Excellent Computer
-                    </span>
-                </div>
-            </footer>
         </div>
-
-        <script>
-        function updateTime() {
-            var now = new Date();
-            var hari = now.toLocaleDateString('id-ID', {
-                weekday: 'long'
-            });
-            var tanggal = now.getDate();
-            var bulan = now.toLocaleDateString('id-ID', {
-                month: 'long'
-            });
-            var tahun = now.getFullYear();
-            var jam = now.getHours();
-            var menit = now.getMinutes();
-            var detik = now.getSeconds();
-
-            var waktuString = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun + ' - ' + jam + ':' + menit + ':' +
-                detik;
-
-            document.getElementById('waktu').innerHTML = waktuString;
-        }
-
-        // Memanggil fungsi updateTime setiap detik
-        setInterval(updateTime, 1000);
-        </script>
-
-        <?php if ($this->session->flashdata('berhasil_absen')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_absen'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_izin')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_izin'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-
-        <?php if ($this->session->flashdata('berhasil_cuti')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_cuti'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_absen')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_absen'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_izin')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_izin'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_pulang'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('login_success')) { ?>
-        <script>
-        Swal.fire({
-            title: 'Berhasil Login',
-            text: '<?php echo $this->session->flashdata('login_success'); ?>',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        })
-        </script>
-        <?php } ?>
-        <script>
-        // Fungsi untuk men-disable tombol Absen Masuk
-        function disableAbsenButton() {
-            var absenButton = document.getElementById('absenButton');
-            absenButton.disabled = true;
-            absenButton.classList.add(
-                'disabled'
-            ); // (Opsional) Tambahkan kelas CSS 'disabled' untuk memberi gaya berbeda pada tombol yang dinonaktifkan
-        }
-
-        // Panggil fungsi disableAbsenButton jika user sudah melakukan absen
-        <?php if ($already_absent || $already_requested): ?>
-        window.onload = disableAbsenButton;
-        <?php endif; ?>
-        </script>
+        <?php $this->load->view('components/footer'); ?>
+    </div>
 </body>
+
+<script>
+function updateTime() {
+    var now = new Date();
+    var hari = now.toLocaleDateString('id-ID', {
+        weekday: 'long'
+    });
+    var tanggal = now.getDate();
+    var bulan = now.toLocaleDateString('id-ID', {
+        month: 'long'
+    });
+    var tahun = now.getFullYear();
+    var jam = now.getHours();
+    var menit = now.getMinutes();
+    var detik = now.getSeconds();
+
+    var waktuString = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun + ' - ' + jam + ':' + menit + ':' +
+        detik;
+
+    document.getElementById('waktu').innerHTML = waktuString;
+}
+
+// Memanggil fungsi updateTime setiap detik
+setInterval(updateTime, 1000);
+</script>
+
+<?php if ($this->session->flashdata('berhasil_absen')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_absen'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_izin')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_izin'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+
+<?php if ($this->session->flashdata('berhasil_cuti')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_cuti'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_absen')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_absen'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_izin')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_izin'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_pulang'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('login_success')) { ?>
+<script>
+Swal.fire({
+    title: 'Berhasil Login',
+    text: '<?php echo $this->session->flashdata('login_success'); ?>',
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 1500
+})
+</script>
+<?php } ?>
+<script>
+// Fungsi untuk men-disable tombol Absen Masuk
+function disableAbsenButton() {
+    var absenButton = document.getElementById('absenButton');
+    absenButton.disabled = true;
+    absenButton.classList.add(
+        'disabled'
+    ); // (Opsional) Tambahkan kelas CSS 'disabled' untuk memberi gaya berbeda pada tombol yang dinonaktifkan
+}
+
+// Panggil fungsi disableAbsenButton jika user sudah melakukan absen
+<?php if ($already_absent || $already_requested): ?>
+window.onload = disableAbsenButton;
+<?php endif; ?>
+</script>
 
 </html>
