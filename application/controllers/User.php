@@ -19,6 +19,7 @@ class User extends CI_Controller
 
     public function index()
     {
+        $data = ['page' => 'dashboard'];
         $tanggal = date('Y-m-d');
         $id_user = $this->session->userdata('id');
         $data['total_absen'] = $this->user_model
@@ -88,9 +89,10 @@ class User extends CI_Controller
 
         $this->load->view('page/user/lembur', $data);
     }
-
+    
     public function history_lembur()
     {
+        $data = ['page' => 'history_lembur'];
         $id_user = $this->session->userdata('id');
         $lembur_data = $this->user_model->getAllArrayData();
 
@@ -812,6 +814,7 @@ class User extends CI_Controller
 
     public function history_cuti()
     {
+        $data = ['page' => 'history_cuti'];
         $id_user = $this->session->userdata('id');
         $data['cuti'] = $this->user_model->get_cuti_data_byuser($id_user);
 
@@ -821,6 +824,7 @@ class User extends CI_Controller
 
     public function history_absensi()
     {
+        $data = ['page' => 'history_absensi'];
         $id_user = $this->session->userdata('id');
         $data['absensi'] = $this->user_model->get_absen_data($id_user);
         usort($data['absensi'], function ($a, $b) {
