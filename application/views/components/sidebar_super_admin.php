@@ -24,7 +24,7 @@ $image = $_SESSION['image'];
 <body>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 z-50 w-full bg-indigo-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-indigo-200 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -102,7 +102,7 @@ $image = $_SESSION['image'];
                     <a href="<?php echo base_url('superadmin'); ?>"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i
-                            class="fas fa-tachometer-alt fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                            class="fa-solid fa-house fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
                 </li>

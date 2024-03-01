@@ -23,7 +23,7 @@ $image = $_SESSION['image'];
 <body>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 z-50 w-full bg-indigo-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-indigo-200 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -104,7 +104,7 @@ $image = $_SESSION['image'];
                     <a href="<?php echo base_url('admin'); ?>"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i
-                            class="fas fa-tachometer-alt fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                            class="fa-solid fa-house fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
                 </li>
@@ -165,7 +165,9 @@ $image = $_SESSION['image'];
 
                         <!-- Menu Organisasi -->
                         <li>
-                            <a href="<?php echo base_url('admin/all_organisasi'); ?>"
+                            <a href="<?php echo base_url(
+                                'admin/all_organisasi'
+                            ); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-building fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
@@ -263,9 +265,7 @@ $image = $_SESSION['image'];
                     <ul id="dropdown-data" class="hidden py-2 space-y-2">
                         <!-- Menu Absensi -->
                         <li>
-                            <a href="<?php echo base_url(
-                                'admin/absensi'
-                            ); ?>"
+                            <a href="<?php echo base_url('admin/absensi'); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-address-card fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
@@ -274,9 +274,7 @@ $image = $_SESSION['image'];
                         </li>
                         <!-- Menu Cuti -->
                         <li>
-                            <a href="<?php echo base_url(
-                                'admin/cuti'
-                            ); ?>"
+                            <a href="<?php echo base_url('admin/cuti'); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-calendar-alt fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
@@ -285,9 +283,7 @@ $image = $_SESSION['image'];
                         </li>
                         <!-- Menu Kehadiran -->
                         <li>
-                            <a href="<?php echo base_url(
-                                'admin/kehadiran'
-                            ); ?>"
+                            <a href="<?php echo base_url('admin/kehadiran'); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-user-check fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
@@ -296,9 +292,7 @@ $image = $_SESSION['image'];
                         </li>
                         <!-- Menu Mingguan -->
                         <li>
-                            <a href="<?php echo base_url(
-                                'admin/lembur'
-                            ); ?>"
+                            <a href="<?php echo base_url('admin/lembur'); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-business-time fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
