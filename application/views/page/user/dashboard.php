@@ -190,7 +190,7 @@
 
                             <div class="mb-4">
                                 <a href="<?php echo base_url('user/izin'); ?>"
-                                    class="w-full flex flex-col items-center bg-red-500 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    class="w-full  flex flex-col items-center bg-red-500 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
                                         <i class="fa-solid fa-circle-xmark fa-2xl mb-2 md:mb-0"></i>
                                     </div>
@@ -200,10 +200,11 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="grid mt-3 grid-cols-2 md:grid-cols-2">
                             <div class="mb-4">
                                 <a href="<?php echo base_url('user/cuti'); ?>"
-                                    class="w-2/5 mx-auto flex flex-col items-center bg-indigo-400 border-indigo-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    class="w-1/2 mx-auto flex flex-col items-center bg-indigo-400 border-indigo-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
                                         <i class="fa-solid fa-calendar-day fa-2xl mb-2 md:mb-0"></i>
                                     </div>
@@ -215,7 +216,7 @@
 
                             <div class="mb-4">
                                 <a href="<?php echo base_url('user/lembur'); ?>"
-                                    class="w-2/5 mx-auto flex flex-col items-center bg-yellow-200 border-yellow-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
+                                    class="w-1/2 mx-auto flex flex-col items-center bg-yellow-200 border-yellow-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
                                         <i class="fa-solid fa-clock fa-2xl mb-2 md:mb-0"></i>
                                     </div>
