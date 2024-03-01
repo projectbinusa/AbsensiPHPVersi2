@@ -360,6 +360,38 @@ class User_model extends CI_Model
         return $this->db->affected_rows();
     }
 
+    // public function edit_user($id_user, $data)
+    // {
+    //     // Lakukan pembaruan data Admin
+    //     $this->db->where('id_user', $id_user);
+    //     $this->db->update('user', $data);
+    // }
+
+    public function edit_user($id_user, $data)
+{
+    try {
+        // Lakukan pembaruan data User
+        $this->db->trans_start(); // Mulai transaksi database
+
+        $this->db->where('id_user', $id_user);
+        $this->db->update('user', $data);
+
+        $this->db->trans_complete(); // Akhiri transaksi database
+
+        if ($this->db->trans_status() === FALSE) {
+            // Jika transaksi gagal, lakukan rollback
+            $this->db->trans_rollback();
+        } else {
+            // Jika transaksi berhasil, lakukan commit
+            $this->db->trans_commit();
+        }
+    } catch (Exception $e) {
+        // Tangkap exception jika terjadi kesalahan
+        echo 'Error: ' . $e->getMessage();
+    }
+}
+
+
     // Memperbarui gambar pengguna
     public function update_image($user_id, $new_image)
     {
@@ -426,10 +458,24 @@ class User_model extends CI_Model
         return $query->row(); // Mengembalikan satu baris hasil query
     }
 
-    public function updateStatusAbsenPulang($tanggal, $data)
+    // public function updateStatusAbsenPulang($tanggal, $data)
+    // {
+    //     $this->db->update('absensi', $data);
+    //     return $this->db->affected_rows(); // Mengembalikan jumlah baris yang terpengaruh oleh query
+    // }
+
+    public function updateStatusAbsenPulang($id_user, $tanggal, $data_pulang)
     {
-        $this->db->update('absensi', $data);
-        return $this->db->affected_rows(); // Mengembalikan jumlah baris yang terpengaruh oleh query
+        // Debug: Menampilkan payload yang dikirimkan
+        // echo "Payload for UpdateStatusAbsenPulang:<br>";
+        // echo "ID User: $id_user<br>";
+        // echo "Tanggal: $tanggal<br>";
+        // echo "Data Pulang:<br>";
+        // var_dump($data_pulang);
+
+        $this->db->where('id_user', $id_user);
+        $this->db->where('tanggal_absen', $tanggal);
+        $this->db->update('absensi', $data_pulang);
     }
 
     public function getAbsensiByDate($tanggal)

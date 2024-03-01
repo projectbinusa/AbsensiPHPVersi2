@@ -110,8 +110,8 @@
                     <div class="bg-white rounded-lg shadow-md p-8 border border-gray-300">
                         <div class="text-3xl font-semibold mb-8">Detail Akun</div>
                         <form method="post" action="<?= base_url(
-                            'user/edit_profile'
-                        ) ?>">
+                                'user/edit_profile'
+                            ) ?>">
                             <div class="mb-4">
                                 <label for="nama_lengkap" class="block mb-1 text-sm">Nama Lengkap</label>
                                 <input type="text" autocomplete="off" class="border rounded-md w-full p-2"
@@ -125,9 +125,9 @@
                             <div class="mb-4">
                                 <label for="id_organisasi" class="block mb-1 text-sm">Organisasi</label>
                                 <select id="id_organisasi" name="id_organisasi" class="border rounded-md w-full p-2">
-                                    <option selected><?php echo nama_organisasi(
-                                        $id_organisasi
-                                    ); ?></option>
+                                    <option selected value="<?php echo $user->id_organisasi ?>"><?php echo nama_organisasi(
+                                            $id_organisasi
+                                        ); ?></option>
                                     <?php foreach ($organisasi as $row): ?>
                                     <option value="<?php echo $row->id_organisasi; ?>">
                                         <?php echo $row->nama_organisasi; ?>
@@ -139,9 +139,9 @@
                             <div class="mb-4">
                                 <label for="id_jabatan" class="block mb-1 text-sm">Jabatan</label>
                                 <select id="id_jabatan" name="id_jabatan" class="border rounded-md w-full p-2">
-                                    <option selected><?php echo nama_jabatan(
-                                        $id_jabatan
-                                    ); ?></option>
+                                    <option selected value="<?php echo $user->id_jabatan ?>"><?php echo nama_jabatan(
+                                            $id_jabatan
+                                        ); ?></option>
                                     <?php foreach ($jabatan as $row): ?>
                                     <option value="<?php echo $row->id_jabatan; ?>">
                                         <?php echo $row->nama_jabatan; ?>
@@ -153,9 +153,9 @@
                             <div class="mb-4">
                                 <label for="id_shift" class="block mb-1 text-sm">Shift</label>
                                 <select id="id_shift" name="id_shift" class="border rounded-md w-full p-2">
-                                    <option selected><?php echo nama_shift(
-                                        $id_shift
-                                    ); ?></option>
+                                    <option selected value="<?php echo $user->id_shift ?>"><?php echo nama_shift(
+                                            $id_shift
+                                        ); ?></option>
                                     <?php foreach ($shift as $row): ?>
                                     <option value="<?php echo $row->id_shift; ?>">
                                         <?php echo $row->nama_shift; ?>
