@@ -66,18 +66,12 @@ class Admin extends CI_Controller
     }
 
     // Sidebar
-    // public function sidebar()
-    // {
-    //     $id_admin = $this->session->userdata('id');
-    //     $image = $this->session->userdata('image');
-    //     $username = $this->session->userdata('username');
-    //     $email = $this->session->userdata('email');
-    //     $data = [
-    //         $id_admin, $image, $username, $email
-    //     ];
-    //     $this->load->view('components/sidebar_admin', $data);
-    // }
-
+    public function sidebar(){
+        $id_admin = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($id_admin);
+        $this->load->view('components/sidebar_admin', $data);
+    }
+    
     // Page Organisasi
     public function organisasi()
     {
@@ -721,6 +715,8 @@ class Admin extends CI_Controller
             'username' => $username,
         ];
 
+        $this->session->set_userdata($data);
+        
         $update_result = $this->admin_model->update_data('admin', $data, [
             'id_admin' => $this->session->userdata('id'),
         ]);
