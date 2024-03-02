@@ -48,6 +48,12 @@ class User extends CI_Controller
         $this->load->view('page/user/dashboard', $data);
     }
 
+    public function sidebar(){
+        $id_user = $this->session->userdata('id');
+        $data['user'] = $this->user_model->getUserByID($id_user);
+        $this->load->view('components/sidebar_user', $data);
+    }
+
     public function absen()
     {
         $data = ['page' => 'absensi'];
@@ -206,103 +212,50 @@ class User extends CI_Controller
         }
     }
 
-    // Pembaruan profil admin
-    // public function edit_profile()
-    // {
-    //     $email = $this->input->post('email');
-    //     $username = $this->input->post('username');
-    //     $id_organisasi = $this->input->post('id_organisasi');
-    //     $id_jabatan = $this->input->post('id_jabatan');
-    //     $id_shift = $this->input->post('id_shift');
-
-    //     if ($id_organisasi && $id_jabatan && $id_shift) {
-    //         $data = [
-    //             'email' => $email,
-    //             'username' => $username,
-    //             'id_organisasi' => $id_organisasi,
-    //             'id_jabatan' => $id_jabatan,
-    //             'id_shift' => $id_shift,
-    //         ];
-
-    //         $update_result = $this->user_model->update_data('user', $data, [
-    //             'id_user' => $this->session->userdata('id'),
-    //         ]);
-
-    //         if ($update_result) {
-    //             $this->session->set_flashdata(
-    //                 'berhasil_ubah_foto',
-    //                 'Data berhasil diperbarui'
-    //             );
-    //         } else {
-    //             $this->session->set_flashdata(
-    //                 'gagal_update',
-    //                 'Gagal memperbarui data'
-    //             );
-    //         }
-    //     } else {
-    //         // Handle kesalahan jika nilai-nilai tidak valid
-    //         $this->session->set_flashdata(
-    //             'gagal_update',
-    //             'Nilai yang diberikan tidak valid'
-    //         );
-    //     }
-
-    //     redirect(base_url('user/profile'));
-    // }
-
     public function edit_profile()
-{
-    $email = $this->input->post('email');
-    $username = $this->input->post('username');
-    $id_organisasi = $this->input->post('id_organisasi');
-    $id_jabatan = $this->input->post('id_jabatan');
-    $id_shift = $this->input->post('id_shift');
+    {
+        $email = $this->input->post('email');
+        $username = $this->input->post('username');
+        // $id_organisasi = $this->input->post('id_organisasi');
+        $id_jabatan = $this->input->post('id_jabatan');
+        $id_shift = $this->input->post('id_shift');
 
-    if ($id_organisasi && $id_jabatan && $id_shift) {
-        $data = [
-            'email' => $email,
-            'username' => $username,
-            'id_organisasi' => $id_organisasi,
-            'id_jabatan' => $id_jabatan,
-            'id_shift' => $id_shift,
-        ];
+        if ($id_jabatan && $id_shift) {
+            $data = [
+                'email' => $email,
+                'username' => $username,
+                // 'id_organisasi' => $id_organisasi,
+                'id_jabatan' => $id_jabatan,
+                'id_shift' => $id_shift,
+            ];
 
-        // var_dump($data); // Periksa apakah data sesuai dengan yang diharapkan
+            $this->session->set_userdata($data);
 
-        $update_result = $this->user_model->update_data('user', $data, [
-            'id_user' => $this->session->userdata('id'),
-        ]);
+            $update_result = $this->user_model->update_data('user', $data, [
+                'id_user' => $this->session->userdata('id'),
+            ]);
 
-//         var_dump($update_result); // Periksa hasil dari pembaruan data
-// var_dump($this->db->error()); // Tampilkan informasi kesalahan database
-
-        if ($update_result) {
-            $this->session->set_flashdata(
-                'berhasil_ubah_foto',
-                'Data berhasil diperbarui'
-            );
+            if ($update_result) {
+                $this->session->set_flashdata(
+                    'berhasil_ubah_foto',
+                    'Data berhasil diperbarui'
+                );
+            } else {
+                $this->session->set_flashdata(
+                    'gagal_update',
+                    'Gagal memperbarui data. Silakan cek log atau hubungi administrator.'
+                );
+            }
         } else {
-            // Tambahkan pesan kesalahan
+            // Handle kesalahan jika nilai-nilai tidak valid
             $this->session->set_flashdata(
                 'gagal_update',
-                'Gagal memperbarui data. Silakan cek log atau hubungi administrator.'
+                'Nilai yang diberikan tidak valid'
             );
-
-            // Debug: Tampilkan informasi error dari database
-            // $db_error = $this->db->error();
-            // var_dump($db_error);
         }
-    } else {
-        // Handle kesalahan jika nilai-nilai tidak valid
-        $this->session->set_flashdata(
-            'gagal_update',
-            'Nilai yang diberikan tidak valid'
-        );
+
+        redirect(base_url('user/profile'));
     }
-
-    redirect(base_url('user/profile'));
-}
-
 
     public function izin()
     {

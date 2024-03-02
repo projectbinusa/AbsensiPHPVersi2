@@ -41,6 +41,13 @@ class SuperAdmin extends CI_Controller
         $this->load->view('page/super_admin/dashboard', $data);
     }
 
+    // Sidebar
+    public function sidebar(){
+        $id_superadmin = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($id_superadmin);
+        $this->load->view('components/sidebar_super_admin', $data);
+    }
+
     // Page Organisasi
     public function organisasi()
     {
@@ -1035,6 +1042,8 @@ class SuperAdmin extends CI_Controller
             'username' => $username,
         ];
 
+        $this->session->set_userdata($data);
+        
         $update_result = $this->super_model->update_data('superadmin', $data, [
             'id_superadmin' => $this->session->userdata('id'),
         ]);
