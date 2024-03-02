@@ -87,6 +87,10 @@ function nama_organisasi($id_organisasi)
     }
 }
 
-// ... (sisa kode Anda)
-
+function sidebar() {
+    $CI = &get_instance();
+    $id_user = $CI->session->userdata('id');
+    $data['user'] = $CI->user_model->getUserByID($id_user);
+    $CI->load->view('components/sidebar_user', $data);
+}
 ?>
