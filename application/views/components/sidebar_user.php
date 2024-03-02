@@ -13,36 +13,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 </head>
 
-<?php
-$id_user = $_SESSION['id']; // Misalkan informasi session disimpan dalam $_SESSION
-$email = $_SESSION['email'];
-$username = $_SESSION['username'];
-$image = $_SESSION['image'];
-
-// $currentDate = date('Y-m-d');
-// $absensiHariIni = $this->user_model->getAbsensiByDate($currentDate); // Mendapatkan data absensi hari ini
-
-// if (empty($absensiHariIni) || !$absensiHariIni[0]->status) {
-//     // Tidak ada data absensi atau status belum absen masuk
-//     $pulangLink = '#'; // Atur link ke '#' jika tidak bisa melakukan absen pulang
-//     $pulangOnClick = "Swal.fire({
-//         title: 'Maaf!',
-//         text: 'Anda belum melakukan absen masuk hari ini.',
-//         icon: 'error',
-//         showConfirmButton: false, // Menghilangkan tombol OK
-//         timer: 2000 // Timer dalam milidetik (misalnya, 3000 untuk 3 detik)
-//     });";
-// } else {
-//     // Ada data absensi hari ini dan status absen masuk sudah dilakukan
-//     $pulangLink = base_url('user/pulang');
-//     $pulangOnClick = ''; // Tidak ada SweetAlert
-// }
-?>
-
 <body>
 
     <!-- Navbar -->
-    <nav class="fixed top-0 z-50 w-full bg-indigo-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-indigo-200 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
@@ -74,7 +48,7 @@ $image = $_SESSION['image'];
                                 aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full object-cover" src="<?= base_url(
-                                    '/images/user/' . $image
+                                    '/images/user/' . $user->image
                                 ) ?>" alt="user photo"></a>
                             </button>
                         </div>
@@ -82,10 +56,10 @@ $image = $_SESSION['image'];
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    <?= $username ?>
+                                    <?= $user->username ?>
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    <?= $email ?>
+                                    <?= $user->email ?>
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
@@ -121,7 +95,7 @@ $image = $_SESSION['image'];
                     <a href="<?php echo base_url('user'); ?>"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i
-                            class="fas fa-tachometer-alt fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                            class="fa-solid fa-house fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
                 </li>
@@ -148,6 +122,11 @@ $image = $_SESSION['image'];
                             class="fa-solid fa-business-time fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">Lembur</span>
                     </a>
+                </li>
+                <li>
+                    <div class="flex flex-col items-center w-full mt-2 border-t border-gray-700 py-5">
+                        <span class="font-semibold ">v 1.0.0</span>
+                    </div>
                 </li>
             </ul>
         </div>

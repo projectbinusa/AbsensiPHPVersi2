@@ -15,14 +15,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </head>
 <style>
-    @media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
     .disable-mobile {
-        pointer-events: none; 
-        opacity: 0.6; 
-        cursor: not-allowed; 
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 }
 </style>
+
 <body>
     <?php $this->load->view('components/sidebar_user'); ?>
     <div class="p-2 sm:ml-64">
@@ -39,7 +40,7 @@
                     <p class="text-gray-800 my-4" id="waktu"></p>
                     <hr class="my-3" style="border: 1px solid black">
                     <div class="hidden md:block">
-                        <div class="grid grid-cols-4 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-3 md:grid-cols-3 gap-4">
                             <div>
                                 <?php if (!$absens): ?>
                                 <a href="<?= base_url('user/absen') ?>"
@@ -53,19 +54,19 @@
                                     </div>
                                 </a>
                                 <?php else: ?>
-                                <div class="md:flex w-full flex-col cursor-not-allowed items-center bg-green-400 border-green-200 rounded-lg shadow  md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2 disable-mobile"
+                                <div class="md:flex w-full flex-col items-center bg-green-400 border-green-200 rounded-lg shadow md:flex-row md:max-w-xl px-5 py-2 opacity-50 cursor-not-allowed"
                                     style="opacity: 0.6;">
-                                    <div class="hidden md:block w-2/5">
+                                    <div class=" hidden md:block w-2/5">
                                         <i class="fa-solid fa-arrow-right-to-bracket fa-2xl"></i>
                                     </div>
                                     <div class="text-left p-4 leading-normal">
-                                        <h3>Jam Masuk:</h3>
+                                        <h3>Jam Masuk</h3>
                                         <p><?= $absensi->jam_masuk ?></p>
                                     </div>
                                 </div>
                                 <?php endif; ?>
-                            </div>
 
+                            </div>
                             <div>
                                 <?php if ($absens): ?>
                                 <a href="<?= base_url('user/pulang') ?>"
@@ -93,8 +94,22 @@
                             </div>
 
                             <div>
+                                <a href="<?php echo base_url('user/izin'); ?>"
+                                    class="md:flex w-full flex-col items-center bg-red-500 border-red-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    <div class="hidden md:block w-2/5">
+                                        <i class="fa-solid fa-circle-xmark fa-2xl"></i>
+                                    </div>
+                                    <div class="text-left p-4 leading-normal">
+                                        <h3>Izin</h3>
+                                        <p>Ajukan izin.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="grid mt-3 grid-cols-2 md:grid-cols-2">
+                            <div>
                                 <a href="<?php echo base_url('user/cuti'); ?>"
-                                    class="md:flex w-full flex-col items-center bg-indigo-400 border-indigo-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    class="md:flex mx-auto w-2/4 flex-col items-center bg-indigo-400 border-indigo-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-calendar-day fa-2xl"></i>
                                     </div>
@@ -107,7 +122,7 @@
 
                             <div>
                                 <a href="<?php echo base_url('user/lembur'); ?>"
-                                    class="md:flex w-full flex-col items-center bg-yellow-200 border-yellow-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
+                                    class="md:flex mx-auto w-2/4 flex-col items-center bg-yellow-200 border-yellow-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
                                     <div class="hidden md:block w-2/5">
                                         <i class="fa-solid fa-clock fa-2xl"></i>
                                     </div>
@@ -117,12 +132,16 @@
                                     </div>
                                 </a>
                             </div>
+
                         </div>
                     </div>
 
+                    <!-- MOBILE  -->
+
                     <div class="md:hidden">
-                        <div class="grid grid-cols-4 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-3 md:grid-cols-3 gap-4">
                             <div class="mb-4">
+                                <?php if (!$absens): ?>
                                 <a href="<?= base_url('user/absen') ?>"
                                     class="w-full flex flex-col items-center bg-green-400 border-green-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-green-100 dark:border-green-400 dark:bg-green-500 dark:hover:bg-green-500 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
@@ -132,9 +151,21 @@
                                 <div class="text-center md:text-left">
                                     <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Masuk</h3>
                                 </div>
+                                <?php else: ?>
+                                <div class="w-full flex flex-col items-center bg-green-400 border-green-200 rounded-full shadow md:flex-row md:max-w-xl px-5 py-2 opacity-50 cursor-not-allowed"
+                                    style="opacity: 0.6;">
+                                    <div class="w-2/5 md:w-auto my-4">
+                                        <i class="fa-solid fa-arrow-right-to-bracket fa-2xl mb-2 md:mb-0"></i>
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Masuk</h3>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mb-4">
+                                <?php if ($absens): ?>
                                 <a href="<?= base_url('user/pulang') ?>"
                                     class="w-full flex flex-col items-center bg-red-500 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-red-100 dark:border-red-400 dark:bg-red-500 dark:hover:bg-red-500 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
@@ -144,11 +175,36 @@
                                 <div class="text-center md:text-left">
                                     <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Pulang</h3>
                                 </div>
+                                <?php else: ?>
+                                <div
+                                    class="w-full flex flex-col items-center bg-red-400 border-red-200 rounded-full shadow md:flex-row md:max-w-xl px-5 py-2 opacity-50 cursor-not-allowed">
+                                    <div class="w-2/5 md:w-auto my-4">
+                                        <i class="fa-solid fa-arrow-right-from-bracket fa-2xl mb-2 md:mb-0"></i>
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Pulang</h3>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mb-4">
+                                <a href="<?php echo base_url('user/izin'); ?>"
+                                    class="w-full  flex flex-col items-center bg-red-500 border-red-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    <div class="w-2/5 md:w-auto my-4">
+                                        <i class="fa-solid fa-circle-xmark fa-2xl mb-2 md:mb-0"></i>
+                                    </div>
+                                </a>
+                                <div class="text-center md:text-left">
+                                    <h3 class="md:hidden mb-1 mt-2 text-1xl font-semibold">Izin</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid mt-3 grid-cols-2 md:grid-cols-2">
+                            <div class="mb-4">
                                 <a href="<?php echo base_url('user/cuti'); ?>"
-                                    class="w-full flex flex-col items-center bg-indigo-400 border-indigo-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
+                                    class="w-1/2 mx-auto flex flex-col items-center bg-indigo-400 border-indigo-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-indigo-100 dark:border-indigo-700 dark:bg-indigo-800 dark:hover:bg-indigo-700 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
                                         <i class="fa-solid fa-calendar-day fa-2xl mb-2 md:mb-0"></i>
                                     </div>
@@ -160,7 +216,7 @@
 
                             <div class="mb-4">
                                 <a href="<?php echo base_url('user/lembur'); ?>"
-                                    class="w-full flex flex-col items-center bg-yellow-200 border-yellow-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
+                                    class="w-1/2 mx-auto flex flex-col items-center bg-yellow-200 border-yellow-200 rounded-full shadow md:flex-row md:max-w-xl hover:bg-yellow-100 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700 px-5 py-2">
                                     <div class="w-2/5 md:w-auto my-4">
                                         <i class="fa-solid fa-clock fa-2xl mb-2 md:mb-0"></i>
                                     </div>
@@ -329,165 +385,158 @@
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
-
-            <footer class="bg-indigo-500 shadow dark:bg-gray-900">
-                <div class="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-                    <span class="text-sm text-gray-900 sm:text-center dark:text-gray-400">© 2024 <a href=""
-                            class="hover:underline">Absensi</a> by Excellent Computer
-                    </span>
-                </div>
-            </footer>
         </div>
-
-        <script>
-        function updateTime() {
-            var now = new Date();
-            var hari = now.toLocaleDateString('id-ID', {
-                weekday: 'long'
-            });
-            var tanggal = now.getDate();
-            var bulan = now.toLocaleDateString('id-ID', {
-                month: 'long'
-            });
-            var tahun = now.getFullYear();
-            var jam = now.getHours();
-            var menit = now.getMinutes();
-            var detik = now.getSeconds();
-
-            var waktuString = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun + ' - ' + jam + ':' + menit + ':' +
-                detik;
-
-            document.getElementById('waktu').innerHTML = waktuString;
-        }
-
-        // Memanggil fungsi updateTime setiap detik
-        setInterval(updateTime, 1000);
-        </script>
-
-        <?php if ($this->session->flashdata('berhasil_absen')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_absen'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_izin')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_izin'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-
-        <?php if ($this->session->flashdata('berhasil_cuti')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_cuti'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_absen')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_absen'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_izin')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_izin'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('gagal_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Gagal",
-            text: "<?php echo $this->session->flashdata('gagal_pulang'); ?>",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('berhasil_pulang')) { ?>
-        <script>
-        Swal.fire({
-            title: "Berhasil",
-            text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        </script>
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('login_success')) { ?>
-        <script>
-        Swal.fire({
-            title: 'Berhasil Login',
-            text: '<?php echo $this->session->flashdata('login_success'); ?>',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        })
-        </script>
-        <?php } ?>
-        <script>
-        // Fungsi untuk men-disable tombol Absen Masuk
-        function disableAbsenButton() {
-            var absenButton = document.getElementById('absenButton');
-            absenButton.disabled = true;
-            absenButton.classList.add(
-                'disabled'
-            ); // (Opsional) Tambahkan kelas CSS 'disabled' untuk memberi gaya berbeda pada tombol yang dinonaktifkan
-        }
-
-        // Panggil fungsi disableAbsenButton jika user sudah melakukan absen
-        <?php if ($already_absent || $already_requested): ?>
-        window.onload = disableAbsenButton;
-        <?php endif; ?>
-        </script>
+        <?php $this->load->view('components/footer'); ?>
+    </div>
 </body>
+
+<script>
+function updateTime() {
+    var now = new Date();
+    var hari = now.toLocaleDateString('id-ID', {
+        weekday: 'long'
+    });
+    var tanggal = now.getDate();
+    var bulan = now.toLocaleDateString('id-ID', {
+        month: 'long'
+    });
+    var tahun = now.getFullYear();
+    var jam = now.getHours();
+    var menit = now.getMinutes();
+    var detik = now.getSeconds();
+
+    var waktuString = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun + ' - ' + jam + ':' + menit + ':' +
+        detik;
+
+    document.getElementById('waktu').innerHTML = waktuString;
+}
+
+// Memanggil fungsi updateTime setiap detik
+setInterval(updateTime, 1000);
+</script>
+
+<?php if ($this->session->flashdata('berhasil_absen')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_absen'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_izin')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_izin'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+
+<?php if ($this->session->flashdata('berhasil_cuti')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_cuti'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_absen')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_absen'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_izin')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_izin'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('gagal_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Gagal",
+    text: "<?php echo $this->session->flashdata('gagal_pulang'); ?>",
+    icon: "error",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('berhasil_pulang')) { ?>
+<script>
+Swal.fire({
+    title: "Berhasil",
+    text: "<?php echo $this->session->flashdata('berhasil_pulang'); ?>",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 1500
+});
+</script>
+<?php } ?>
+
+<?php if ($this->session->flashdata('login_success')) { ?>
+<script>
+Swal.fire({
+    title: 'Berhasil Login',
+    text: '<?php echo $this->session->flashdata('login_success'); ?>',
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 1500
+})
+</script>
+<?php } ?>
+<script>
+// Fungsi untuk men-disable tombol Absen Masuk
+function disableAbsenButton() {
+    var absenButton = document.getElementById('absenButton');
+    absenButton.disabled = true;
+    absenButton.classList.add(
+        'disabled'
+    ); // (Opsional) Tambahkan kelas CSS 'disabled' untuk memberi gaya berbeda pada tombol yang dinonaktifkan
+}
+
+// Panggil fungsi disableAbsenButton jika user sudah melakukan absen
+<?php if ($already_absent || $already_requested): ?>
+window.onload = disableAbsenButton;
+<?php endif; ?>
+</script>
 
 </html>

@@ -73,6 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = true;
 
+// LOCAL Database
 $db['default'] = [
     'dsn' => '',
     'hostname' => 'localhost',
@@ -102,6 +103,29 @@ $db['default'] = [
 //     'username' => 'absensiecomp',
 //     'password' => 'N3v3rF0r93t3n',
 //     'database' => 'absensiecomp',
+//     'dbdriver' => 'mysqli',
+//     'dbprefix' => '',
+//     'pconnect' => false,
+//     'db_debug' => ENVIRONMENT !== 'production',
+//     'cache_on' => false,
+//     'cachedir' => '',
+//     'char_set' => 'utf8',
+//     'dbcollat' => 'utf8_general_ci',
+//     'swap_pre' => '',
+//     'encrypt' => false,
+//     'compress' => false,
+//     'stricton' => false,
+//     'failover' => [],
+//     'save_queries' => true,
+// ];
+
+// PENTING, JANGAN DI HAPUS (DEPLOYMENT) !!!!!!!!!!!!!!!!!!!!!
+// $db['default'] = [
+//     'dsn' => '',
+//     'hostname' => 'localhost',
+//     'username' => 'absenbootcamp',
+//     'password' => 'N3v3rF0r93t3n2024',
+//     'database' => 'absenbootcamp',
 //     'dbdriver' => 'mysqli',
 //     'dbprefix' => '',
 //     'pconnect' => false,

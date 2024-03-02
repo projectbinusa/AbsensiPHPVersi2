@@ -25,6 +25,7 @@ class Admin extends CI_Controller
     // Page Dashboard
     public function index()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
         $data[
             'early_attendance'
@@ -66,21 +67,16 @@ class Admin extends CI_Controller
     }
 
     // Sidebar
-    // public function sidebar()
-    // {
+    // public function sidebar(){
     //     $id_admin = $this->session->userdata('id');
-    //     $image = $this->session->userdata('image');
-    //     $username = $this->session->userdata('username');
-    //     $email = $this->session->userdata('email');
-    //     $data = [
-    //         $id_admin, $image, $username, $email
-    //     ];
+    //     $data['admin'] = $this->admin_model->getAdminByID($id_admin);
     //     $this->load->view('components/sidebar_admin', $data);
     // }
-
+    
     // Page Organisasi
     public function organisasi()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
         $data['user'] = $this->admin_model->get_data('user')->result();
         $data['organisasi'] = $this->admin_model->get_organisasi_pusat(
@@ -92,6 +88,7 @@ class Admin extends CI_Controller
     // Page Tabel Organisasi
     public function all_organisasi()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
         $data['user'] = $this->admin_model->get_data('user')->result();
         $data['organisasi'] = $this->admin_model->get_all_organisasi($id_admin);
@@ -101,6 +98,7 @@ class Admin extends CI_Controller
     // Page Jabatan
     public function jabatan()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
 
         $data['jabatan'] = $this->admin_model
@@ -111,6 +109,7 @@ class Admin extends CI_Controller
 
     public function cuti()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
@@ -121,6 +120,7 @@ class Admin extends CI_Controller
 
     public function lembur()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
@@ -159,6 +159,7 @@ class Admin extends CI_Controller
 
     public function user()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
 
         $data['user'] = $this->admin_model
@@ -170,6 +171,7 @@ class Admin extends CI_Controller
 
     public function absensi()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
 
         // Menggunakan model untuk mendapatkan seluruh id_user berdasarkan id_admin
@@ -229,6 +231,7 @@ class Admin extends CI_Controller
     // Page Profile
     public function profile()
     {
+        sidebar();
         if ($this->session->userdata('id')) {
             $user_id = $this->session->userdata('id');
             $data['admin'] = $this->admin_model->getAdminByID($user_id);
@@ -242,6 +245,7 @@ class Admin extends CI_Controller
     // Page Detail Shift
     public function detail_shift()
     {
+        sidebar();
         // Mendefinisikan data yang akan digunakan dalam tampilan
         $data = [
             'judul' => 'Detail Shift',
@@ -253,6 +257,7 @@ class Admin extends CI_Controller
     // Page Update Shift
     public function update_shift($id_shift)
     {
+        sidebar();
         $data['shift'] = $this->admin_model->getShiftId($id_shift);
         $this->load->view('page/admin/shift/update_shift', $data);
     }
@@ -260,12 +265,14 @@ class Admin extends CI_Controller
     // Page Tambah Organisasi
     public function tambah_organisasi()
     {
+        sidebar();
         $this->load->view('page/admin/organisasi/tambah_organisasi');
     }
 
     // Page rekap harian
     public function rekap_harian()
     {
+        sidebar();
         $tanggal = $this->input->get('tanggal');
         $id_admin = $this->session->userdata('id_admin');
 
@@ -278,6 +285,7 @@ class Admin extends CI_Controller
 
     public function rekap_mingguan()
     {
+        sidebar();
         $start_date = $this->input->get('start_date') ?: null;
         $end_date = $this->input->get('end_date') ?: null;
 
@@ -299,6 +307,7 @@ class Admin extends CI_Controller
 
     public function rekap_simpel()
     {
+        sidebar();
         $bulan = $this->input->post('bulan');
         $admin_id = $this->session->userdata('id_admin'); // Assuming you store admin ID in the session
         $data['absen'] = $this->admin_model->get_bulanan($bulan, $admin_id);
@@ -308,6 +317,7 @@ class Admin extends CI_Controller
 
     public function rekap_perkaryawan()
     {
+        sidebar();
         $user_id = $this->input->post('id_user');
         $admin_id = $this->session->userdata('id_admin'); // Assuming you store admin ID in the session
         $data['absen'] = $this->admin_model->get_perkaryawan(
@@ -323,6 +333,7 @@ class Admin extends CI_Controller
 
     public function rekap_bulanan()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
         $bulan = $this->input->get('bulan');
         $tahun = $this->input->get('tahun');
@@ -338,6 +349,7 @@ class Admin extends CI_Controller
     // Page Detail Organisasi
     public function detail_organisasi($organisasi_id)
     {
+        sidebar();
         $data['organisasi'] = $this->admin_model->getOrganisasiDetails(
             $organisasi_id
         );
@@ -348,6 +360,7 @@ class Admin extends CI_Controller
     // Page Detail User
     public function detail_user($user_id)
     {
+        sidebar();
         $data['user'] = $this->admin_model->getUserDetails($user_id);
 
         // Mengirim data pengguna ke view
@@ -357,6 +370,7 @@ class Admin extends CI_Controller
     // Page tambah user
     public function tambah_user()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
 
         $data['admin'] = $this->admin_model->get_data('admin')->result();
@@ -371,6 +385,7 @@ class Admin extends CI_Controller
     // Page tambah shift
     public function tambah_shift()
     {
+        sidebar();
         $data['admin'] = $this->admin_model->get_data('admin')->result();
         $this->load->view('page/admin/shift/tambah_shift', $data);
     }
@@ -378,12 +393,14 @@ class Admin extends CI_Controller
     // Page tambah jabatan
     public function tambah_jabatan()
     {
+        sidebar();
         $this->load->view('page/admin/jabatan/tambah_jabatan');
     }
 
     // Page update organisasi
     public function update_organisasi($id_organisasi)
     {
+        sidebar();
         $data['organisasi'] = $this->admin_model->getOrganisasiById(
             $id_organisasi
         );
@@ -393,6 +410,7 @@ class Admin extends CI_Controller
     // Page Update User
     public function update_user($id_user)
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
         $id_jabatan = $this->session->userdata('id_jabatan');
         $id_shift = $this->session->userdata('id_shift');
@@ -412,6 +430,7 @@ class Admin extends CI_Controller
 
     public function lokasi()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id_admin');
 
         // Data lokasi
@@ -426,6 +445,7 @@ class Admin extends CI_Controller
     // page tambah lokasi
     public function tambah_lokasi()
     {
+        sidebar();
         $this->load->model('admin_model');
 
         // Get organizational data
@@ -459,6 +479,7 @@ class Admin extends CI_Controller
     // page detail lokasi
     public function detail_lokasi($lokasi_id)
     {
+        sidebar();
         $data['lokasi'] = $this->admin_model->getLokasiData($lokasi_id);
 
         // Mengirim data lokasi ke view
@@ -468,6 +489,7 @@ class Admin extends CI_Controller
     // page update lokasi
     public function update_lokasi($id_lokasi)
     {
+        sidebar();
         // Load necessary models or helpers here
         $this->load->model('admin_model');
 
@@ -481,6 +503,7 @@ class Admin extends CI_Controller
     // page detail jabatan
     public function detail_jabatan($id_jabatan)
     {
+        sidebar();
         $data['jabatan'] = $this->admin_model->getJabatanDetails($id_jabatan);
 
         // Mengirim data pengguna ke view
@@ -490,6 +513,7 @@ class Admin extends CI_Controller
     // page update jabatan
     public function update_jabatan($id_jabatan)
     {
+        sidebar();
         $data['jabatan'] = $this->admin_model->getJabatanId($id_jabatan);
 
         // Menampilkan view update_jabatan dengan data jabatan
@@ -499,6 +523,7 @@ class Admin extends CI_Controller
     // page shift
     public function shift()
     {
+        sidebar();
         $id_admin = $this->session->userdata('id');
         $data['shift'] = $this->admin_model->get_shift_by_id_admin($id_admin);
         $data[
@@ -510,6 +535,7 @@ class Admin extends CI_Controller
     // page detail absen
     public function detail_absen($id_absensi)
     {
+        sidebar();
         $data['absensi'] = $this->admin_model->getAbsensiDetail($id_absensi);
         // Menampilkan view update_jabatan dengan data jabatan
         $this->load->view('page/admin/absen/detail_absensi', $data);
@@ -721,6 +747,8 @@ class Admin extends CI_Controller
             'username' => $username,
         ];
 
+        $this->session->set_userdata($data);
+        
         $update_result = $this->admin_model->update_data('admin', $data, [
             'id_admin' => $this->session->userdata('id'),
         ]);
@@ -2028,6 +2056,7 @@ class Admin extends CI_Controller
 
     public function kehadiran()
     {
+        sidebar();
         // Mendapatkan id_admin yang sedang login (contoh: menggunakan sesi)
         $id_admin = $this->session->userdata('id_admin');
 
@@ -2041,6 +2070,7 @@ class Admin extends CI_Controller
     // page history absen
     public function history_absen()
     {
+        sidebar();
         $this->load->model('admin_model');
 
         // Ambil id_admin dari sesi (misalnya setelah admin login)

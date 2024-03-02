@@ -19,6 +19,8 @@ class User extends CI_Controller
 
     public function index()
     {
+        sidebar();
+        $data = ['page' => 'dashboard'];
         $tanggal = date('Y-m-d');
         $id_user = $this->session->userdata('id');
         $data['total_absen'] = $this->user_model
@@ -47,8 +49,16 @@ class User extends CI_Controller
         $this->load->view('page/user/dashboard', $data);
     }
 
+    public function sidebar(){
+        $id_user = $this->session->userdata('id');
+        $data['user'] = $this->user_model->getUserByID($id_user);
+        $this->load->view('components/sidebar_user', $data);
+    }
+
     public function absen()
     {
+        sidebar();
+        $data = ['page' => 'absensi'];
         setlocale(LC_TIME, 'id_ID');
         date_default_timezone_set('Asia/Jakarta');
         $username = $this->session->userdata('username');
@@ -79,18 +89,24 @@ class User extends CI_Controller
 
     public function cuti()
     {
-        $this->load->view('page/user/cuti');
+        sidebar();
+        $data = ['page' => 'cuti'];
+        $this->load->view('page/user/cuti', $data);
     }
 
     public function lembur()
     {
+        sidebar();
+        $data = ['page' => 'lembur'];
         $data['user'] = $this->user_model->get_all_user();
 
         $this->load->view('page/user/lembur', $data);
     }
-
+    
     public function history_lembur()
     {
+        sidebar();
+        $data = ['page' => 'history_lembur'];
         $id_user = $this->session->userdata('id');
         $lembur_data = $this->user_model->getAllArrayData();
 
@@ -124,6 +140,7 @@ class User extends CI_Controller
 
     public function ajukan_lembur()
     {
+        sidebar();
         $id_user_login = $this->session->userdata('id');
 
         // Ambil array ID user yang dipilih dari form
@@ -147,6 +164,8 @@ class User extends CI_Controller
 
     public function pulang()
     {
+        sidebar();
+        $data = ['page' => 'pulang'];
         setlocale(LC_TIME, 'id_ID');
         date_default_timezone_set('Asia/Jakarta');
         $username = $this->session->userdata('username');
@@ -175,75 +194,10 @@ class User extends CI_Controller
         $this->load->view('page/user/pulang', $data);
     }
 
-    public function aksi_pulang()
-    {
-        $id_user = $this->session->userdata('id_user');
-
-        setlocale(LC_TIME, 'id_ID');
-        date_default_timezone_set('Asia/Jakarta');
-        $tanggal = date('Y-m-d');
-
-        // Cek apakah absen masuk belum selesai
-        $absensi_belum_selesai = $this->user_model->getAbsensiBelumSelesai(
-            $tanggal,
-            $id_user
-        );
-
-        if ($absensi_belum_selesai) {
-            $username = $this->session->userdata('username');
-            $currentDateTime = date('Y-m-d H:i:s');
-
-            $this->db->where('tanggal_absen', $tanggal);
-            $this->db->where('status', 0);
-            date_default_timezone_set('Asia/Jakarta');
-            $jam = date('H:i:s');
-            $image_data = $this->input->post('image_data');
-
-            $img = str_replace('data:image/png;base64,', '', $image_data);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-
-            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
-            file_put_contents($foto_pulang, $data);
-
-            // Menyimpan jam pulang
-            $data = [
-                'status' => 1,
-                'jam_pulang' => $jam,
-                'foto_pulang' => $foto_pulang,
-                'lokasi_pulang' => $this->input->post('lokasi_pulang'),
-                'keterangan_pulang_awal' => $this->input->post(
-                    'keterangan_pulang_awal'
-                ),
-            ];
-
-            // Contoh update status absensi pulang
-            $this->user_model->updateStatusAbsenPulang($tanggal, $data);
-
-            // Get absen masuk time
-            $absen_masuk = $this->user_model->getAbsenMasuk($tanggal, $id_user); // Anda perlu mengimplementasikan fungsi ini di model Anda
-
-            // Hitung jam kerja
-            $jam_kerja = $this->hitungJamKerja($absen_masuk->jam_masuk, $jam); // Anda perlu mengimplementasikan fungsi ini
-
-            // Set flashdata untuk berhasil pulang dengan jam kerja
-            $this->session->set_flashdata(
-                'berhasil_pulang',
-                'Berhasil Pulang. Jam kerja hari ini: ' . $jam_kerja
-            );
-
-            redirect('user');
-        } else {
-            $this->session->set_flashdata(
-                'gagal_pulang',
-                'Anda tidak bisa melakukan absen pulang sekarang.'
-            );
-            redirect('user');
-        }
-    }
-
     public function profile()
     {
+        sidebar();
+        $data = ['page' => 'profile'];
         if ($this->session->userdata('id')) {
             $user_id = $this->session->userdata('id');
             $id_admin = $this->session->userdata('id_admin');
@@ -266,25 +220,25 @@ class User extends CI_Controller
         }
     }
 
-    // Pembaruan profil admin
     public function edit_profile()
     {
+        sidebar();
         $email = $this->input->post('email');
         $username = $this->input->post('username');
-        $id_organisasi = $this->input->post('id_organisasi');
+        // $id_organisasi = $this->input->post('id_organisasi');
         $id_jabatan = $this->input->post('id_jabatan');
         $id_shift = $this->input->post('id_shift');
 
-        $nama_jabatan = $this->user_model->nama_jabatan_by_id($id_jabatan);
-
-        if ($id_organisasi && $id_jabatan && $id_shift) {
+        if ($id_jabatan && $id_shift) {
             $data = [
                 'email' => $email,
                 'username' => $username,
-                'id_organisasi' => $id_organisasi,
+                // 'id_organisasi' => $id_organisasi,
                 'id_jabatan' => $id_jabatan,
                 'id_shift' => $id_shift,
             ];
+
+            $this->session->set_userdata($data);
 
             $update_result = $this->user_model->update_data('user', $data, [
                 'id_user' => $this->session->userdata('id'),
@@ -298,7 +252,7 @@ class User extends CI_Controller
             } else {
                 $this->session->set_flashdata(
                     'gagal_update',
-                    'Gagal memperbarui data'
+                    'Gagal memperbarui data. Silakan cek log atau hubungi administrator.'
                 );
             }
         } else {
@@ -314,6 +268,8 @@ class User extends CI_Controller
 
     public function izin()
     {
+        sidebar();
+        $data = ['page' => 'izin'];
         setlocale(LC_TIME, 'id_ID');
         date_default_timezone_set('Asia/Jakarta');
         $username = $this->session->userdata('username');
@@ -346,6 +302,8 @@ class User extends CI_Controller
 
     public function izin_absen($id_absensi)
     {
+        sidebar();
+        $data = ['page' => 'izin_absen'];
         $absensi = $this->user_model->get_absensi_by_id($id_absensi); // Ganti dengan metode yang sesuai di model Anda
 
         setlocale(LC_TIME, 'id_ID');
@@ -469,6 +427,51 @@ class User extends CI_Controller
                 );
                 redirect(base_url('user'));
             }
+        }
+    }
+    
+    public function aksi_pulang()
+    {
+        $id_user = $this->session->userdata('id');
+        $tanggal = date('Y-m-d');
+        // $jam_pulang = date('H:i:s');
+        date_default_timezone_set('Asia/Jakarta');
+
+        // Check jika user sudah melakukan absen masuk pada hari ini
+        $already_absent = $this->user_model->cek_absen($id_user, $tanggal);
+        // var_dump($already_absent);
+
+        if ($already_absent) {
+            $image_data = $this->input->post('image_data');
+            $lokasi_pulang = $this->input->post('lokasi_pulang');
+            $keterangan_pulang_awal = $this->input->post('keterangan_pulang_awal');
+
+            // Image processing and file handling for the pulang photo
+            $img = str_replace('data:image/png;base64,', '', $image_data);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+
+            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
+            file_put_contents($foto_pulang, $data);
+
+            // Update status absen pulang
+            $data_pulang = [
+                'status' => 1,
+                'jam_pulang' => date('H:i:s'),
+                'foto_pulang' => $foto_pulang,
+                'lokasi_pulang' => $lokasi_pulang,
+                'keterangan_pulang_awal' => $keterangan_pulang_awal,
+            ];
+
+            $this->user_model->updateStatusAbsenPulang($id_user, $tanggal, $data_pulang);
+
+            // Set flashdata for berhasil pulang
+            $this->session->set_flashdata('berhasil_pulang', 'Berhasil Pulang');
+            redirect('user');
+        } else {
+            // Set flashdata for gagal pulang
+            $this->session->set_flashdata('gagal_pulang', 'Anda tidak bisa melakukan absen pulang sekarang.');
+            redirect('user');
         }
     }
 
@@ -645,21 +648,6 @@ class User extends CI_Controller
         redirect(base_url('user/profile'));
     }
 
-    // public function get_realtime_absensi()
-    // {
-    //     // Panggil metode di dalam model untuk mendapatkan data absensi real-time
-    //     $realtime_absensi = $this->user_model->get_realtime_absensi();
-
-    //     // Tambahkan log untuk melihat data sebelum dikirim
-    //     log_message(
-    //         'debug',
-    //         'Realtime Absensi Data: ' . json_encode($realtime_absensi)
-    //     );
-
-    //     // Mengirim data dalam format JSON
-    //     echo json_encode($realtime_absensi);
-    // }
-
     // Pembaruan password
     public function update_password()
     {
@@ -807,6 +795,8 @@ class User extends CI_Controller
 
     public function history_cuti()
     {
+        sidebar();
+        $data = ['page' => 'history_cuti'];
         $id_user = $this->session->userdata('id');
         $data['cuti'] = $this->user_model->get_cuti_data_byuser($id_user);
 
@@ -816,6 +806,8 @@ class User extends CI_Controller
 
     public function history_absensi()
     {
+        sidebar();
+        $data = ['page' => 'history_absensi'];
         $id_user = $this->session->userdata('id');
         $data['absensi'] = $this->user_model->get_absen_data($id_user);
         usort($data['absensi'], function ($a, $b) {
@@ -852,6 +844,8 @@ class User extends CI_Controller
 
     public function detail_absensi($id_absensi)
     {
+        sidebar();
+        $data = ['page' => 'detail_absensi'];
         $data['absensi'] = $this->user_model->getAbsensiDetail($id_absensi);
         $this->load->view('page/user/detail_absensi', $data);
     }
