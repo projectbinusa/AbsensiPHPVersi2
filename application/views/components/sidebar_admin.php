@@ -302,6 +302,11 @@ $image = $_SESSION['image'];
                         </a>
                     </ul>
                 </li>
+                <li>
+                    <div class="flex flex-col items-center w-full mt-2 border-t border-gray-700 py-5">
+                        <span class="font-semibold ">v 1.0.0</span>
+                    </div>
+                </li>
             </ul>
         </div>
     </aside>
