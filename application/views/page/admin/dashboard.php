@@ -56,11 +56,7 @@
                     <hr class="mb-4">
                     <div class="flex justify-between">
                         <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-                            <?php if (isset($absensi['count'])): ?>
-                            <?= $absensi['count'] ?> Absensi
-                            <?php else: ?>
-                            0 Absensi
-                            <?php endif; ?>
+                            <?php echo $absensi_count; ?> Absen
                         </p>
                         <div>
                             <i class="fa-solid fa-address-card fa-2xl text-green-700"></i>
@@ -100,8 +96,8 @@
                     type: 'category',
                     categories: [
                         <?php foreach ($absensi as $row): ?> '<?php echo $row[
-                            'tanggal_absen'
-                        ]; ?>',
+     'tanggal_absen'
+ ]; ?>',
                         <?php endforeach; ?>
                     ]
                 },
@@ -174,7 +170,9 @@
                                     <?php echo $no + 1; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_user($row->id_user)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_user($row->id_user)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo convDate($row->tanggal_absen); ?>
@@ -248,7 +246,9 @@
                                     <?php echo $no; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_user($row->id_user)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_user($row->id_user)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo convDate($row->awal_cuti); ?>
@@ -315,7 +315,9 @@
                                     <?php echo $no; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_admin($row->id_admin)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_admin($row->id_admin)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo $row->nama_jabatan; ?>
@@ -365,7 +367,9 @@
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="px-6 py-4"><?php echo $no; ?></td>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_admin($row->id_admin)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_admin($row->id_admin)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4"><?php echo isset(
                                     $data['nama_lokasi']
@@ -428,7 +432,9 @@
                                     <?php echo $no; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_admin($row->id_admin)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_admin($row->id_admin)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo $row->alamat; ?>
@@ -481,7 +487,9 @@
                                     <?php echo $no; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase($attendance['username']); ?>
+                                    <?php echo toTitleCase(
+                                        $attendance['username']
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo $attendance['nama_jabatan']; ?>
