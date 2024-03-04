@@ -350,7 +350,7 @@ function formatJamKerja($jamMasuk, $jamPulang) {
 function sidebar() {
     $CI = &get_instance();
     $id_admin = $CI->session->userdata('id');
-    $data['admin'] = $CI->admin_model->getUserByID($id_admin);
+    $data['admin'] = $CI->admin_model->getAdminByID($id_admin);
     $CI->load->view('components/sidebar_admin', $data);
 }
 ?>
