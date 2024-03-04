@@ -1016,10 +1016,12 @@ class Admin_model extends CI_Model
 
     public function get_absen_data_by_admin($id_admin)
     {
+        $today = date('Y-m-d'); // Ambil tanggal hari ini
         $this->db->select('COUNT(id_absensi) as count');
         $this->db->from('absensi');
         $this->db->join('user', 'user.id_user = absensi.id_user');
         $this->db->where('user.id_admin', $id_admin);
+        $this->db->where('DATE(absensi.tanggal_absen)', $today); // Filter absensi hanya untuk hari ini
 
         $query = $this->db->get();
         return $query->row()->count;

@@ -338,7 +338,8 @@ if (!function_exists('nama_user')) {
     }
 }
 
-function formatJamKerja($jamMasuk, $jamPulang) {
+function formatJamKerja($jamMasuk, $jamPulang)
+{
     // Hitung selisih waktu antara jam_masuk dan jam_pulang
     $jamMasukObj = DateTime::createFromFormat('H:i', $jamMasuk);
     $jamPulangObj = DateTime::createFromFormat('H:i', $jamPulang);
@@ -347,9 +348,10 @@ function formatJamKerja($jamMasuk, $jamPulang) {
     // Format selisih waktu ke dalam jam dan menit
     return $selisihWaktu->format('%H jam %i menit');
 }
-function sidebar() {
+function sidebar()
+{
     $CI = &get_instance();
-    $id_admin = $CI->session->userdata('id');
+    $id_admin = $CI->session->userdata('id_admin');
     $data['admin'] = $CI->admin_model->getAdminByID($id_admin);
     $CI->load->view('components/sidebar_admin', $data);
 }
