@@ -8,6 +8,10 @@
     <link rel="icon" href="<?php echo base_url(
         './src/assets/image/absensi.png'
     ); ?>" type="image/gif">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 </head>
 
 <body>
@@ -50,7 +54,9 @@
                                 class="bg-indigo-500 hover:bg-indigo text-white font-bold py-2 px-4 rounded inline-block">
                                 <i class="fa-solid fa-filter"></i>
                             </button>
-                            <!-- <a href="<?= base_url('Admin/export_bulanan') ?>"
+                            <!-- <a href="<?= base_url(
+                                'Admin/export_bulanan'
+                            ) ?>"
                                 class="exp bg-green-500 hover:bg-green text-white font-bold py-2 px-4 rounded inline-block ml-auto">
                                 <i class="fa-solid fa-file-export"></i>
                             </a> -->
@@ -62,7 +68,7 @@
                     </form>
 
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <table id=rekapSimple class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead
                                 class="text-xs text-left text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -124,9 +130,9 @@
                                         <?php echo $no; ?>
                                     </th>
                                     <td class="px-6 py-4">
-                                        <?php echo toTitleCase(nama_user(
-                                            $row->id_user
-                                        )); ?>
+                                        <?php echo toTitleCase(
+                                            nama_user($row->id_user)
+                                        ); ?>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php echo convDate(
@@ -141,14 +147,20 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php
-                                            $time = DateTime::createFromFormat('H:i', $jam_kerja);
-                                            if ($time === false) {
-                                                echo "-";
-                                            } else {
-                                                $hours = $time->format('H');
-                                                $minutes = $time->format('i');
-                                                echo $hours . ' jam ' . $minutes . ' menit';
-                                            }
+                                        $time = DateTime::createFromFormat(
+                                            'H:i',
+                                            $jam_kerja
+                                        );
+                                        if ($time === false) {
+                                            echo '-';
+                                        } else {
+                                            $hours = $time->format('H');
+                                            $minutes = $time->format('i');
+                                            echo $hours .
+                                                ' jam ' .
+                                                $minutes .
+                                                ' menit';
+                                        }
                                         ?>
                                     </td>
                                     <td class="px-6 py-4">
@@ -166,5 +178,22 @@
         </div>
     </div>
 </body>
+<script>
+function toggleModal() {
+    document.getElementById('modal').classList.toggle('hidden')
+}
+
+$(document).ready(function() {
+
+    var table = $('#rekapSimple').DataTable({
+        lengthChange: false, // Menonaktifkan opsi "Show entries"
+        searching: true, // Menampilkan kolom pencarian
+        paging: true, // Menampilkan paginasi
+        ordering: true, // Menampilkan sorting
+        info: true, // Menampilkan informasi halaman
+        "dom": '<"top"f>rt<"bottom"lip>',
+    })
+});
+</script>
 
 </html>
