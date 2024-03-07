@@ -119,10 +119,4 @@ function nama_admin($id_admin)
         return $tmt;
     }
 }
-function sidebar() {
-    $CI = &get_instance();
-    $id_super = $CI->session->userdata('id');
-    $data['superadmin'] = $CI->super_model->getSuperAdminByID($id_super);
-    $CI->load->view('components/sidebar_super_admin', $data);
-}
 ?>
