@@ -348,11 +348,11 @@ function formatJamKerja($jamMasuk, $jamPulang)
     // Format selisih waktu ke dalam jam dan menit
     return $selisihWaktu->format('%H jam %i menit');
 }
-function sidebar()
-{
-    $CI = &get_instance();
-    $id_admin = $CI->session->userdata('id');
-    $data['admin'] = $CI->admin_model->getAdminByID($id_admin);
-    $CI->load->view('components/sidebar_admin', $data);
-}
+// function sidebar()
+// {
+//     $CI = &get_instance();
+//     $id_admin = $CI->session->userdata('id');
+//     $data['admin'] = $CI->admin_model->getAdminByID($id_admin);
+//     $CI->load->view('components/sidebar_admin', $data);
+// }
 ?>

@@ -13,6 +13,12 @@
     ); ?>" type="image/gif">
 
 </head>
+<?php
+$id_superadmin = $_SESSION['id']; // Misalkan informasi session disimpan dalam $_SESSION
+$email = $_SESSION['email'];
+$username = $_SESSION['username'];
+$image = $_SESSION['image'];
+?>
 
 <body>
 
@@ -48,17 +54,17 @@
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
                             <img class="w-8 h-8 rounded-full object-cover" src="<?= base_url(
-                                '/images/superadmin/' . $superadmin->image
+                                '/images/superadmin/' . $image
                             ) ?>" alt="user photo"></a>
                         </button>
                         <div class="z-50 hidden my-4 text-base list-none bg-indigo-50 divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                    <?= $superadmin->username; ?>
+                                    <?= $username ?>
                                 </p>
                                 <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    <?= $superadmin->email; ?>
+                                    <?= $email ?>
                                 </p>
                             </div>
                             <ul class="py-1" role="none">

@@ -25,7 +25,6 @@ class Admin extends CI_Controller
     // Page Dashboard
     public function index()
     {
-        sidebar();
         $id_admin = $this->session->userdata('id');
         $data[
             'early_attendance'
@@ -235,7 +234,6 @@ class Admin extends CI_Controller
     // Page Profile
     public function profile()
     {
-        sidebar();
         if ($this->session->userdata('id')) {
             $user_id = $this->session->userdata('id');
             $data['admin'] = $this->admin_model->getAdminByID($user_id);
