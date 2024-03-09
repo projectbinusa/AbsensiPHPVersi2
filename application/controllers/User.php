@@ -535,7 +535,7 @@ class User extends CI_Controller
         $tanggal = date('Y-m-d');
 
         // Check jika user sudah melakukan absen atau izin pada hari ini
-        $already_absent = $this->user_model->cek_absen($id_user, $tanggal);
+        $already_absent = $this->user_model->cek_absen_masuk($id_user, $tanggal);
         $already_requested = $this->user_model->cek_izin($id_user, $tanggal);
 
         if ($already_requested) {
