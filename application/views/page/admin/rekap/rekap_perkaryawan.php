@@ -94,7 +94,13 @@
                                         Jam Masuk
                                     </th>
                                     <th scope="col" class="px-6 py-3">
+                                        Foto Masuk
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Jam Pulang
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Foto Pulang
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Jam Kerja
@@ -154,7 +160,18 @@
                                         <?php echo $row->jam_masuk; ?>
                                     </td>
                                     <td class="px-6 py-4">
+                                        <img src="<?= base_url($row->foto_masuk) ?>" alt=""
+                                            class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            id="foto_masuk" style="max-width: 100px; max-height: 100px;">
+                                    </td>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <?php echo $row->jam_pulang; ?>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <img src="<?= base_url($row->foto_pulang) ?>" alt=""
+                                            class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php
