@@ -1267,5 +1267,14 @@ class Admin_model extends CI_Model
             return null;
         }
     }
+
+    public function hapus_data_terkait($id_user)
+    {
+        // Menghapus entri absensi yang terkait dengan id pengguna
+        $this->db->where('id_user', $id_user);
+        $this->db->delete('absensi');
+        $this->db->where('id_user', $id_user);
+        $this->db->delete('cuti');
+    }
 }
 ?>
