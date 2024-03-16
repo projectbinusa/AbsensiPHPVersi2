@@ -803,9 +803,16 @@ class Admin extends CI_Controller
     // Hapus User
     public function hapus_user($id_user)
     {
+        // Menghapus data yang terkait dengan id user
+        $this->admin_model->hapus_data_terkait($id_user);
+
+        // Menghapus pengguna itu sendiri
         $this->admin_model->hapus_user($id_user);
+
+        // Redirect ke halaman user setelah penghapusan
         redirect('admin/user');
     }
+
 
     // Aksi Update User
     public function aksi_edit_user()
@@ -1300,6 +1307,22 @@ class Admin extends CI_Controller
         $id_admin = $this->session->userdata('id_admin');
         $bulan = $this->input->get('bulan');
         $tahun = $this->input->get('tahun');
+        $nama_bulan = date('F', mktime(0, 0, 0, $bulan, 1)); // Menggunakan fungsi date()
+        $nama_bulan = [
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember'
+        ][$bulan];
+
         $rekap = $this->admin_model->get_all_karyawan(
             $id_admin,
             $bulan,
@@ -1349,7 +1372,7 @@ class Admin extends CI_Controller
         ];
 
         // Set judul
-        $sheet->setCellValue('A1', 'REKAP BULANAN KARYAWAN ');
+        $sheet->setCellValue('A1', 'Rekap Bulan '. toTitleCase($nama_bulan) . ' ' . $tahun);
         $sheet->mergeCells('A1:G1');
 
         $sheet
@@ -1459,7 +1482,7 @@ class Admin extends CI_Controller
         // Atur tinggi baris secara otomatis
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
 
-        // Atur orientasi dan judul halaman
+        // // Atur orientasi dan judul halaman
         $sheet
             ->getPageSetup()
             ->setOrientation(
