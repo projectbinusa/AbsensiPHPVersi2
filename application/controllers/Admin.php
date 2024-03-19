@@ -813,7 +813,6 @@ class Admin extends CI_Controller
         redirect('admin/user');
     }
 
-
     // Aksi Update User
     public function aksi_edit_user()
     {
@@ -1320,7 +1319,7 @@ class Admin extends CI_Controller
             '09' => 'September',
             '10' => 'Oktober',
             '11' => 'November',
-            '12' => 'Desember'
+            '12' => 'Desember',
         ][$bulan];
 
         $rekap = $this->admin_model->get_all_karyawan(
@@ -1372,7 +1371,10 @@ class Admin extends CI_Controller
         ];
 
         // Set judul
-        $sheet->setCellValue('A1', 'Rekap Bulan '. toTitleCase($nama_bulan) . ' ' . $tahun);
+        $sheet->setCellValue(
+            'A1',
+            'Rekap Bulan ' . toTitleCase($nama_bulan) . ' ' . $tahun
+        );
         $sheet->mergeCells('A1:G1');
 
         $sheet
@@ -2436,7 +2438,7 @@ class Admin extends CI_Controller
             //         convDate($item->tanggal_absen)
             //     );
             //     $sheet->setCellValue('J' . $row, $item->status_absen);
-            // }
+            // }hnj
             $no++;
             $row++;
         }

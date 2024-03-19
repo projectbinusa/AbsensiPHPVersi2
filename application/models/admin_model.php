@@ -772,12 +772,12 @@ class Admin_model extends CI_Model
 
     public function getAllArrayData()
     {
-        $query = $this->db->get('lembur'); // Mengambil semua data dari tabel lembur
+        $query = $this->db->get('lembur');
         if ($query->num_rows() > 0) {
-            $result_array = $query->result_array(); // Mengambil hasil query dan konversi menjadi array
+            $result_array = $query->result_array();
             return $result_array;
         } else {
-            return []; // Jika tidak ada data, kembalikan array kosong
+            return []; 
         }
     }
 
