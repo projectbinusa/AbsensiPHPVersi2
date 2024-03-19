@@ -128,7 +128,7 @@ class Auth extends CI_Controller
                 'username' => $username,
                 'email' => $email,
                 'image' => 'User.png',
-                'password' => md5($password), // Simpan kata sandi yang telah di-MD5
+                'password' => md5($password),
                 'id_organisasi' => $id_organisasi,
                 'id_admin' => $this->m_model->get_admin_id($id_organisasi),
                 'image' => 'User.png',

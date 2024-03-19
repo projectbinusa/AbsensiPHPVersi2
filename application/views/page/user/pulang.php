@@ -19,6 +19,14 @@
         max-width: 100%;
         max-height: 100%;
     }
+
+    #video {
+        transform: scaleX(-1);
+    }
+
+    #photoContainer img {
+        transform: scaleX(-1);
+    }
     </style>
 </head>
 
