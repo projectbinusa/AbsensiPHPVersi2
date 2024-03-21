@@ -46,11 +46,17 @@ class User extends CI_Controller
             $id_user,
             $tanggal
         );
-        $data['absen_pulang'] = $already_absent_pulang = $this->user_model->cek_absen_pulang($id_user, $tanggal);
+        $data[
+            'absen_pulang'
+        ] = $already_absent_pulang = $this->user_model->cek_absen_pulang(
+            $id_user,
+            $tanggal
+        );
         $this->load->view('page/user/dashboard', $data);
     }
 
-    public function sidebar(){
+    public function sidebar()
+    {
         $id_user = $this->session->userdata('id');
         $data['user'] = $this->user_model->getUserByID($id_user);
         $this->load->view('components/sidebar_user', $data);
@@ -103,7 +109,7 @@ class User extends CI_Controller
 
         $this->load->view('page/user/lembur', $data);
     }
-    
+
     public function history_lembur()
     {
         sidebar();
@@ -347,7 +353,10 @@ class User extends CI_Controller
         $jam_masuk = date('H:i:s');
 
         // Check jika user sudah melakukan absen atau izin pada hari ini
-        $already_absent = $this->user_model->cek_absen_masuk($id_user, $tanggal);
+        $already_absent = $this->user_model->cek_absen_masuk(
+            $id_user,
+            $tanggal
+        );
         $already_requested = $this->user_model->cek_izin($id_user, $tanggal);
 
         // Periksa absensi terlambat atau lebih awal berdasarkan shift
@@ -430,19 +439,87 @@ class User extends CI_Controller
             }
         }
     }
-    
+
+    public function aksi_pulang()
+    {
+        $id_user = $this->session->userdata('id');
+        $tanggal = date('Y-m-d');
+        // $jam_pulang = date('H:i:s');
+        date_default_timezone_set('Asia/Jakarta');
+
+        // Check jika user sudah melakukan absen masuk pada hari ini
+        $already_absent = $this->user_model->cek_absen_masuk(
+            $id_user,
+            $tanggal
+        );
+        // var_dump($already_absent);
+
+        if ($already_absent) {
+            $image_data = $this->input->post('image_data');
+            $lokasi_pulang = $this->input->post('lokasi_pulang');
+            $keterangan_pulang_awal = $this->input->post(
+                'keterangan_pulang_awal'
+            );
+
+            // Image processing and file handling for the pulang photo
+            $img = str_replace('data:image/png;base64,', '', $image_data);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+
+            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
+            file_put_contents($foto_pulang, $data);
+
+            // Update status absen pulang
+            $data_pulang = [
+                'status' => 1,
+                'jam_pulang' => date('H:i:s'),
+                'foto_pulang' => $foto_pulang,
+                'lokasi_pulang' => $lokasi_pulang,
+                'keterangan_pulang_awal' => $keterangan_pulang_awal,
+            ];
+
+            $this->user_model->updateStatusAbsenPulang(
+                $id_user,
+                $tanggal,
+                $data_pulang
+            );
+
+            // Set flashdata for berhasil pulang
+            $this->session->set_flashdata('berhasil_pulang', 'Berhasil Pulang');
+            redirect('user');
+        } else {
+            // Set flashdata for gagal pulang
+            $this->session->set_flashdata(
+                'gagal_pulang',
+                'Anda tidak bisa melakukan absen pulang sekarang.'
+            );
+            redirect('user');
+        }
+    }
+
     // public function aksi_pulang()
     // {
     //     $id_user = $this->session->userdata('id');
     //     $tanggal = date('Y-m-d');
-    //     // $jam_pulang = date('H:i:s');
-    //     date_default_timezone_set('Asia/Jakarta');
 
     //     // Check jika user sudah melakukan absen masuk pada hari ini
-    //     $already_absent = $this->user_model->cek_absen($id_user, $tanggal);
-    //     // var_dump($already_absent);
+    //     $already_absent_masuk = $this->user_model->cek_absen_masuk($id_user, $tanggal);
 
-    //     if ($already_absent) {
+    //     if (!$already_absent_masuk) {
+    //         // Set flashdata for gagal pulang
+    //         $this->session->set_flashdata('gagal_pulang', 'Anda belum melakukan absen masuk hari ini.');
+    //         redirect('user');
+    //     } else {
+    //         // Check jika user sudah melakukan absen pulang pada hari ini
+    //         $already_absent_pulang = $this->user_model->cek_absen_pulang($id_user, $tanggal);
+
+    //         if ($already_absent_pulang) {
+    //             // Set flashdata for gagal pulang
+    //             $this->session->set_flashdata('gagal_pulang', 'Anda sudah melakukan absen pulang hari ini.');
+    //             redirect('user');
+    //         }
+
+    //         // Lanjutkan dengan proses absen pulang
     //         $image_data = $this->input->post('image_data');
     //         $lokasi_pulang = $this->input->post('lokasi_pulang');
     //         $keterangan_pulang_awal = $this->input->post('keterangan_pulang_awal');
@@ -456,7 +533,7 @@ class User extends CI_Controller
     //         file_put_contents($foto_pulang, $data);
 
     //         // Update status absen pulang
-    //         $data_pulang = [
+    //         $data = [
     //             'status' => 1,
     //             'jam_pulang' => date('H:i:s'),
     //             'foto_pulang' => $foto_pulang,
@@ -464,69 +541,13 @@ class User extends CI_Controller
     //             'keterangan_pulang_awal' => $keterangan_pulang_awal,
     //         ];
 
-    //         $this->user_model->updateStatusAbsenPulang($id_user, $tanggal, $data_pulang);
+    //         $this->user_model->updateStatusAbsenPulang($id_user, $tanggal, $data);
 
     //         // Set flashdata for berhasil pulang
     //         $this->session->set_flashdata('berhasil_pulang', 'Berhasil Pulang');
     //         redirect('user');
-    //     } else {
-    //         // Set flashdata for gagal pulang
-    //         $this->session->set_flashdata('gagal_pulang', 'Anda tidak bisa melakukan absen pulang sekarang.');
-    //         redirect('user');
     //     }
     // }
-
-    public function aksi_pulang()
-    {
-        $id_user = $this->session->userdata('id');
-        $tanggal = date('Y-m-d');
-
-        // Check jika user sudah melakukan absen masuk pada hari ini
-        $already_absent_masuk = $this->user_model->cek_absen_masuk($id_user, $tanggal);
-
-        if (!$already_absent_masuk) {
-            // Set flashdata for gagal pulang
-            $this->session->set_flashdata('gagal_pulang', 'Anda belum melakukan absen masuk hari ini.');
-            redirect('user');
-        } else {
-            // Check jika user sudah melakukan absen pulang pada hari ini
-            $already_absent_pulang = $this->user_model->cek_absen_pulang($id_user, $tanggal);
-
-            if ($already_absent_pulang) {
-                // Set flashdata for gagal pulang
-                $this->session->set_flashdata('gagal_pulang', 'Anda sudah melakukan absen pulang hari ini.');
-                redirect('user');
-            }
-
-            // Lanjutkan dengan proses absen pulang
-            $image_data = $this->input->post('image_data');
-            $lokasi_pulang = $this->input->post('lokasi_pulang');
-            $keterangan_pulang_awal = $this->input->post('keterangan_pulang_awal');
-
-            // Image processing and file handling for the pulang photo
-            $img = str_replace('data:image/png;base64,', '', $image_data);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-
-            $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
-            file_put_contents($foto_pulang, $data);
-
-            // Update status absen pulang
-            $data = [
-                'status' => 1,
-                'jam_pulang' => date('H:i:s'),
-                'foto_pulang' => $foto_pulang,
-                'lokasi_pulang' => $lokasi_pulang,
-                'keterangan_pulang_awal' => $keterangan_pulang_awal,
-            ];
-
-            $this->user_model->updateStatusAbsenPulang($id_user, $tanggal, $data);
-
-            // Set flashdata for berhasil pulang
-            $this->session->set_flashdata('berhasil_pulang', 'Berhasil Pulang');
-            redirect('user');
-        }
-    }
 
     public function aksi_izin()
     {
@@ -535,7 +556,10 @@ class User extends CI_Controller
         $tanggal = date('Y-m-d');
 
         // Check jika user sudah melakukan absen atau izin pada hari ini
-        $already_absent = $this->user_model->cek_absen_masuk($id_user, $tanggal);
+        $already_absent = $this->user_model->cek_absen_masuk(
+            $id_user,
+            $tanggal
+        );
         $already_requested = $this->user_model->cek_izin($id_user, $tanggal);
 
         if ($already_requested) {
