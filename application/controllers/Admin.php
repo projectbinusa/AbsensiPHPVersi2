@@ -813,7 +813,6 @@ class Admin extends CI_Controller
         redirect('admin/user');
     }
 
-
     // Aksi Update User
     public function aksi_edit_user()
     {
@@ -1320,7 +1319,7 @@ class Admin extends CI_Controller
             '09' => 'September',
             '10' => 'Oktober',
             '11' => 'November',
-            '12' => 'Desember'
+            '12' => 'Desember',
         ][$bulan];
 
         $rekap = $this->admin_model->get_all_karyawan(
@@ -1372,7 +1371,10 @@ class Admin extends CI_Controller
         ];
 
         // Set judul
-        $sheet->setCellValue('A1', 'Rekap Bulan '. toTitleCase($nama_bulan) . ' ' . $tahun);
+        $sheet->setCellValue(
+            'A1',
+            'Rekap Bulan ' . toTitleCase($nama_bulan) . ' ' . $tahun
+        );
         $sheet->mergeCells('A1:G1');
 
         $sheet
@@ -1404,16 +1406,27 @@ class Admin extends CI_Controller
             }
 
             // Hitung selisih waktu antara jam_masuk dan jam_pulang
-            $jamMasuk = new DateTime(
-                $data->tanggal_absen . ' ' . $data->jam_masuk
-            );
-            $jamPulang = new DateTime(
-                $data->tanggal_absen . ' ' . $data->jam_pulang
-            );
-            $selisihWaktu = $jamMasuk->diff($jamPulang);
+            $jam_masuk = $data->jam_masuk;
+            $jam_pulang = $data->jam_pulang;
+            $jam_kerja = '-';
+            if ($jam_masuk != '00:00:00' && $jam_pulang != '00:00:00') {
+                $start_time = strtotime($jam_masuk);
+                $end_time = strtotime($jam_pulang);
+                $diff = $end_time - $start_time;
+                $hours = floor($diff / (60 * 60));
+                $minutes = floor(($diff - $hours * 60 * 60) / 60);
+                $jam_kerja = sprintf('%02d:%02d', $hours, $minutes);
+            }
 
-            // Format selisih waktu ke dalam jam dan menit
-            $durasiKerja = $selisihWaktu->format('%H jam %i menit');
+            // Format jam_kerja menggunakan DateTime
+            $time = DateTime::createFromFormat('H:i', $jam_kerja);
+            if ($time === false) {
+                $jam_kerja_formatted = '-';
+            } else {
+                $hours = $time->format('H');
+                $minutes = $time->format('i');
+                $jam_kerja_formatted = $hours . ' jam ' . $minutes . ' menit';
+            }
 
             // Populate the row for the current data
             $userRows[$data->id_user][] = [
@@ -1422,7 +1435,7 @@ class Admin extends CI_Controller
                 'C' => convDate($data->tanggal_absen),
                 'D' => $data->jam_masuk,
                 'E' => $data->jam_pulang,
-                'F' => $durasiKerja, // Tambahkan kolom durasi kerja
+                'F' => $jam_kerja_formatted, // Tambahkan kolom durasi kerja
                 'G' => $data->keterangan_izin,
                 'H' => $data->status_absen,
             ];
@@ -2436,7 +2449,7 @@ class Admin extends CI_Controller
             //         convDate($item->tanggal_absen)
             //     );
             //     $sheet->setCellValue('J' . $row, $item->status_absen);
-            // }
+            // }hnj
             $no++;
             $row++;
         }
