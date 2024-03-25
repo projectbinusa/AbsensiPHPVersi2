@@ -25,7 +25,6 @@ class SuperAdmin extends CI_Controller
     // Page Dashboard / Utama
     public function index()
     {
-        sidebar();
         $id_superadmin = $this->session->userdata('id');
         $id_admin = $this->super_model->get_admin_data_by_superadmin(
             $id_superadmin
@@ -317,7 +316,6 @@ class SuperAdmin extends CI_Controller
     // Page Profile
     public function profile()
     {
-        sidebar();
         if ($this->session->userdata('id')) {
             $user_id = $this->session->userdata('id');
             $data['superadmin'] = $this->super_model->getSuperAdminByID(
@@ -1073,7 +1071,7 @@ class SuperAdmin extends CI_Controller
         ];
 
         $this->session->set_userdata($data);
-        
+
         $update_result = $this->super_model->update_data('superadmin', $data, [
             'id_superadmin' => $this->session->userdata('id'),
         ]);

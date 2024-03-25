@@ -278,10 +278,20 @@ class User_model extends CI_Model
         return $query->row();
     }
 
-    public function cek_absen($id_user, $tanggal)
+    public function cek_absen_masuk($id_user, $tanggal)
     {
         $this->db->where('id_user', $id_user);
         $this->db->where('tanggal_absen', $tanggal);
+        $query = $this->db->get('absensi');
+
+        return $query->num_rows() > 0 ? true : false;
+    }
+
+    public function cek_absen_pulang($id_user, $tanggal)
+    {
+        $this->db->where('id_user', $id_user);
+        $this->db->where('tanggal_absen', $tanggal);
+        $this->db->where('status', 1);
         $query = $this->db->get('absensi');
 
         return $query->num_rows() > 0 ? true : false;

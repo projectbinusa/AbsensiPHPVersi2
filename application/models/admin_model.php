@@ -772,12 +772,12 @@ class Admin_model extends CI_Model
 
     public function getAllArrayData()
     {
-        $query = $this->db->get('lembur'); // Mengambil semua data dari tabel lembur
+        $query = $this->db->get('lembur');
         if ($query->num_rows() > 0) {
-            $result_array = $query->result_array(); // Mengambil hasil query dan konversi menjadi array
+            $result_array = $query->result_array();
             return $result_array;
         } else {
-            return []; // Jika tidak ada data, kembalikan array kosong
+            return []; 
         }
     }
 
@@ -1016,10 +1016,12 @@ class Admin_model extends CI_Model
 
     public function get_absen_data_by_admin($id_admin)
     {
+        $today = date('Y-m-d'); // Ambil tanggal hari ini
         $this->db->select('COUNT(id_absensi) as count');
         $this->db->from('absensi');
         $this->db->join('user', 'user.id_user = absensi.id_user');
         $this->db->where('user.id_admin', $id_admin);
+        $this->db->where('DATE(absensi.tanggal_absen)', $today); // Filter absensi hanya untuk hari ini
 
         $query = $this->db->get();
         return $query->row()->count;
@@ -1264,6 +1266,15 @@ class Admin_model extends CI_Model
             // Jika tidak ditemukan, kembalikan null atau nilai default yang sesuai
             return null;
         }
+    }
+
+    public function hapus_data_terkait($id_user)
+    {
+        // Menghapus entri absensi yang terkait dengan id pengguna
+        $this->db->where('id_user', $id_user);
+        $this->db->delete('absensi');
+        $this->db->where('id_user', $id_user);
+        $this->db->delete('cuti');
     }
 }
 ?>

@@ -19,6 +19,19 @@
         max-width: 100%;
         max-height: 100%;
     }
+
+    #video {
+        transform: scaleX(-1);
+    }
+
+    #photoContainer img {
+        transform: scaleX(-1);
+    }
+
+    #capture-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
     </style>
 </head>
 
@@ -57,6 +70,7 @@
                                     class="bg-indigo-500 text-white px-4 py-2 rounded-md mb-3">
                                     <i class="fa-solid fa-camera"></i>
                                 </button>
+
                                 <label for="map" class="block text-sm font-semibold mb-2">Lokasi:</label>
                                 <div id="address"></div>
                                 <div class="flex items-center justify-center">
@@ -142,13 +156,22 @@
                     const video = document.getElementById('video');
                     const captureBtn = document.getElementById('capture-btn');
 
+                    // Mengecek ketersediaan kamera
                     navigator.mediaDevices.getUserMedia({
                             video: true
                         })
                         .then(stream => {
                             video.srcObject = stream;
+                            // Aktifkan tombol capture jika kamera tersedia
+                            captureBtn.disabled = false;
+                            captureBtn.classList.remove('bg-gray-400');
                         })
-                        .catch(err => console.error('Error accessing camera:', err));
+                        .catch(err => {
+                            console.error('Error accessing camera:', err);
+                            // Nonaktifkan tombol capture jika kamera tidak tersedia
+                            captureBtn.disabled = true;
+                            captureBtn.classList.add('bg-gray-400');
+                        });
 
                     captureBtn.addEventListener('click', captureAndSubmit);
                 });
