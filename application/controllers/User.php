@@ -105,7 +105,6 @@ class User extends CI_Controller
     {
         sidebar();
         $data = ['page' => 'lembur'];
-        $data['user'] = $this->user_model->get_all_user();
 
         $this->load->view('page/user/lembur', $data);
     }
