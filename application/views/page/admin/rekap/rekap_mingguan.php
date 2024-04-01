@@ -48,7 +48,7 @@
                         <div class="flex sm:flex-row gap-4 mx-auto items-center">
                             <button type="submit"
                                 class="bg-indigo-500 hover:bg-indigo text-white font-bold py-2 px-4 rounded inline-block">
-                                <i class="fa-solid fa-filter"></i>
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                             <a href="<?= base_url('Admin/export_mingguan') ?>"
                                 class="exp bg-green-500 hover:bg-green text-white font-bold py-2 px-4 rounded inline-block ml-auto">
@@ -59,7 +59,9 @@
 
                     <?php if (empty($perminggu)): ?>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 py-3">
-                        <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white mt-5 mb-3">Data Kosong!!
+                        <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white mt-5 mb-3">Tidak Ada
+                            Absen
+                            Minggu Ini !!
                         </h1>
                         <p class="text-center">Silahkan pilih minggu lain</p>
                     </div>
@@ -103,8 +105,8 @@
                                 <?php
                                 $no = 0;
                                 foreach ($perminggu as $row):
+
                                     $no++;
-                                    // Hitung jam kerja
                                     $jam_masuk = $row['jam_masuk'];
                                     $jam_pulang = $row['jam_pulang'];
                                     $jam_kerja = '-';
@@ -124,8 +126,8 @@
                                             $hours,
                                             $minutes
                                         );
-                                    } 
-                                ?>
+                                    }
+                                    ?>
                                 <tr
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row"
@@ -133,9 +135,9 @@
                                         <?php echo $no; ?>
                                     </th>
                                     <td class="px-6 py-4">
-                                        <?php echo toTitleCase(nama_user(
-                                            $row['id_user']
-                                        )); ?>
+                                        <?php echo toTitleCase(
+                                            nama_user($row['id_user'])
+                                        ); ?>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php echo convDate(
@@ -146,7 +148,9 @@
                                         <?php echo $row['jam_masuk']; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <img src="<?= base_url($row['foto_masuk']) ?>" alt=""
+                                        <img src="<?= base_url(
+                                            $row['foto_masuk']
+                                        ) ?>" alt=""
                                             class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                     </td>
@@ -154,20 +158,28 @@
                                         <?php echo $row['jam_pulang']; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <img src="<?= base_url($row['foto_pulang']) ?>" alt=""
+                                        <img src="<?= base_url(
+                                            $row['foto_pulang']
+                                        ) ?>" alt=""
                                             class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php
-                                            $time = DateTime::createFromFormat('H:i', $jam_kerja);
-                                            if ($time === false) {
-                                                echo "-";
-                                            } else {
-                                                $hours = $time->format('H');
-                                                $minutes = $time->format('i');
-                                                echo $hours . ' jam ' . $minutes . ' menit';
-                                            }
+                                        $time = DateTime::createFromFormat(
+                                            'H:i',
+                                            $jam_kerja
+                                        );
+                                        if ($time === false) {
+                                            echo '-';
+                                        } else {
+                                            $hours = $time->format('H');
+                                            $minutes = $time->format('i');
+                                            echo $hours .
+                                                ' jam ' .
+                                                $minutes .
+                                                ' menit';
+                                        }
                                         ?>
                                     </td>
                                     <td class="px-6 py-4">
