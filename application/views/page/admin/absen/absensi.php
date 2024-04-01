@@ -80,7 +80,7 @@
                         <!-- Tombol untuk Semua Form -->
                         <button type="button" id="submit-button"
                             class="bg-indigo-500 hover:bg-indigo text-white font-bold py-2 px-4 rounded inline-block ml-2">
-                            <i class="fa-solid fa-filter"></i>
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                         <a href="<?= base_url('Admin/export_absensi') ?>"
                             class="exp bg-green-500 hover:bg-green text-white font-bold py-2 px-4 rounded inline-block ml-2">
@@ -135,7 +135,8 @@
                             <?php
                             $no = 0;
                             foreach ($absensi as $row):
-                                $no++; 
+
+                                $no++;
                                 $hours = 0;
                                 $minutes = 0;
                                 // Hitung jam kerja
@@ -167,7 +168,9 @@
                                     <?php echo $no; ?>
                                 </th>
                                 <td class="px-6 py-4">
-                                    <?php echo toTitleCase(nama_user($row->id_user)); ?>
+                                    <?php echo toTitleCase(
+                                        nama_user($row->id_user)
+                                    ); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php echo convDate($row->tanggal_absen); ?>
@@ -179,7 +182,9 @@
                                     <?php echo $row->jam_masuk; ?>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <img src="<?= base_url($row->foto_masuk) ?>" alt=""
+                                    <img src="<?= base_url(
+                                        $row->foto_masuk
+                                    ) ?>" alt=""
                                         class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                         id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                 </td>
@@ -187,20 +192,28 @@
                                     <?php echo $row->jam_pulang; ?>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <img src="<?= base_url($row->foto_pulang) ?>" alt=""
+                                    <img src="<?= base_url(
+                                        $row->foto_pulang
+                                    ) ?>" alt=""
                                         class="block py-2.5 px-0 w-25 max-h-96 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                         id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php
-                                        $time = DateTime::createFromFormat('H:i', $jam_kerja);
-                                        if ($time === false) {
-                                            echo "-";
-                                        } else {
-                                            $hours = $time->format('H');
-                                            $minutes = $time->format('i');
-                                            echo $hours . ' jam ' . $minutes . ' menit';
-                                        }
+                                    $time = DateTime::createFromFormat(
+                                        'H:i',
+                                        $jam_kerja
+                                    );
+                                    if ($time === false) {
+                                        echo '-';
+                                    } else {
+                                        $hours = $time->format('H');
+                                        $minutes = $time->format('i');
+                                        echo $hours .
+                                            ' jam ' .
+                                            $minutes .
+                                            ' menit';
+                                    }
                                     ?>
                                 </td>
                                 <td class="px-6 py-4">

@@ -23,51 +23,103 @@
                         </h6>
                     </div>
                     <hr>
-                    <form action="<?= base_url('admin/rekap_bulanan') ?>" method="get"
-                        class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-5">
+                    <form action="<?= base_url(
+                        'admin/rekap_bulanan'
+                    ) ?>" method="get" class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-5">
                         <select
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             id="bulan" name="bulan">
                             <option>Pilih Bulan</option>
-                            <option value="01"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '1') echo 'selected'; ?>>Januari
+                            <option value="01" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '1'
+                            ) {
+                                echo 'selected';
+                            } ?>>Januari
                             </option>
-                            <option value="02"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '2') echo 'selected'; ?>>Februari
+                            <option value="02" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '2'
+                            ) {
+                                echo 'selected';
+                            } ?>>Februari
                             </option>
-                            <option value="03"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '3') echo 'selected'; ?>>Maret
+                            <option value="03" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '3'
+                            ) {
+                                echo 'selected';
+                            } ?>>Maret
                             </option>
-                            <option value="04"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '4') echo 'selected'; ?>>April
+                            <option value="04" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '4'
+                            ) {
+                                echo 'selected';
+                            } ?>>April
                             </option>
-                            <option value="05"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '5') echo 'selected'; ?>>Mei
+                            <option value="05" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '5'
+                            ) {
+                                echo 'selected';
+                            } ?>>Mei
                             </option>
-                            <option value="06"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '6') echo 'selected'; ?>>Juni
+                            <option value="06" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '6'
+                            ) {
+                                echo 'selected';
+                            } ?>>Juni
                             </option>
-                            <option value="07"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '7') echo 'selected'; ?>>Juli
+                            <option value="07" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '7'
+                            ) {
+                                echo 'selected';
+                            } ?>>Juli
                             </option>
-                            <option value="08"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '8') echo 'selected'; ?>>Agustus
+                            <option value="08" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '8'
+                            ) {
+                                echo 'selected';
+                            } ?>>Agustus
                             </option>
-                            <option value="09"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '9') echo 'selected'; ?>>September
+                            <option value="09" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '9'
+                            ) {
+                                echo 'selected';
+                            } ?>>September
                             </option>
-                            <option value="10"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '10') echo 'selected'; ?>>Oktober
+                            <option value="10" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '10'
+                            ) {
+                                echo 'selected';
+                            } ?>>Oktober
                             </option>
-                            <option value="11"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '11') echo 'selected'; ?>>November
+                            <option value="11" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '11'
+                            ) {
+                                echo 'selected';
+                            } ?>>November
                             </option>
-                            <option value="12"
-                                <?php if(isset($_GET['bulan']) && $_GET['bulan'] == '12') echo 'selected'; ?>>Desember
+                            <option value="12" <?php if (
+                                isset($_GET['bulan']) &&
+                                $_GET['bulan'] == '12'
+                            ) {
+                                echo 'selected';
+                            } ?>>Desember
                             </option>
                         </select>
-                        <input type="number" id="form_tahun" name="tahun"
-                            value="<?= isset($_GET['tahun'])? $_GET['tahun']: '' ?>"
+                        <input type="number" id="form_tahun" name="tahun" value="<?= isset(
+                            $_GET['tahun']
+                        )
+                            ? $_GET['tahun']
+                            : '' ?>"
                             class="w-40 sm:w-64 sm:w-40 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-3 "
                             placeholder="Pilih Tahun" pattern="[0-9]{4}">
                         <label for="tahun"
@@ -75,9 +127,15 @@
                         <div class="flex sm:flex-row gap-4 mx-auto items-center">
                             <button type="submit"
                                 class="bg-indigo-500 hover:bg-indigo text-white font-bold py-2 px-4 rounded inline-block">
-                                <i class="fa-solid fa-filter"></i>
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
-                            <a href="<?= base_url('admin/export_all_karyawan') . '?bulan=' . (isset($_GET['bulan']) ? $_GET['bulan'] : '') . '&tahun=' . (isset($_GET['tahun']) ? $_GET['tahun'] : '') ?>"
+                            <a href="<?= base_url('admin/export_all_karyawan') .
+                                '?bulan=' .
+                                (isset($_GET['bulan']) ? $_GET['bulan'] : '') .
+                                '&tahun=' .
+                                (isset($_GET['tahun'])
+                                    ? $_GET['tahun']
+                                    : '') ?>"
                                 class="exp bg-green-500 hover:bg-green text-white font-bold py-2 px-4 rounded inline-block ml-auto">
                                 <i class="fa-solid fa-file-export"></i>
                             </a>
@@ -105,6 +163,9 @@
                                         Foto Masuk
                                     </th>
                                     <th scope="col" class="px-6 py-3">
+                                        Lokasi Masuk
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Jam Pulang
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -122,6 +183,7 @@
                                 <?php
                                 $no = 0;
                                 foreach ($absensi as $row):
+
                                     $no++;
                                     $hours = 0;
                                     $minutes = 0;
@@ -132,13 +194,22 @@
                                         $jam_masuk != '00:00:00' &&
                                         $jam_pulang != '00:00:00'
                                     ) {
-                                        $start_time = strtotime($row->jam_masuk);
+                                        $start_time = strtotime(
+                                            $row->jam_masuk
+                                        );
                                         $end_time = strtotime($row->jam_pulang);
                                         $diff = $end_time - $start_time;
                                         $hours = floor($diff / (60 * 60));
-                                        $minutes = floor(($diff - $hours * 60 * 60) / 60);
-                                        $jam_kerja = sprintf('%02d:%02d', $hours, $minutes);
-                                    } ?>
+                                        $minutes = floor(
+                                            ($diff - $hours * 60 * 60) / 60
+                                        );
+                                        $jam_kerja = sprintf(
+                                            '%02d:%02d',
+                                            $hours,
+                                            $minutes
+                                        );
+                                    }
+                                    ?>
                                 <tr
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row"
@@ -146,38 +217,51 @@
                                         <?php echo $no; ?>
                                     </th>
                                     <th scope="row" class="px-6 py-4">
-                                        <?php echo toTitleCase(nama_user($row->id_user)); ?>
+                                        <?php echo toTitleCase(
+                                            nama_user($row->id_user)
+                                        ); ?>
                                     </th>
                                     <td class="px-6 py-4">
-                                        <?php echo convDate($row->tanggal_absen); ?>
+                                        <?php echo convDate(
+                                            $row->tanggal_absen
+                                        ); ?>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php echo $row->jam_masuk; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <img src="<?= base_url($row->foto_masuk) ?>" alt=""
+                                        <img src="<?= base_url(
+                                            $row->foto_masuk
+                                        ) ?>" alt=""
                                             class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             id="foto_masuk" style="max-width: 100px; max-height: 100px;">
-                                    </td>
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php echo $row->jam_pulang; ?>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <img src="<?= base_url($row->foto_pulang) ?>" alt=""
+                                        <img src="<?= base_url(
+                                            $row->foto_pulang
+                                        ) ?>" alt=""
                                             class="block py-2.5 px-0 w-25 max-h-32 h-25 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             id="foto_masuk" style="max-width: 100px; max-height: 100px;">
                                     </td>
                                     <td class="px-6 py-4">
                                         <?php
-                                            $time = DateTime::createFromFormat('H:i', $jam_kerja);
-                                            if ($time === false) {
-                                                echo "-";
-                                            } else {
-                                                $hours = $time->format('H');
-                                                $minutes = $time->format('i');
-                                                echo $hours . ' jam ' . $minutes . ' menit';
-                                            }
+                                        $time = DateTime::createFromFormat(
+                                            'H:i',
+                                            $jam_kerja
+                                        );
+                                        if ($time === false) {
+                                            echo '-';
+                                        } else {
+                                            $hours = $time->format('H');
+                                            $minutes = $time->format('i');
+                                            echo $hours .
+                                                ' jam ' .
+                                                $minutes .
+                                                ' menit';
+                                        }
                                         ?>
                                     </td>
                                     <td class="px-6 py-4">
@@ -189,7 +273,6 @@
                                 ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </main>

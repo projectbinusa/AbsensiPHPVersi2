@@ -52,7 +52,7 @@
                         <div class="flex sm:flex-row gap-4 mx-auto items-center">
                             <button type="submit"
                                 class="bg-indigo-500 hover:bg-indigo text-white font-bold py-2 px-4 rounded inline-block">
-                                <i class="fa-solid fa-filter"></i>
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                             <!-- <a href="<?= base_url(
                                 'Admin/export_bulanan'
