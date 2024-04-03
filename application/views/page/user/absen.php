@@ -67,9 +67,10 @@
                                     <input type="hidden" name="image_data" id="image-data" />
                                 </div>
                                 <button type="button" id="capture-btn"
-                                    class="bg-indigo-500 text-white px-4 py-2 rounded-md mb-3">
+                                    class="bg-indigo-500 text-white px-4 py-2 rounded-md mb-3" style="width: 150px;">
                                     <i class="fa-solid fa-camera"></i>
                                 </button>
+
 
                                 <label for="map" class="block text-sm font-semibold mb-2">Lokasi:</label>
                                 <div id="address"></div>
@@ -148,9 +149,13 @@
                     const imageDataInput = document.getElementById('image-data');
                     imageDataInput.value = capturedImageData;
 
-                    // Submit form
-                    document.getElementById('absenForm').submit();
+                    // Tunggu 2 detik sebelum mengirim formulir
+                    setTimeout(function() {
+                        // Submit form
+                        document.getElementById('absenForm').submit();
+                    }, 2000); // Waktu dalam milidetik (2 detik)
                 }
+
 
                 document.addEventListener('DOMContentLoaded', function() {
                     const video = document.getElementById('video');
