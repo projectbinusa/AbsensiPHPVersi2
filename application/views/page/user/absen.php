@@ -104,6 +104,22 @@
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
+                    let cnt = 0,
+                        xp = latitude,
+                        yp = longitude,
+                        edges = [
+                            [-6.975529487096709, 110.30157620693905],
+                            [-6.975496541825257, 110.3009736968416],
+                            [-6.976353915653226, 110.30154539936574],
+                            [-6.976339400207557, 110.30093865296837]
+                        ]
+                    edges.forEach((edge, i) => {
+                        const [x1, y1] = edge;
+                        const [x2, y2] = edges.length - 1 === i ? edges[0] : edges[i +1];
+                        if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp-y1)/(y2-y1)) * (x2-x1)) cnt++;
+                    })
+                    if (cnt%2 !== 1) document.querySelector('#capture-btn').disabled = true 
+
                     // Menyimpan nilai latitude dan longitude di input tersembunyi
                     document.getElementById("lokasi_masuk").value = "Latitude: " + latitude + ", Longitude: " +
                         longitude;
