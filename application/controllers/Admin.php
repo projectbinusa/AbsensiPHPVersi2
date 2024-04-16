@@ -2127,16 +2127,19 @@ class Admin extends CI_Controller
     {
         $bulan = $this->session->flashdata('bulan');
         $admin_id = $this->session->userdata('id_admin');
-        // var_dump($admin_id);
-        $user_id = '2';
-        // var_dump($id_user);
-        // echo '<br />';
+        // var_dump($bulan);
 
         // $data = $this->admin_model->get_bulanan($bulan, $admin_id);
-        $data = $this->admin_model->get_perkaryawan($admin_id, $user_id);
-
+        
         $list_user = $this->admin_model->get_user_by_id_admin($admin_id);
-
+        // var_dump("ini list user --------------->", $list_user, "<br>");
+        foreach ($list_user as $user) {
+            $id_user = $user->id_user;
+            $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
+            // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
+        }
+        
+        
         usort($data, function ($a, $b) {
             return strcmp(nama_user($a->id_user), nama_user($b->id_user));
         });
@@ -2153,7 +2156,7 @@ class Admin extends CI_Controller
             ],
             'alignment' => [
                 'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -2167,7 +2170,7 @@ class Admin extends CI_Controller
             'alignment' => [
                 'horizontal' =>
                     \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' =>
+                    'vertical' =>
                     \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
             'fill' => [
@@ -2175,7 +2178,7 @@ class Admin extends CI_Controller
                 'startColor' => ['argb' => '4F81BD'],
             ],
         ];
-
+        
         $style_izin = [
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -2199,7 +2202,7 @@ class Admin extends CI_Controller
                 'outline' => [
                     'borderStyle' =>
                         \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
+                        'color' => ['argb' => '000000'],
                 ],
             ],
         ];
@@ -2236,7 +2239,7 @@ class Admin extends CI_Controller
         $style_data = [
             'alignment' => [
                 'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
         ];
 
@@ -2256,48 +2259,61 @@ class Admin extends CI_Controller
         $sheet->setCellValue('I3', 'TANGGAL');
         $sheet->setCellValue('J3', 'TANPA KETERANGAN');
         $sheet->getStyle('A3:J3')->applyFromArray($style_header);
-
+        
         // Set data
         $no = 1;
         $row = 4;
-
+        
         $no1 = 1;
         $row2 = 4;
         $temp = [];
-        $day = new DateTime($data[0]->tanggal_absen);
+        foreach ($list_user as $user) {
+            // var_dump($user);
+            $id_user = $user->id_user;
+            // $tanggal = $user->tanggal_absen;
+            // var_dump("ini tanggal ------->", $tanggal, "<br>");
+            // var_dump("ini id ------------>",$id_user, "<br>");
+            $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
+            // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
+            foreach($data as $d) {
+                // var_dump("lohhh", $d->tanggal_absen);
+                $day = new DateTime($d->tanggal_absen);
+                // var_dump($day);
 
-        for ($i = 0; $i < count($data); $i++) {
-            $now = new DateTime($data[$i]->tanggal_absen);
-            if ($now->format('Y/m/d') == $day->format('Y/m/d')) {
-                array_push($temp, $data[$i]);
-                $day->modify('+1 day');
-            } else {
-                $selisih = $now->diff($day)->days;
-                for ($j = 0; $j < $selisih; $j++) {
-                    $object = new stdClass();
-                    $object->id_user = $user_id;
-                    $object->tanggal_absen = $day->format('Y/m/d');
-                    $object->keterangan_izin = '-';
-                    $object->jam_masuk = '-';
-                    $object->foto_masuk = '-';
-                    $object->lokasi_masuk = '-';
-                    $object->jam_pulang = '-';
-                    $object->foto_pulang = '-';
-                    $object->lokasi_pulang = '-';
-                    $object->status = '0';
-                    $object->status_absen = 'Tidak masuk';
-                    $object->keterangan_terlambat = '-';
-                    $object->keterangan_pulang_awal = '-';
+                for ($i = 0; $i < count($data); $i++) {
+                    $now = new DateTime($data[$i]->tanggal_absen);
+                    if ($now->format('Y/m/d') == $day->format('Y/m/d')) {
+                        array_push($temp, $data[$i]);
+                        $day->modify('+1 day');
+                    } else {
+                        $selisih = $now->diff($day)->days;
+                        for ($j = 0; $j < $selisih; $j++) {
+                            $object = new stdClass();
+                            $object->id_user = $id_user;
+                            $object->tanggal_absen = $day->format('Y/m/d');
+                            $object->keterangan_izin = '-';
+                            $object->jam_masuk = '-';
+                            $object->foto_masuk = '-';
+                            $object->lokasi_masuk = '-';
+                            $object->jam_pulang = '-';
+                            $object->foto_pulang = '-';
+                            $object->lokasi_pulang = '-';
+                            $object->status = '0';
+                            $object->status_absen = 'Tidak masuk';
+                            $object->keterangan_terlambat = '-';
+                            $object->keterangan_pulang_awal = '-';
 
-                    $day->modify('+1 day');
+                            $day->modify('+1 day');
 
-                    array_push($temp, $object);
-                }
+                            array_push($temp, $object);
+                        }
 
-                // Periksa apakah $i + 1 adalah indeks yang valid sebelum mengaksesnya
-                if ($i + 1 < count($data)) {
-                    $day->modify($data[$i + 1]->tanggal_absen);
-                    // var_dump($data[$i + 1]->tanggal_absen);
+                        // Periksa apakah $i + 1 adalah indeks yang valid sebelum mengaksesnya
+                        if ($i + 1 < count($data)) {
+                            $day->modify($data[$i + 1]->tanggal_absen);
+                            // var_dump($data[$i + 1]->tanggal_absen);
+                        }
+                    }
                 }
             }
         }
@@ -2307,14 +2323,14 @@ class Admin extends CI_Controller
         $lupa = [];
         $izin = [];
         foreach ($temp as $item) {
-            // var_dump($item->id_user, $item->status_absen);
+            // var_dump("id user ---------------->", $item->id_user, "status absen ------------>", $item->status_absen, "<br>");
             // echo'<br />';
             if ($item->status_absen === 'Tidak masuk') {
                 array_push($alpa, $item->id_user, $item->tanggal_absen);
                 // var_dump('ini alpa -------------------------------->',$alpa);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Terlambat') {
-                array_push($telat, $item->id_user, $item->tanggal_absen);
+                array_push($telat, $item->id_user, $item->tanggal_absen, $item->keterangan_terlambat);
                 // var_dump('ini telat -------------------------------->',$telat);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Lupa') {
@@ -2322,16 +2338,15 @@ class Admin extends CI_Controller
                 // var_dump('ini lupa ---------------------------------->',$lupa);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Izin') {
-                array_push($izin, $item->id_user, $item->tanggal_absen);
+                array_push($izin, $item->id_user, $item->tanggal_absen, $item->keterangan_izin);
                 // var_dump('ini izin ----------------------------------->',$izin);
                 // echo'<br />';
+                // var_dump($item->tanggal_absen, $item->keterangan_izin);
             }
         }
 
         foreach ($list_user as $nama) {
             // var_dump($nama->id_user);
-            // echo'<br />';
-
             $id = $nama->id_user;
             // var_dump($id);
             $sheet->setCellValue('A' . $row, $no);
@@ -2351,6 +2366,7 @@ class Admin extends CI_Controller
 
             // var_dump($izin[0]);
             if (!empty($alpa) && $id === $alpa[0]) {
+                // var_dump("halo alpa ----->", $alpa, "<br>");
                 $est = implode(', ', $alpa) . "\n";
                 $sheet->setCellValue('I' . $row, $est);
                 $sheet->setCellValue('J' . $row, 'Tanpa Keterangan');
@@ -2360,7 +2376,7 @@ class Admin extends CI_Controller
                     ->setWrapText(true);
             }
             if (!empty($telat) && $id === $telat[0]) {
-                // var_dump($telat);
+                // var_dump("saya telat ---->", $telat, "<br>");
                 $est2 = implode(', ', $telat) . "\n";
                 $sheet->setCellValue('E' . $row, $est2);
                 $sheet->setCellValue('F' . $row, 'Contoh Terlambat');
@@ -2370,16 +2386,18 @@ class Admin extends CI_Controller
                     ->setWrapText(true);
             }
             if (!empty($izin) && $id === $izin[0]) {
+                // var_dump("aduh izin ------>", $izin, "<br>");
                 $est3 = implode(', ', $izin) . "\n";
                 $sheet->setCellValue('C' . $row, $est3);
                 $sheet->setCellValue('D' . $row, 'Contoh Izin');
-                // var_dump($nama->keterangan_izin);
+                // var_dump('ini tetetetetet ', $nama->keterangan_izin);
                 $sheet
                     ->getStyle('C' . $row)
                     ->getAlignment()
                     ->setWrapText(true);
             }
             if (!empty($lupa) && $id === $lupa[0]) {
+                // var_dump("aku lupa deh --------->", $lupa, "<br>");
                 $est4 = implode(', ', $lupa) . "\n";
                 $sheet->setCellValue('G' . $row, $est4);
                 $sheet->setCellValue('H' . $row, 'Contoh Lupa absen');
@@ -2449,7 +2467,7 @@ class Admin extends CI_Controller
             //         convDate($item->tanggal_absen)
             //     );
             //     $sheet->setCellValue('J' . $row, $item->status_absen);
-            // }hnj
+            // }
             $no++;
             $row++;
         }
@@ -2469,26 +2487,31 @@ class Admin extends CI_Controller
         // Atur tinggi baris secara otomatis
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
 
-        // Atur orientasi dan judul halaman
-        $sheet
-            ->getPageSetup()
-            ->setOrientation(
-                \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
+        // try {
+            // Atur orientasi dan judul halaman
+            $sheet
+                ->getPageSetup()
+                ->setOrientation(
+                    \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
+                );
+            $sheet->setTitle('Rekap Simpel');
+    
+            // Set header untuk file Excel
+            header(
+                'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             );
-        $sheet->setTitle('REKAP BULANAN');
-
-        // Set header untuk file Excel
-        header(
-            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header(
-            'Content-Disposition: attachment; filename="REKAP BULANAN.xlsx"'
-        );
-        header('Cache-Control: max-age=0');
-
-        // Simpan file Excel dan tampilkan ke output
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
+            header(
+                'Content-Disposition: attachment; filename="REKAP BULANAN.xlsx"'
+            );
+            header('Cache-Control: max-age=0');
+    
+            // Simpan file Excel dan tampilkan ke output
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        // } catch (\Throwable $th) {
+            //throw $th;
+            // var_dump($th);
+        // }
     }
 
     public function laporan_surat_lembur($id_lembur)
