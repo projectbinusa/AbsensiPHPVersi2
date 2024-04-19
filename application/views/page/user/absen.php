@@ -100,12 +100,12 @@
                 </form>
                 <script>
                 // Menambahkan script JavaScript untuk mendapatkan dan menampilkan longitude dan latitude
+                let cnt = 0;
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
-                    let cnt = 0,
-                        xp = latitude,
+                    const xp = latitude,
                         yp = longitude,
                         edges = [
                             [-6.975529487096709, 110.30157620693905],
@@ -118,7 +118,12 @@
                         const [x2, y2] = edges.length - 1 === i ? edges[0] : edges[i +1];
                         if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp-y1)/(y2-y1)) * (x2-x1)) cnt++;
                     })
-                    if (cnt%2 !== 1) document.querySelector('#capture-btn').disabled = true 
+
+                    if (cnt%2 !== 1) {
+                        captureBtn.disabled = true;
+                    } else {
+                        captureBtn.disabled = false;
+                    }
 
                     // Menyimpan nilai latitude dan longitude di input tersembunyi
                     document.getElementById("lokasi_masuk").value = "Latitude: " + latitude + ", Longitude: " +
@@ -184,7 +189,11 @@
                         .then(stream => {
                             video.srcObject = stream;
                             // Aktifkan tombol capture jika kamera tersedia
-                            captureBtn.disabled = false;
+                            if (cnt%2 !== 1) {
+                                captureBtn.disabled = true;
+                            } else {
+                                captureBtn.disabled = false;
+                            }
                             captureBtn.classList.remove('bg-gray-400');
                         })
                         .catch(err => {
