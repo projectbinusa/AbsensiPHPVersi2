@@ -263,50 +263,50 @@ class Auth extends CI_Controller
             $resetLink = base_url('auth/reset_password/' . $token);
 
             $mail->setFrom('mingave11@gmail.com', 'Absensi App');
-            $mail->addAddress($email);
+            $mail->addAddress($email); // Set alamat email yang diambil dari input form sebagai alamat tujuan
             $mail->isHTML(true);
             $mail->Subject = 'Reset Password';
             $mail->Body =
                 '
-            <html>
-            <head>
-                <title>Reset Password</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f4f4f4;
-                        margin: 0;
-                        padding: 20px;
-                    }
-                    .container {
-                        background-color: #ffffff;
-                        border-radius: 5px;
-                        padding: 20px;
-                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                    }
-                    .button {
-                        border: 1px solid #7B66FF;
-                        color: white;
-                        padding: 10px 20px;
-                        text-align: center;
-                        text-decoration: none;
-                        display: inline-block;
-                        font-size: 16px;
-                        border-radius: 5px;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h2 style="color: #000000;">Reset Your Password</h2>
-                    <p>You have requested to reset your password. Click the button below to proceed:</p>
-                    <a class="button" href="' .
+        <html>
+        <head>
+            <title>Reset Password</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 20px;
+                }
+                .container {
+                    background-color: #ffffff;
+                    border-radius: 5px;
+                    padding: 20px;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                }
+                .button {
+                    border: 1px solid #7B66FF;
+                    color: white;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    border-radius: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2 style="color: #000000;">Reset Your Password</h2>
+                <p>You have requested to reset your password. Click the button below to proceed:</p>
+                <a class="button" href="' .
                 $resetLink .
                 '">Reset Password</a>
-                </div>
-            </body>
-            </html>
-        ';
+            </div>
+        </body>
+        </html>
+    ';
 
             $mail->send();
 

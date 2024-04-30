@@ -38,7 +38,7 @@ $image = $_SESSION['image'];
 
                         <!-- Logo Aplikasi -->
                         <img src="<?php echo base_url(
-                            './src/assets/image/absensi.png'
+                            './src/assets/image/binussmg.png'
                         ); ?>" class="h-10 mr-3" alt="Absensi Logo" />
 
                         <!-- Nama Aplikasi -->
@@ -56,7 +56,7 @@ $image = $_SESSION['image'];
                                 <span class="sr-only">Open user menu</span>
                                 <!--  -->
                                 <img class="w-8 h-8 rounded-full object-cover" src="<?= base_url(
-                                    '/images/admin/' . $image
+                                    '/images/admin/' . $admin->image
                                 ) ?>" alt="user photo"></a>
 
                             </button>
@@ -82,8 +82,9 @@ $image = $_SESSION['image'];
                                 <li>
                                     <a onclick="confirmLogout();"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        role="menuitem">Log out</a>
+                                        role="menuitem" style="cursor: pointer;">Log out</a>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -129,7 +130,7 @@ $image = $_SESSION['image'];
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-users-gear fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                                <span class="flex-1 ml-3 whitespace-nowrap">Karyawan</span>
+                                <span class="flex-1 ml-3 whitespace-nowrap">Guru & Siswa</span>
                             </a>
                         </li>
 
@@ -291,20 +292,20 @@ $image = $_SESSION['image'];
                             </a>
                         </li>
                         <!-- Menu Mingguan -->
-                        <li>
+                        <!-- <li>
                             <a href="<?php echo base_url('admin/lembur'); ?>"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 <i
                                     class="fa-solid fa-business-time fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                                 <span class="flex-1 ml-3 whitespace-nowrap">Lembur</span>
                             </a>
-                        </li>
+                        </li> -->
                         </a>
                     </ul>
                 </li>
                 <li>
                     <div class="flex flex-col items-center w-full mt-2 border-t border-gray-700 py-5">
-                        <span class="font-semibold ">v 1.0.0</span>
+                        <span class="font-semibold ">v 2.0.0</span>
                     </div>
                 </li>
             </ul>

@@ -30,7 +30,7 @@
 
                     <!-- Form Input -->
                     <form action="<?php echo base_url(
-                        'superAdmin/aksi_tambah_user'
+                        'superadmin/aksi_tambah_user'
                     ); ?>" method="post" enctype="multipart/form-data">
 
                         <div class="grid md:grid-cols-2 md:gap-6">

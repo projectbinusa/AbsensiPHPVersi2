@@ -115,11 +115,12 @@
                         ]
                     edges.forEach((edge, i) => {
                         const [x1, y1] = edge;
-                        const [x2, y2] = edges.length - 1 === i ? edges[0] : edges[i +1];
-                        if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp-y1)/(y2-y1)) * (x2-x1)) cnt++;
+                        const [x2, y2] = edges.length - 1 === i ? edges[0] : edges[i + 1];
+                        if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp - y1) / (y2 - y1)) * (x2 - x1))
+                            cnt++;
                     })
 
-                    if (cnt%2 !== 1) {
+                    if (cnt % 2 !== 1) {
                         captureBtn.disabled = true;
                     } else {
                         captureBtn.disabled = false;
@@ -189,7 +190,7 @@
                         .then(stream => {
                             video.srcObject = stream;
                             // Aktifkan tombol capture jika kamera tersedia
-                            if (cnt%2 !== 1) {
+                            if (cnt % 2 !== 1) {
                                 captureBtn.disabled = true;
                             } else {
                                 captureBtn.disabled = false;

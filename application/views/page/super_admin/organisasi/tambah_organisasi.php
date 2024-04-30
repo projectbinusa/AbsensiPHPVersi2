@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absensi App</title>
-    <link rel="icon" href="<?php echo base_url('./src/assets/image/absensi.png'); ?>" type="image/gif">
+    <link rel="icon" href="<?php echo base_url(
+        './src/assets/image/absensi.png'
+    ); ?>" type="image/gif">
 </head>
 
 <body>
@@ -27,7 +29,9 @@
                 <div class="mt-5 text-left">
 
                     <!-- Form Input -->
-                    <form action="<?php echo base_url('SuperAdmin/aksi_tambah_organisasi') ?>" method="post"
+                    <form action="<?php echo base_url(
+                        'superadmin/aksi_tambah_organisasi'
+                    ); ?>" method="post"
                         enctype="multipart/form-data">
 
                         <div class="grid md:grid-cols-2 md:gap-6">
