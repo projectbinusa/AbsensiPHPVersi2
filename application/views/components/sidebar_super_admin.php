@@ -54,7 +54,7 @@ $image = $_SESSION['image'];
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
                             <img class="w-8 h-8 rounded-full object-cover" src="<?= base_url(
-                                '/images/superadmin/' . $image
+                                '/images/superadmin/' . $superadmin->image
                             ) ?>" alt="user photo"></a>
                         </button>
                         <div class="z-50 hidden my-4 text-base list-none bg-indigo-50 divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -222,16 +222,6 @@ $image = $_SESSION['image'];
                         </li>
                         </a>
                     </ul>
-                </li>
-
-                <!-- Menu Token  -->
-                <li>
-                    <a href="<?php echo base_url('superadmin/token'); ?>"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <i
-                            class="fas fa-solid fa-key fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                        <span class="ml-3">Token</span>
-                    </a>
                 </li>
 
                 <li>

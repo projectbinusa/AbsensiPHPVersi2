@@ -123,6 +123,29 @@ $db['default'] = [
 // $db['default'] = [
 //     'dsn' => '',
 //     'hostname' => 'localhost',
+//     'username' => 'demoabsensibinusa',
+//     'password' => 'demoabsensibinusa12345',
+//     'database' => 'demoabsensibinusa',
+//     'dbdriver' => 'mysqli',
+//     'dbprefix' => '',
+//     'pconnect' => false,
+//     'db_debug' => ENVIRONMENT !== 'production',
+//     'cache_on' => false,
+//     'cachedir' => '',
+//     'char_set' => 'utf8',
+//     'dbcollat' => 'utf8_general_ci',
+//     'swap_pre' => '',
+//     'encrypt' => false,
+//     'compress' => false,
+//     'stricton' => false,
+//     'failover' => [],
+//     'save_queries' => true,
+// ];
+
+// PENTING, JANGAN DI HAPUS (DEPLOYMENT) !!!!!!!!!!!!!!!!!!!!!
+// $db['default'] = [
+//     'dsn' => '',
+//     'hostname' => 'localhost',
 //     'username' => 'absenbootcamp',
 //     'password' => 'N3v3rF0r93t3n2024',
 //     'database' => 'absenbootcamp',

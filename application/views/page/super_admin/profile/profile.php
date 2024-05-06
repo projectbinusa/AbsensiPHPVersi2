@@ -69,9 +69,8 @@
                             <div id="profile-picture-container"
                                 class="rounded-full mt-2 mx-auto my-auto w-48 h-48 md:w-40 md:h-40 lg:w-56 lg:h-56 xl:w-64 xl:h-64 object-cover">
                                 <img class="h-full object-cover rounded-full" src="<?= base_url(
-                                        './images/superadmin/' .
-                                            $superadmin->image
-                                    ) ?>" alt="Profile Picture">
+                                    './images/superadmin/' . $superadmin->image
+                                ) ?>" alt="Profile Picture">
                             </div>
                             <div class="small font-italic text-muted mb-4">JPG atau PNG tidak lebih besar dari 5 MB
                             </div>

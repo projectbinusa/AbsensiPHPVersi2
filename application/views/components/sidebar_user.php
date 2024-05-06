@@ -31,7 +31,7 @@
 
                         <!-- Logo Aplikasi -->
                         <img src="<?php echo base_url(
-                            './src/assets/image/absensi.png'
+                            './src/assets/image/binussmg.png'
                         ); ?>" class="h-10 mr-3" alt="Absensi Logo" />
 
                         <!-- Nama Aplikasi -->
@@ -115,17 +115,17 @@
                         <span class="flex-1 ml-3 whitespace-nowrap">Cuti</span>
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="<?php echo base_url('user/history_lembur'); ?>"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i
                             class="fa-solid fa-business-time fa-fw fa-lg me-3 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">Lembur</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <div class="flex flex-col items-center w-full mt-2 border-t border-gray-700 py-5">
-                        <span class="font-semibold ">v 1.0.0</span>
+                        <span class="font-semibold ">v 2.0.0</span>
                     </div>
                 </li>
             </ul>

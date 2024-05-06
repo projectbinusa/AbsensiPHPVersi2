@@ -777,7 +777,7 @@ class Admin_model extends CI_Model
             $result_array = $query->result_array();
             return $result_array;
         } else {
-            return []; 
+            return [];
         }
     }
 
@@ -1275,6 +1275,16 @@ class Admin_model extends CI_Model
         $this->db->delete('absensi');
         $this->db->where('id_user', $id_user);
         $this->db->delete('cuti');
+    }
+
+    public function getUserByID($id)
+    {
+        $this->db->select('*');
+        $this->db->from('admin');
+        $this->db->where('id_admin', $id);
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }
 ?>

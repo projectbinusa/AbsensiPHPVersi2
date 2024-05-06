@@ -25,6 +25,8 @@ class SuperAdmin extends CI_Controller
     // Page Dashboard / Utama
     public function index()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         $id_admin = $this->super_model->get_admin_data_by_superadmin(
             $id_superadmin
@@ -51,7 +53,8 @@ class SuperAdmin extends CI_Controller
     // Page Organisasi
     public function organisasi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['start'] = $this->uri->segment(3);
 
         // Get the id_superadmin that is currently logged in
@@ -85,7 +88,8 @@ class SuperAdmin extends CI_Controller
     // Page Tambah Organisasi
     public function tambah_organisasi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         $data['admin'] = $this->super_model->get_admin_by_superadminn(
             $id_superadmin
@@ -99,7 +103,8 @@ class SuperAdmin extends CI_Controller
     // Page Update Organisasi
     public function update_organisasi($id_organisasi)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['organisasi'] = $this->super_model->getOrganisasiById(
             $id_organisasi
         );
@@ -111,7 +116,8 @@ class SuperAdmin extends CI_Controller
 
     public function detail_organisasi($organisasi_id)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id_superadmin');
 
         $data['organisasi'] = $this->super_model->getOrganisasiDetails(
@@ -128,7 +134,8 @@ class SuperAdmin extends CI_Controller
     // Page Admin
     public function admin()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
 
         $data['start'] = $this->uri->segment(3);
@@ -144,7 +151,8 @@ class SuperAdmin extends CI_Controller
     // Page Jabatan
     public function jabatan()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['start'] = $this->uri->segment(3);
 
         $id_superadmin = $this->session->userdata('id');
@@ -162,7 +170,8 @@ class SuperAdmin extends CI_Controller
     // Page Tambah Admin
     public function tambah_admin()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // $data['id_superadmin'] = $this->session->userdata('id');
         $data['organisasi'] = $this->super_model
             ->get_data('organisasi')
@@ -173,7 +182,8 @@ class SuperAdmin extends CI_Controller
     // Page Edit Admin
     public function update_admin($id_admin)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // $id_admin = $this->session->userdata('id_admin');
         $data['admin'] = $this->super_model->getAdminById($id_admin);
         $this->load->view('page/super_admin/admin/update_admin', $data);
@@ -182,7 +192,8 @@ class SuperAdmin extends CI_Controller
     // Page Detail admin
     public function detail_admin($admin_id)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // $data['id_superadmin'] = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->super_model->getAdminDetails($admin_id);
@@ -192,7 +203,8 @@ class SuperAdmin extends CI_Controller
     // Page User
     public function user()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['start'] = $this->uri->segment(3);
 
         // Dapatkan ID superadmin yang sedang login dari sesi
@@ -209,7 +221,8 @@ class SuperAdmin extends CI_Controller
     // Page Tambah User
     public function tambah_user()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         $data['admin'] = $this->super_model->get_data('admin')->result();
         $data[
@@ -230,7 +243,8 @@ class SuperAdmin extends CI_Controller
     // Page Update User
     public function update_user($id_user)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['user'] = $this->super_model->getUserId($id_user);
         $this->load->view('page/super_admin/user/update_user', $data);
     }
@@ -238,7 +252,8 @@ class SuperAdmin extends CI_Controller
     // Page Detail User
     public function detail_user($user_id)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['user'] = $this->super_model->getUserDetails($user_id);
 
         // Mengirim data pengguna ke view
@@ -248,7 +263,8 @@ class SuperAdmin extends CI_Controller
     // Page Absensi
     public function absensi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['start'] = $this->uri->segment(3);
 
         // Mengambil id_superadmin yang sedang login
@@ -265,7 +281,8 @@ class SuperAdmin extends CI_Controller
     // Page Tambah Jabatan
     public function tambah_jabatan()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         $data['admin'] = $this->super_model->get_admin_by_superadminn(
             $id_superadmin
@@ -276,14 +293,16 @@ class SuperAdmin extends CI_Controller
     // Page Update Jabatan
     public function update_jabatan($id_jabatan)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['jabatan'] = $this->super_model->getJabatanId($id_jabatan);
         $this->load->view('page/super_admin/jabatan/update_jabatan', $data);
     }
 
     public function shift()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['start'] = $this->uri->segment(3);
 
         $id_superadmin = $this->session->userdata('id');
@@ -297,7 +316,8 @@ class SuperAdmin extends CI_Controller
     // Page Tambah Shift
     public function tambah_shift()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         $data['admin'] = $this->super_model->get_admin_by_superadminn(
             $id_superadmin
@@ -308,7 +328,8 @@ class SuperAdmin extends CI_Controller
     // Page Update Shift
     public function update_shift($id_shift)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['shift'] = $this->super_model->getShiftId($id_shift);
         $this->load->view('page/super_admin/shift/update_shift', $data);
     }
@@ -331,7 +352,8 @@ class SuperAdmin extends CI_Controller
     // page detail absen
     public function detail_absen($id_absensi)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['absensi'] = $this->super_model->getAbsensiDetails($id_absensi);
         // Menampilkan view update_jabatan dengan data jabatan
         $this->load->view('page/super_admin/absen/detail_absensi', $data);
@@ -340,7 +362,8 @@ class SuperAdmin extends CI_Controller
     // page detail jabatan
     public function detail_jabatan($id_jabatan)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['jabatan'] = $this->super_model->getJabatanDetails($id_jabatan);
 
         // Mengirim data pengguna ke view
@@ -349,7 +372,8 @@ class SuperAdmin extends CI_Controller
 
     public function detail_shift($id_shift)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Memanggil method getShiftDetails untuk mendapatkan data shift berdasarkan ID
         $data['shift'] = $this->super_model->getShiftDetails($id_shift);
 
@@ -369,7 +393,8 @@ class SuperAdmin extends CI_Controller
 
     public function lokasi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Dapatkan ID superadmin yang sedang login dari sesi
         $superadmin_id = $this->session->userdata('id');
 
@@ -393,7 +418,8 @@ class SuperAdmin extends CI_Controller
     // page tambah lokasi
     public function tambah_lokasi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
 
         // Get organizational data
@@ -443,7 +469,8 @@ class SuperAdmin extends CI_Controller
     // page detail lokasi
     public function detail_lokasi($lokasi_id)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $data['lokasi'] = $this->super_model->getLokasiData($lokasi_id);
 
         // Mengirim data lokasi ke view
@@ -453,7 +480,8 @@ class SuperAdmin extends CI_Controller
     // page update lokasi
     public function update_lokasi($id_lokasi)
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Load necessary models or helpers here
         $this->load->model('super_model');
 
@@ -466,7 +494,8 @@ class SuperAdmin extends CI_Controller
 
     public function aksi_edit_lokasi()
     {
-        sidebar();
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_lokasi = $this->input->post('id_lokasi');
         $nama_lokasi = $this->input->post('nama_lokasi');
@@ -492,6 +521,8 @@ class SuperAdmin extends CI_Controller
 
     public function hapus_lokasi($id_lokasi)
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $this->super_model->hapus_lokasi($id_lokasi); // Assuming you have a method 'hapus_lokasi' in the model
         redirect('superadmin/lokasi');
     }
@@ -499,6 +530,8 @@ class SuperAdmin extends CI_Controller
     // ini page buat ubah password nya
     public function aksi_ubah_password()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $user_id = $this->session->userdata('id');
         $password_baru = $this->input->post('password_baru');
         $konfirmasi_password = $this->input->post('konfirmasi_password');
@@ -534,6 +567,8 @@ class SuperAdmin extends CI_Controller
     // aksi tambah admin
     public function aksi_tambah_admin()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         // Ambil data yang diperlukan dari form
         $password = $this->input->post('password');
@@ -572,6 +607,8 @@ class SuperAdmin extends CI_Controller
     // aksi tambah organisasi
     public function aksi_tambah_organisasi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         // Ambil data yang diperlukan dari form
         $data = [
@@ -601,6 +638,8 @@ class SuperAdmin extends CI_Controller
     // aksi tambah user
     public function aksi_tambah_user()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Ambil data yang diperlukan dari form
         $password = $this->input->post('password');
         if (strlen($password) < 8) {
@@ -651,6 +690,8 @@ class SuperAdmin extends CI_Controller
     // aksi tambah jabatan
     public function aksi_tambah_jabatan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         // Ambil data yang diperlukan dari form
         $data = [
@@ -673,6 +714,8 @@ class SuperAdmin extends CI_Controller
     // aksi tambah shift
     public function aksi_tambah_shift()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $id_superadmin = $this->session->userdata('id');
         // Ambil data yang diperlukan dari form
         $data = [
@@ -735,6 +778,8 @@ class SuperAdmin extends CI_Controller
     // Aksi Update Organisasi
     public function aksi_edit_organisasi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_organisasi = $this->input->post('id_organisasi');
         $nama_organisasi = $this->input->post('nama_organisasi');
@@ -785,6 +830,8 @@ class SuperAdmin extends CI_Controller
     // Aksi Update User
     public function aksi_edit_user()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_user = $this->input->post('id_user');
         $username = $this->input->post('username');
@@ -809,6 +856,8 @@ class SuperAdmin extends CI_Controller
     // aksi Update jabatan
     public function aksi_edit_jabatan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_jabatan = $this->input->post('id_jabatan');
         $nama_jabatan = $this->input->post('nama_jabatan');
@@ -833,6 +882,8 @@ class SuperAdmin extends CI_Controller
     // aksi Update jabatan
     public function aksi_edit_shift()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_shift = $this->input->post('id_shift');
         $nama_shift = $this->input->post('nama_shift');
@@ -861,6 +912,8 @@ class SuperAdmin extends CI_Controller
     // aksi Update admin
     public function aksi_edit_admin()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         // Mendapatkan data dari form
         $id_admin = $this->input->post('id_admin');
         $email = $this->input->post('email');
@@ -973,7 +1026,6 @@ class SuperAdmin extends CI_Controller
     // 3. Lain-lain
     public function get_realtime_absensi()
     {
-        sidebar();
         // Panggil metode di dalam model untuk mendapatkan data absensi real-time
         $realtime_absensi = $this->super_model->get_realtime_absensi();
 
@@ -1062,6 +1114,8 @@ class SuperAdmin extends CI_Controller
     // Pembaruan profil admin
     public function edit_profile()
     {
+        $user_id = $this->session->userdata('id');
+        $data['superadmin'] = $this->super_model->getSuperAdminByID($user_id);
         $email = $this->input->post('email');
         $username = $this->input->post('username');
 
@@ -1144,7 +1198,7 @@ class SuperAdmin extends CI_Controller
 
     // public function token()
     // {
-    //     sidebar();
+    //
     //     $this->load->model('super_model');
     //     $data['user'] = $this->super_model->get_user();
 
@@ -1153,3 +1207,4 @@ class SuperAdmin extends CI_Controller
     //     $this->load->view('page/super_admin/token/token', $data);
     // }
 }
+

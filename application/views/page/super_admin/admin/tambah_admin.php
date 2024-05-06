@@ -30,7 +30,7 @@
 
                     <!-- Form Input -->
                     <form action="<?php echo base_url(
-                        'superAdmin/aksi_tambah_admin'
+                        'superadmin/aksi_tambah_admin'
                     ); ?>" method="post" enctype="multipart/form-data">
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <!-- Email Input -->

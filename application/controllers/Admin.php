@@ -26,6 +26,8 @@ class Admin extends CI_Controller
     public function index()
     {
         $id_admin = $this->session->userdata('id');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data[
             'early_attendance'
         ] = $this->admin_model->get_early_attendance_by_user($id_admin);
@@ -75,6 +77,8 @@ class Admin extends CI_Controller
     // Page Organisasi
     public function organisasi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id');
         $data['user'] = $this->admin_model->get_data('user')->result();
         $data['organisasi'] = $this->admin_model->get_organisasi_pusat(
@@ -86,6 +90,8 @@ class Admin extends CI_Controller
     // Page Tabel Organisasi
     public function all_organisasi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id');
         $data['user'] = $this->admin_model->get_data('user')->result();
         $data['organisasi'] = $this->admin_model->get_all_organisasi($id_admin);
@@ -96,6 +102,8 @@ class Admin extends CI_Controller
     public function jabatan()
     {
         $id_admin = $this->session->userdata('id_admin');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
 
         $data['jabatan'] = $this->admin_model
             ->get_data_by_id_admin('jabatan', $id_admin)
@@ -105,6 +113,8 @@ class Admin extends CI_Controller
 
     public function cuti()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id_admin');
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
@@ -115,6 +125,8 @@ class Admin extends CI_Controller
 
     public function lembur()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id_admin');
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
@@ -154,6 +166,8 @@ class Admin extends CI_Controller
     public function user()
     {
         $id_admin = $this->session->userdata('id_admin');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
 
         $data['user'] = $this->admin_model
             ->get_data_by_id_admin('user', $id_admin)
@@ -164,6 +178,8 @@ class Admin extends CI_Controller
 
     public function absensi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id');
 
         // Menggunakan model untuk mendapatkan seluruh id_user berdasarkan id_admin
@@ -251,6 +267,8 @@ class Admin extends CI_Controller
     // Page Update Shift
     public function update_shift($id_shift)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['shift'] = $this->admin_model->getShiftId($id_shift);
         $this->load->view('page/admin/shift/update_shift', $data);
     }
@@ -258,12 +276,16 @@ class Admin extends CI_Controller
     // Page Tambah Organisasi
     public function tambah_organisasi()
     {
-        $this->load->view('page/admin/organisasi/tambah_organisasi');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $this->load->view('page/admin/organisasi/tambah_organisasi', $data);
     }
 
     // Page rekap harian
     public function rekap_harian()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $tanggal = $this->input->get('tanggal');
         $id_admin = $this->session->userdata('id_admin');
 
@@ -276,6 +298,8 @@ class Admin extends CI_Controller
 
     public function rekap_mingguan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $start_date = $this->input->get('start_date') ?: null;
         $end_date = $this->input->get('end_date') ?: null;
 
@@ -297,6 +321,8 @@ class Admin extends CI_Controller
 
     public function rekap_simpel()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $bulan = $this->input->post('bulan');
         $admin_id = $this->session->userdata('id_admin'); // Assuming you store admin ID in the session
         $data['absen'] = $this->admin_model->get_bulanan($bulan, $admin_id);
@@ -309,6 +335,8 @@ class Admin extends CI_Controller
 
     public function rekap_perkaryawan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $user_id = $this->input->post('id_user');
         $admin_id = $this->session->userdata('id_admin'); // Assuming you store admin ID in the session
         $data['absen'] = $this->admin_model->get_perkaryawan(
@@ -327,6 +355,8 @@ class Admin extends CI_Controller
 
     public function rekap_bulanan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id_admin');
         $bulan = $this->input->get('bulan');
         $tahun = $this->input->get('tahun');
@@ -345,6 +375,9 @@ class Admin extends CI_Controller
     // Page Detail Organisasi
     public function detail_organisasi($organisasi_id)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
+
         $data['organisasi'] = $this->admin_model->getOrganisasiDetails(
             $organisasi_id
         );
@@ -352,12 +385,13 @@ class Admin extends CI_Controller
         $this->load->view('page/admin/organisasi/detail_organisasi', $data);
     }
 
-    // Page Detail User
     public function detail_user($user_id)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['user'] = $this->admin_model->getUserDetails($user_id);
 
-        // Mengirim data pengguna ke view
+        // Mengirim data pengguna dan admin ke view
         $this->load->view('page/admin/user/detail_user', $data);
     }
 
@@ -365,8 +399,9 @@ class Admin extends CI_Controller
     public function tambah_user()
     {
         $id_admin = $this->session->userdata('id_admin');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
 
-        $data['admin'] = $this->admin_model->get_data('admin')->result();
         $data['organisasi'] = $this->admin_model->getOrganisasiByIdAdmin(
             $id_admin
         );
@@ -379,6 +414,8 @@ class Admin extends CI_Controller
     public function tambah_shift()
     {
         $data['admin'] = $this->admin_model->get_data('admin')->result();
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $this->load->view('page/admin/shift/tambah_shift', $data);
     }
 
@@ -401,6 +438,8 @@ class Admin extends CI_Controller
     public function update_user($id_user)
     {
         $id_admin = $this->session->userdata('id');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_jabatan = $this->session->userdata('id_jabatan');
         $id_shift = $this->session->userdata('id_shift');
         $id_organisasi = $this->session->userdata('id_organisasi');
@@ -420,6 +459,8 @@ class Admin extends CI_Controller
     public function lokasi()
     {
         $id_admin = $this->session->userdata('id_admin');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
 
         // Data lokasi
         $data['lokasi'] = $this->admin_model
@@ -466,6 +507,8 @@ class Admin extends CI_Controller
     // page detail lokasi
     public function detail_lokasi($lokasi_id)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['lokasi'] = $this->admin_model->getLokasiData($lokasi_id);
 
         // Mengirim data lokasi ke view
@@ -475,6 +518,8 @@ class Admin extends CI_Controller
     // page update lokasi
     public function update_lokasi($id_lokasi)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         // Load necessary models or helpers here
         $this->load->model('admin_model');
 
@@ -497,6 +542,8 @@ class Admin extends CI_Controller
     // page update jabatan
     public function update_jabatan($id_jabatan)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['jabatan'] = $this->admin_model->getJabatanId($id_jabatan);
 
         // Menampilkan view update_jabatan dengan data jabatan
@@ -507,6 +554,8 @@ class Admin extends CI_Controller
     public function shift()
     {
         $id_admin = $this->session->userdata('id');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['shift'] = $this->admin_model->get_shift_by_id_admin($id_admin);
         $data[
             'employee_counts'
@@ -2091,6 +2140,8 @@ class Admin extends CI_Controller
 
     public function kehadiran()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         // Mendapatkan id_admin yang sedang login (contoh: menggunakan sesi)
         $id_admin = $this->session->userdata('id_admin');
 
@@ -2130,7 +2181,7 @@ class Admin extends CI_Controller
         // var_dump($bulan);
 
         // $data = $this->admin_model->get_bulanan($bulan, $admin_id);
-        
+
         $list_user = $this->admin_model->get_user_by_id_admin($admin_id);
         // var_dump("ini list user --------------->", $list_user, "<br>");
         foreach ($list_user as $user) {
@@ -2138,8 +2189,7 @@ class Admin extends CI_Controller
             $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
             // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
         }
-        
-        
+
         usort($data, function ($a, $b) {
             return strcmp(nama_user($a->id_user), nama_user($b->id_user));
         });
@@ -2156,7 +2206,7 @@ class Admin extends CI_Controller
             ],
             'alignment' => [
                 'horizontal' =>
-                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -2170,7 +2220,7 @@ class Admin extends CI_Controller
             'alignment' => [
                 'horizontal' =>
                     \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' =>
+                'vertical' =>
                     \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
             'fill' => [
@@ -2178,7 +2228,7 @@ class Admin extends CI_Controller
                 'startColor' => ['argb' => '4F81BD'],
             ],
         ];
-        
+
         $style_izin = [
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -2202,7 +2252,7 @@ class Admin extends CI_Controller
                 'outline' => [
                     'borderStyle' =>
                         \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => ['argb' => '000000'],
+                    'color' => ['argb' => '000000'],
                 ],
             ],
         ];
@@ -2239,7 +2289,7 @@ class Admin extends CI_Controller
         $style_data = [
             'alignment' => [
                 'vertical' =>
-                \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
         ];
 
@@ -2259,11 +2309,11 @@ class Admin extends CI_Controller
         $sheet->setCellValue('I3', 'TANGGAL');
         $sheet->setCellValue('J3', 'TANPA KETERANGAN');
         $sheet->getStyle('A3:J3')->applyFromArray($style_header);
-        
+
         // Set data
         $no = 1;
         $row = 4;
-        
+
         $no1 = 1;
         $row2 = 4;
         $temp = [];
@@ -2275,7 +2325,7 @@ class Admin extends CI_Controller
             // var_dump("ini id ------------>",$id_user, "<br>");
             $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
             // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
-            foreach($data as $d) {
+            foreach ($data as $d) {
                 // var_dump("lohhh", $d->tanggal_absen);
                 $day = new DateTime($d->tanggal_absen);
                 // var_dump($day);
@@ -2330,7 +2380,12 @@ class Admin extends CI_Controller
                 // var_dump('ini alpa -------------------------------->',$alpa);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Terlambat') {
-                array_push($telat, $item->id_user, $item->tanggal_absen, $item->keterangan_terlambat);
+                array_push(
+                    $telat,
+                    $item->id_user,
+                    $item->tanggal_absen,
+                    $item->keterangan_terlambat
+                );
                 // var_dump('ini telat -------------------------------->',$telat);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Lupa') {
@@ -2338,7 +2393,12 @@ class Admin extends CI_Controller
                 // var_dump('ini lupa ---------------------------------->',$lupa);
                 // echo'<br />';
             } elseif ($item->status_absen === 'Izin') {
-                array_push($izin, $item->id_user, $item->tanggal_absen, $item->keterangan_izin);
+                array_push(
+                    $izin,
+                    $item->id_user,
+                    $item->tanggal_absen,
+                    $item->keterangan_izin
+                );
                 // var_dump('ini izin ----------------------------------->',$izin);
                 // echo'<br />';
                 // var_dump($item->tanggal_absen, $item->keterangan_izin);
@@ -2488,29 +2548,29 @@ class Admin extends CI_Controller
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
 
         // try {
-            // Atur orientasi dan judul halaman
-            $sheet
-                ->getPageSetup()
-                ->setOrientation(
-                    \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
-                );
-            $sheet->setTitle('Rekap Simpel');
-    
-            // Set header untuk file Excel
-            header(
-                'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        // Atur orientasi dan judul halaman
+        $sheet
+            ->getPageSetup()
+            ->setOrientation(
+                \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
             );
-            header(
-                'Content-Disposition: attachment; filename="REKAP BULANAN.xlsx"'
-            );
-            header('Cache-Control: max-age=0');
-    
-            // Simpan file Excel dan tampilkan ke output
-            $writer = new Xlsx($spreadsheet);
-            $writer->save('php://output');
+        $sheet->setTitle('Rekap Simpel');
+
+        // Set header untuk file Excel
+        header(
+            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        header(
+            'Content-Disposition: attachment; filename="REKAP BULANAN.xlsx"'
+        );
+        header('Cache-Control: max-age=0');
+
+        // Simpan file Excel dan tampilkan ke output
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
         // } catch (\Throwable $th) {
-            //throw $th;
-            // var_dump($th);
+        //throw $th;
+        // var_dump($th);
         // }
     }
 
