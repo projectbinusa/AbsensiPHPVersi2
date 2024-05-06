@@ -814,15 +814,15 @@ class User extends CI_Controller
         $admin = $this->user_model->getUserByID($user_id);
 
         if ($image[0] == true) {
-            $admin->image = $image[1];
+            $admin->image = $image[0];
         }
 
         $data = [
-            'image' => $image[1],
+            'image' => $image[0],
         ];
-
+        var_dump($image);
         // Update foto di database
-        $this->user_model->updateUserPhoto($user_id, $data);
+        $update_result = $this->user_model->updateUserPhoto($user_id, $data);
 
         if ($update_result) {
             $this->session->set_flashdata(
@@ -837,7 +837,7 @@ class User extends CI_Controller
         }
 
         // Redirect ke halaman profile
-        redirect(base_url('user/profile'));
+        // redirect(base_url('user/profile'));
     }
 
     public function aksi_ubah_password()

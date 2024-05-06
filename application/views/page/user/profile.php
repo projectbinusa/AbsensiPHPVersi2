@@ -87,14 +87,14 @@
                                         class="rounded-full mt-2 mx-auto my-auto w-48 h-48 md:w-40 md:h-40 lg:w-56 lg:h-56 xl:w-64 xl:h-64 object-cover">
                                 </div>
                                 <div class="flex justify-center mb-2">
-                                    <div
+                                    <label
                                         class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800 mx-auto">
-                                        <label for="image" class="text-white rounded-md" style="cursor: pointer; "> <i
+                                        <div for="image-input" class="text-white rounded-md" style="cursor: pointer; "> <i
                                                 class="fas fa-pen-to-square"></i>
-                                        </label>
+                                        </div>
                                         <input type="file" name="image" id="image" accept="image/*"
                                             onchange="previewImage()" style="display: none;">
-                                    </div>
+                                    </label>
 
 
                                     <button type="submit"

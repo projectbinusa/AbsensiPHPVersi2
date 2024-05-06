@@ -66,7 +66,7 @@
                                     <canvas id="canvas" style="display:none;"></canvas>
                                     <input type="hidden" name="image_data" id="image-data" />
                                 </div>
-                                <button type="button" id="capture-btn"
+                                <button type="button" disabled id="capture-btn"
                                     class="bg-indigo-500 text-white px-4 py-2 rounded-md mb-3" style="width: 150px;">
                                     <i class="fa-solid fa-camera"></i>
                                 </button>
@@ -101,30 +101,39 @@
                 <script>
                 // Menambahkan script JavaScript untuk mendapatkan dan menampilkan longitude dan latitude
                 let cnt = 0;
+				let loading = 0;
+				function checkCameraButton() {
+                	if (loading === 1) {
+                    	const captureBtn = document.getElementById('capture-btn');
+                    	if (cnt%2 !== 1) {
+                        	captureBtn.disabled = true;
+                    	} else {
+                        	captureBtn.disabled = false;
+                    	}
+                    	return;
+                    }
+                	loading++;
+                }
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
-                    const xp = latitude,
-                        yp = longitude,
+                    const xp = -6.975746,
+                        yp = 110.301289,
                         edges = [
                             [-6.975529487096709, 110.30157620693905],
                             [-6.975496541825257, 110.3009736968416],
-                            [-6.976353915653226, 110.30154539936574],
-                            [-6.976339400207557, 110.30093865296837]
+                            [-6.976339400207557, 110.30093865296837],
+                            [-6.976353915653226, 110.30154539936574]
                         ]
                     edges.forEach((edge, i) => {
                         const [x1, y1] = edge;
                         const [x2, y2] = edges.length - 1 === i ? edges[0] : edges[i +1];
                         if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp-y1)/(y2-y1)) * (x2-x1)) cnt++;
                     })
-
-                    if (cnt%2 !== 1) {
-                        captureBtn.disabled = true;
-                    } else {
-                        captureBtn.disabled = false;
-                    }
-
+                    console.log(xp,yp)
+                    console.log(cnt)
+					checkCameraButton();
                     // Menyimpan nilai latitude dan longitude di input tersembunyi
                     document.getElementById("lokasi_masuk").value = "Latitude: " + latitude + ", Longitude: " +
                         longitude;
@@ -188,12 +197,7 @@
                         })
                         .then(stream => {
                             video.srcObject = stream;
-                            // Aktifkan tombol capture jika kamera tersedia
-                            if (cnt%2 !== 1) {
-                                captureBtn.disabled = true;
-                            } else {
-                                captureBtn.disabled = false;
-                            }
+							checkCameraButton();
                             captureBtn.classList.remove('bg-gray-400');
                         })
                         .catch(err => {
