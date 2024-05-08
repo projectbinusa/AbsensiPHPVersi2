@@ -18,13 +18,13 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
 
 #imageFolders
-# images/admin/*
-# images/foto_masuk/*
-# images/foto_pulang/*
-# images/logo/*
-# images/organisasi/*
-# images/superadmin/*
-# images/user/*
+images/admin/*
+images/foto_masuk/*
+images/foto_pulang/*
+images/logo/*
+images/organisasi/*
+images/superadmin/*
+images/user/*
 
 # IDE Files
 #-------------------------

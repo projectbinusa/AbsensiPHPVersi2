@@ -132,19 +132,9 @@
                         if (((yp < y1) !== (yp < y2)) && xp < x1 + ((yp - y1) / (y2 - y1)) * (x2 - x1))
                             cnt++;
                     })
-<<<<<<< HEAD
                     console.log(xp,yp)
                     console.log(cnt)
 					checkCameraButton();
-=======
-
-                    if (cnt % 2 !== 1) {
-                        captureBtn.disabled = true;
-                    } else {
-                        captureBtn.disabled = false;
-                    }
-
->>>>>>> 80d2f97962452e86502db18e670d18952f0953fa
                     // Menyimpan nilai latitude dan longitude di input tersembunyi
                     document.getElementById("lokasi_masuk").value = "Latitude: " + latitude + ", Longitude: " +
                         longitude;
@@ -208,16 +198,7 @@
                         })
                         .then(stream => {
                             video.srcObject = stream;
-<<<<<<< HEAD
 							checkCameraButton();
-=======
-                            // Aktifkan tombol capture jika kamera tersedia
-                            if (cnt % 2 !== 1) {
-                                captureBtn.disabled = true;
-                            } else {
-                                captureBtn.disabled = false;
-                            }
->>>>>>> 80d2f97962452e86502db18e670d18952f0953fa
                             captureBtn.classList.remove('bg-gray-400');
                         })
                         .catch(err => {

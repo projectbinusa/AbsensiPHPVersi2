@@ -384,13 +384,15 @@ class User extends CI_Controller
             $lokasi_masuk = $this->input->post('lokasi_masuk');
             $image_data = $this->input->post('image_data');
 
-            // Konversi data URL ke gambar dan simpan di server
             $img = str_replace('data:image/png;base64,', '', $image_data);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
 
-            $foto_masuk = './images/foto_masuk/' . uniqid() . '.png'; // Ganti dengan ekstensi yang sesuai
+            $foto_masuk = './images/foto_masuk/' . uniqid() . '.png';
             file_put_contents($foto_masuk, $data);
+            $dest = compress($image_data, $foto_masuk, 55);
+
+            move_uploaded_file($foto_masuk, $dest);
 
             // Verifikasi status absen
             if ($absensiTimestamp < $shiftStart) {
@@ -467,6 +469,9 @@ class User extends CI_Controller
 
             $foto_pulang = './images/foto_pulang/' . uniqid() . '.png';
             file_put_contents($foto_pulang, $data);
+            $dest = compress($image_data, $foto_pulang, 55);
+
+            move_uploaded_file($foto_pulang, $dest);
 
             // Update status absen pulang
             $data_pulang = [
