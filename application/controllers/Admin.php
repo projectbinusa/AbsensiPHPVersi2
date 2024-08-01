@@ -10,6 +10,7 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         $this->load->model('admin_model');
+      $this->load->model('user_model');
         $this->load->library('upload');
         $this->load->helper('admin_helper');
         $this->load->library('pagination');
@@ -31,6 +32,9 @@ class Admin extends CI_Controller
         $data[
             'early_attendance'
         ] = $this->admin_model->get_early_attendance_by_user($id_admin);
+        $data[
+            'late_attendance'
+        ] = $this->admin_model->get_late_attendance_by_user($id_admin);
         $data['jabatan'] = $this->admin_model->get_jabatan_data_by_admin(
             $id_admin
         );
@@ -64,6 +68,7 @@ class Admin extends CI_Controller
         $data['absensi'] = $this->admin_model->get_realtime_absensi_by_admin(
             $id_admin
         );
+        $data['kehadiran'] = $this->admin_model->getKehadiranData($id_admin);
         $this->load->view('page/admin/dashboard', $data);
     }
 
@@ -77,9 +82,9 @@ class Admin extends CI_Controller
     // Page Organisasi
     public function organisasi()
     {
+        $id_admin = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-        $id_admin = $this->session->userdata('id');
         $data['user'] = $this->admin_model->get_data('user')->result();
         $data['organisasi'] = $this->admin_model->get_organisasi_pusat(
             $id_admin
@@ -90,6 +95,7 @@ class Admin extends CI_Controller
     // Page Tabel Organisasi
     public function all_organisasi()
     {
+        $id_admin = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $id_admin = $this->session->userdata('id');
@@ -104,7 +110,6 @@ class Admin extends CI_Controller
         $id_admin = $this->session->userdata('id_admin');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-
         $data['jabatan'] = $this->admin_model
             ->get_data_by_id_admin('jabatan', $id_admin)
             ->result();
@@ -125,9 +130,9 @@ class Admin extends CI_Controller
 
     public function lembur()
     {
+        $id_admin = $this->session->userdata('id_admin');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-        $id_admin = $this->session->userdata('id_admin');
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
         // Ambil data lembur dari model
@@ -168,7 +173,6 @@ class Admin extends CI_Controller
         $id_admin = $this->session->userdata('id_admin');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-
         $data['user'] = $this->admin_model
             ->get_data_by_id_admin('user', $id_admin)
             ->result();
@@ -178,10 +182,9 @@ class Admin extends CI_Controller
 
     public function absensi()
     {
+        $id_admin = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-        $id_admin = $this->session->userdata('id');
-
         // Menggunakan model untuk mendapatkan seluruh id_user berdasarkan id_admin
         $id_user_array = $this->admin_model->getUsersByIdAdmin($id_admin);
 
@@ -257,6 +260,8 @@ class Admin extends CI_Controller
     public function detail_shift()
     {
         // Mendefinisikan data yang akan digunakan dalam tampilan
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data = [
             'judul' => 'Detail Shift',
             'deskripsi' => 'Ini adalah halaman detail shift.',
@@ -353,7 +358,7 @@ class Admin extends CI_Controller
         $this->load->view('page/admin/rekap/rekap_perkaryawan', $data);
     }
 
-    public function rekap_bulanan()
+public function rekap_bulanan()
     {
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
@@ -372,12 +377,12 @@ class Admin extends CI_Controller
         $this->load->view('page/admin/rekap/rekap_bulanan', $data);
     }
 
+
     // Page Detail Organisasi
     public function detail_organisasi($organisasi_id)
     {
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
-
         $data['organisasi'] = $this->admin_model->getOrganisasiDetails(
             $organisasi_id
         );
@@ -385,23 +390,23 @@ class Admin extends CI_Controller
         $this->load->view('page/admin/organisasi/detail_organisasi', $data);
     }
 
+    // Page Detail User
     public function detail_user($user_id)
-    {
-        $user_id = $this->session->userdata('id');
-        $data['admin'] = $this->admin_model->getAdminByID($user_id);
-        $data['user'] = $this->admin_model->getUserDetails($user_id);
+{
+    $data['admin'] = $this->admin_model->getAdminByID($this->session->userdata('id'));
+    $data['user'] = $this->admin_model->getUserDetails($user_id);
 
-        // Mengirim data pengguna dan admin ke view
-        $this->load->view('page/admin/user/detail_user', $data);
-    }
-
+    // Mengirim data pengguna ke view
+    $this->load->view('page/admin/user/detail_user', $data);
+}
     // Page tambah user
     public function tambah_user()
     {
-        $id_admin = $this->session->userdata('id_admin');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $id_admin = $this->session->userdata('id_admin');
 
+        $data['admin'] = $this->admin_model->get_data('admin')->result();
         $data['organisasi'] = $this->admin_model->getOrganisasiByIdAdmin(
             $id_admin
         );
@@ -413,21 +418,25 @@ class Admin extends CI_Controller
     // Page tambah shift
     public function tambah_shift()
     {
-        $data['admin'] = $this->admin_model->get_data('admin')->result();
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $data['admin'] = $this->admin_model->get_data('admin')->result();
         $this->load->view('page/admin/shift/tambah_shift', $data);
     }
 
     // Page tambah jabatan
     public function tambah_jabatan()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $this->load->view('page/admin/jabatan/tambah_jabatan');
     }
 
     // Page update organisasi
     public function update_organisasi($id_organisasi)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['organisasi'] = $this->admin_model->getOrganisasiById(
             $id_organisasi
         );
@@ -437,9 +446,9 @@ class Admin extends CI_Controller
     // Page Update User
     public function update_user($id_user)
     {
-        $id_admin = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $id_admin = $this->session->userdata('id');
         $id_jabatan = $this->session->userdata('id_jabatan');
         $id_shift = $this->session->userdata('id_shift');
         $id_organisasi = $this->session->userdata('id_organisasi');
@@ -458,9 +467,9 @@ class Admin extends CI_Controller
 
     public function lokasi()
     {
-        $id_admin = $this->session->userdata('id_admin');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $id_admin = $this->session->userdata('id_admin');
 
         // Data lokasi
         $data['lokasi'] = $this->admin_model
@@ -474,6 +483,8 @@ class Admin extends CI_Controller
     // page tambah lokasi
     public function tambah_lokasi()
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $this->load->model('admin_model');
 
         // Get organizational data
@@ -533,6 +544,8 @@ class Admin extends CI_Controller
     // page detail jabatan
     public function detail_jabatan($id_jabatan)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['jabatan'] = $this->admin_model->getJabatanDetails($id_jabatan);
 
         // Mengirim data pengguna ke view
@@ -553,9 +566,9 @@ class Admin extends CI_Controller
     // page shift
     public function shift()
     {
-        $id_admin = $this->session->userdata('id');
         $user_id = $this->session->userdata('id');
         $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $id_admin = $this->session->userdata('id');
         $data['shift'] = $this->admin_model->get_shift_by_id_admin($id_admin);
         $data[
             'employee_counts'
@@ -566,6 +579,8 @@ class Admin extends CI_Controller
     // page detail absen
     public function detail_absen($id_absensi)
     {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         $data['absensi'] = $this->admin_model->getAbsensiDetail($id_absensi);
         // Menampilkan view update_jabatan dengan data jabatan
         $this->load->view('page/admin/absen/detail_absensi', $data);
@@ -1350,12 +1365,11 @@ class Admin extends CI_Controller
         $writer->save('php://output');
     }
 
-    public function export_all_karyawan()
+  public function export_all_karyawan()
     {
         $id_admin = $this->session->userdata('id_admin');
         $bulan = $this->input->get('bulan');
         $tahun = $this->input->get('tahun');
-        $nama_bulan = date('F', mktime(0, 0, 0, $bulan, 1)); // Menggunakan fungsi date()
         $nama_bulan = [
             '01' => 'Januari',
             '02' => 'Februari',
@@ -1371,92 +1385,116 @@ class Admin extends CI_Controller
             '12' => 'Desember',
         ][$bulan];
 
-        $rekap = $this->admin_model->get_all_karyawan(
-            $id_admin,
-            $bulan,
-            $tahun
-        );
+        $rekap = $this->admin_model->get_all_karyawan($id_admin, $bulan, $tahun);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Style untuk judul
+        // Define styles
         $style_title = [
-            'font' => [
-                'bold' => true,
-                'size' => 18,
-                'color' => ['argb' => 'FFFFFF'],
-            ],
-            'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
+            'font' => ['bold' => true, 'size' => 18],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
             ],
         ];
-
-        // Style untuk header kolom
         $style_header = [
-            'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']],
+            'font' => ['bold' => true],
             'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
             ],
         ];
-
-        // Style untuk baris data
         $style_data = [
             'alignment' => [
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ];
+        $style_absent = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FF0000'],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ];
+        $style_lebih_awal = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FFFFFF'],
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ];
+        $style_left_align = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ];
+        $style_orange = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FFA500'], // Orange color
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
             ],
         ];
 
-        // Set judul
-        $sheet->setCellValue(
-            'A1',
-            'Rekap Bulan ' . toTitleCase($nama_bulan) . ' ' . $tahun
-        );
-        $sheet->mergeCells('A1:G1');
+        // Array to translate day names to Indonesian
+        $days_in_indonesian = [
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+        ];
 
-        $sheet
-            ->getStyle('A1')
-            ->getFont()
-            ->setBold(true);
-
-        // Set header kolom
-        $sheet->setCellValue('A3', 'NO');
-        $sheet->setCellValue('B3', 'NAMA');
-        $sheet->setCellValue('C3', 'TANGGAL');
-        $sheet->setCellValue('D3', 'JAM MASUK');
-        $sheet->setCellValue('E3', 'JAM PULANG');
-        $sheet->setCellValue('F3', 'JAM KERJA');
-        $sheet->setCellValue('G3', 'KETERANGAN');
-        $sheet->setCellValue('H3', 'KEHADIRAN');
-
-        // Set data
-        $no = 1;
-        $row = 4;
-        // Initialize an associative array to store rows based on id_user
-        $userRows = [];
+        // Initialize array to store separate user data
+        $userTables = [];
 
         foreach ($rekap as $data) {
-            // Check if the id_user key exists in the associative array
-            if (!isset($userRows[$data->id_user])) {
-                // If not, initialize an empty array for that id_user
-                $userRows[$data->id_user] = [];
+            if (!isset($userTables[$data->id_user])) {
+                $userTables[$data->id_user] = [];
             }
 
-            // Hitung selisih waktu antara jam_masuk dan jam_pulang
             $jam_masuk = $data->jam_masuk;
             $jam_pulang = $data->jam_pulang;
+            // Menghitung jam kerja dengan detik
             $jam_kerja = '-';
             if ($jam_masuk != '00:00:00' && $jam_pulang != '00:00:00') {
                 $start_time = strtotime($jam_masuk);
@@ -1464,40 +1502,140 @@ class Admin extends CI_Controller
                 $diff = $end_time - $start_time;
                 $hours = floor($diff / (60 * 60));
                 $minutes = floor(($diff - $hours * 60 * 60) / 60);
-                $jam_kerja = sprintf('%02d:%02d', $hours, $minutes);
+                $seconds = $diff % 60; // Tambahkan detik
+                $jam_kerja = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds); // Format dengan detik
             }
 
-            // Format jam_kerja menggunakan DateTime
-            $time = DateTime::createFromFormat('H:i', $jam_kerja);
-            if ($time === false) {
-                $jam_kerja_formatted = '-';
-            } else {
-                $hours = $time->format('H');
-                $minutes = $time->format('i');
-                $jam_kerja_formatted = $hours . ' jam ' . $minutes . ' menit';
+            // Format jam kerja dengan detik
+            $time = DateTime::createFromFormat('H:i:s', $jam_kerja); // Perhatikan format input
+            $jam_kerja_formatted = $time ? $time->format('H') . ' jam ' . $time->format('i') . ' menit ' . $time->format('s') . ' detik' : '-';
+
+
+            // Fetch job title using getJabatanByIdUser from user_model
+            $jabatan_data = $this->user_model->getJabatanByIdUser($data->id_user);
+            $jabatan = !empty($jabatan_data) ? $jabatan_data[0]->nama_jabatan : '-';
+
+            // Fetch shift time
+            $shift_data = $this->user_model->getShiftByIdUser($data->id_user);
+            $shift_start_time = !empty($shift_data) ? $shift_data[0]->jam_masuk : null;
+
+            // Calculate late time only if status is "terlambat"
+            $waktu_terlambat = '-';
+            if ($data->status_absen == 'Terlambat' && $shift_start_time && $jam_masuk != '00:00:00' && strtotime($jam_masuk) > strtotime($shift_start_time)) {
+                $late_diff = strtotime($jam_masuk) - strtotime($shift_start_time);
+                $late_hours = floor($late_diff / (60 * 60));
+                $late_minutes = floor(($late_diff - $late_hours * 60 * 60) / 60);
+                $late_seconds = $late_diff % 60;
+                $waktu_terlambat = sprintf('%02d:%02d:%02d', $late_hours, $late_minutes, $late_seconds);
             }
 
-            // Populate the row for the current data
-            $userRows[$data->id_user][] = [
-                'A' => $no,
+            // Store data in array
+            $Table = [
+                'A' => 0,
                 'B' => toTitleCase(nama_user($data->id_user)),
-                'C' => convDate($data->tanggal_absen),
+                'C' => $data->tanggal_absen,
                 'D' => $data->jam_masuk,
-                'E' => $data->jam_pulang,
-                'F' => $jam_kerja_formatted, // Tambahkan kolom durasi kerja
-                'G' => $data->keterangan_izin,
-                'H' => $data->status_absen,
+                'E' => $waktu_terlambat,
+                'F' => $data->jam_pulang,
+                'G' => $jam_kerja_formatted, // Write formatted work hours here
+                'H' => $data->keterangan_izin,
+                'I' => $data->status_absen,
+                'J' => $jabatan
             ];
-
-            $no++;
+            $userTables[$data->id_user][] = $Table;
         }
 
-        // Iterate over the userRows associative array to populate the spreadsheet
-        foreach ($userRows as $userId => $rows) {
+        $currentDate = date('Y-m-d');
+        $days_in_month = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+
+        // Add missing days and sort data
+        foreach ($userTables as $userId => &$rows) {
+            $sortedRows = [];
+            for ($day = 1; $day <= $days_in_month; $day++) { // Loop through days in the month
+                $date = sprintf('%04d-%02d-%02d', $tahun, $bulan, $day);
+                $day_name = $days_in_indonesian[date('l', strtotime($date))]; // Translate to Indonesian day name
+                $formatted_date = $day_name . ', ' . date('d M Y', strtotime($date));
+
+                $found = false;
+                foreach ($rows as &$row) {
+                    if ($row['C'] == $date) {
+                        $row['C'] = $formatted_date; // Add the day of the week to existing rows
+                        $sortedRows[] = $row;
+                        $found = true;
+                        break;
+                    }
+                }
+                unset($row);
+                if (!$found) {
+                    $Table = [
+                        'A' => 0,
+                        'B' => toTitleCase(nama_user($userId)),
+                        'C' => $formatted_date,
+                        'D' => '-',
+                        'E' => '-',
+                        'F' => '-',
+                        'G' => '-',
+                        'H' => '-',
+                        'I' => ($bulan == date('m') && $tahun == date('Y')) ? '-' : 'Tidak Masuk',
+                        'J' => !empty($this->user_model->getJabatanByIdUser($userId)) ? $this->user_model->getJabatanByIdUser($userId)[0]->nama_jabatan : '-' // Fetch job title for missing days
+                    ];
+                    $sortedRows[] = $Table;
+                }
+            }
+            // Sort rows by date
+            usort($sortedRows, function ($a, $b) {
+                return strtotime(substr($a['C'], 0, 10)) - strtotime(substr($b['C'], 0, 10));
+            });
+            $rows = $sortedRows; // Assign sorted rows back to userTables
+        }
+        unset($rows);
+
+        // Generate report
+        $row = 1; // Start from row 1
+
+        foreach ($userTables as $userId => $rows) {
+            // Add a title before each user's data
+            $sheet->setCellValue('A' . $row, 'Data Absensi Bulan: ' . $nama_bulan . ' ' . $tahun);
+            $sheet->mergeCells('A' . $row . ':I' . $row); // Update to include the new column
+            $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($style_title);
+            $row += 1;
+
+            // Add user name and job title on the next lines
+            $row++;
+            $sheet->setCellValue('A' . $row, 'Nama Karyawan: ' . $rows[0]['B']);
+            $sheet->mergeCells('A' . $row . ':D' . $row); // Update to include the new column
+            $sheet->getStyle('A' . $row . ':D' . $row)->applyFromArray($style_header);
+
+            $row++;
+
+            // Add job title
+            $sheet->setCellValue('A' . $row, 'Jabatan: ' . $rows[0]['J']);
+            $sheet->mergeCells('A' . $row . ':D' . $row); // Update to include the new column
+            $sheet->getStyle('A' . $row . ':D' . $row)->applyFromArray($style_header);
+
+            $row++;
+
+            // Add column headers
+            $sheet->setCellValue('A' . $row, 'No');
+            $sheet->setCellValue('B' . $row, 'Nama');
+            $sheet->setCellValue('C' . $row, 'Tanggal');
+            $sheet->setCellValue('D' . $row, 'Jam Masuk');
+            $sheet->setCellValue('E' . $row, 'Waktu Terlambat');
+            $sheet->setCellValue('F' . $row, 'Jam Pulang');
+            $sheet->setCellValue('G' . $row, 'Jam Kerja');
+            $sheet->setCellValue('H' . $row, 'Keterangan');
+            $sheet->setCellValue('I' . $row, 'Status');
+            $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($style_header);
+            $row++;
+
+            $no = 1;
+            $total_izin = 0;
+            $total_terlambat = 0;
+            $total_tidak_masuk = 0;
+            $total_lupa = 0;
+
             foreach ($rows as $rowData) {
-                // var_dump($rowData);
-                // echo '<br />';
-                $sheet->setCellValue('A' . $row, $rowData['A']);
+                $sheet->setCellValue('A' . $row, $no);
                 $sheet->setCellValue('B' . $row, $rowData['B']);
                 $sheet->setCellValue('C' . $row, $rowData['C']);
                 $sheet->setCellValue('D' . $row, $rowData['D']);
@@ -1505,230 +1643,133 @@ class Admin extends CI_Controller
                 $sheet->setCellValue('F' . $row, $rowData['F']);
                 $sheet->setCellValue('G' . $row, $rowData['G']);
                 $sheet->setCellValue('H' . $row, $rowData['H']);
-
-                // Apply formatting based on conditions (e.g., Terlambat or jam_masuk)
-                if ($rowData['H'] == 'Terlambat') {
-                    $sheet->getStyle('A' . $row . ':H' . $row)->applyFromArray([
+                $sheet->setCellValue('I' . $row, $rowData['I']);
+            
+                // Apply styles based on status
+                if ($rowData['I'] == 'Terlambat') {
+                    $total_terlambat++;
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray([
                         'fill' => [
-                            'fillType' =>
-                                \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'startColor' => ['argb' => 'FAF3AD'],
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['argb' => 'FFFF00'],
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                    ]);
+                } elseif ($rowData['I'] == 'Izin') {
+                    $total_izin++;
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['argb' => '0081CF'],
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                    ]);
+                } elseif ($rowData['I'] == 'Lupa') {
+                    $total_lupa++;
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['argb' => '7C4700'],
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                    ]);
+                } elseif ($rowData['I'] == 'Lebih Awal') {
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($style_lebih_awal);
+                } elseif ($rowData['I'] == 'Tidak Masuk') {
+                    $total_tidak_masuk++;
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray($style_absent);
+                } else {
+                    // Apply white color for empty days
+                    $sheet->getStyle('A' . $row . ':I' . $row)->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['argb' => 'FFFFFF'],
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
                         ],
                     ]);
                 }
-
-                if ($rowData['E'] == '00:00:00') {
-                    $sheet->getStyle('A' . $row . ':H' . $row)->applyFromArray([
-                        'fill' => [
-                            'fillType' =>
-                                \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'startColor' => ['argb' => 'BDD7EE'],
-                        ],
-                    ]);
+            
+                // Apply the orange style if 'Jam Pulang' is empty but 'Jam Masuk' is filled
+                if ($rowData['D'] != '00:00:00' && $rowData['F'] == '00:00:00') {
+                    $sheet->getStyle('F' . $row)->applyFromArray($style_orange);
                 }
-
+            
+                $no++;
                 $row++;
             }
+            
+            // Totals and page break
+            $sheet->setCellValue('B' . $row, 'Total Izin');
+            $sheet->setCellValue('C' . $row, $total_izin);
+            $sheet->getStyle('B' . $row . ':C' . $row)->applyFromArray($style_left_align);
+            $sheet->getStyle('B' . $row . ':C' . $row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE);
+            $row++;
+            
+            $sheet->setCellValue('B' . $row, 'Total Terlambat');
+            $sheet->setCellValue('C' . $row, $total_terlambat);
+            $sheet->getStyle('B' . $row . ':C' . $row)->applyFromArray($style_left_align);
+            $sheet->getStyle('B' . $row . ':C' . $row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE);
+            $row++;
+            
+            $sheet->setCellValue('B' . $row, 'Total Tidak Masuk');
+            $sheet->setCellValue('C' . $row, $total_tidak_masuk);
+            $sheet->getStyle('B' . $row . ':C' . $row)->applyFromArray($style_left_align);
+            $sheet->getStyle('B' . $row . ':C' . $row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE);
+            $row++;
+            
+            $sheet->setCellValue('B' . $row, 'Total Lupa');
+            $sheet->setCellValue('C' . $row, $total_lupa);
+            $sheet->getStyle('B' . $row . ':C' . $row)->applyFromArray($style_left_align);
+            $sheet->getStyle('B' . $row . ':C' . $row)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_NONE);
+            $row++;
+            
+            // Add a page break
+            $row += 2;
+            $sheet->setBreak('A' . $row, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+            
         }
+        $sheet->getColumnDimension('A')->setWidth(4);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(20);
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('E')->setWidth(15);
+        $sheet->getColumnDimension('F')->setWidth(15);
+        $sheet->getColumnDimension('G')->setWidth(25);
+        $sheet->getColumnDimension('H')->setWidth(25);
+        $sheet->getColumnDimension('I')->setWidth(20);
 
-        // Atur lebar kolom
-        $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->getColumnDimension('B')->setWidth(50);
-        $sheet->getColumnDimension('C')->setWidth(25);
-        $sheet->getColumnDimension('D')->setWidth(30);
-        $sheet->getColumnDimension('E')->setWidth(30);
-        $sheet->getColumnDimension('F')->setWidth(30);
-        $sheet->getColumnDimension('G')->setWidth(30);
-        $sheet->getColumnDimension('H')->setWidth(30);
+        // Save file
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Rekap_Karyawan_' . $nama_bulan . '_' . $tahun . '.xlsx';
 
-        // Atur tinggi baris secara otomatis
-        $sheet->getDefaultRowDimension()->setRowHeight(-1);
-
-        // // Atur orientasi dan judul halaman
-        $sheet
-            ->getPageSetup()
-            ->setOrientation(
-                \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
-            );
-        $sheet->setTitle('REKAP KARYAWAN PERBULAN');
-
-        // Set header untuk file Excel
-        header(
-            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header(
-            'Content-Disposition: attachment; filename="REKAP KARYAWAN PERBULANAN.xlsx"'
-        );
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
 
-        // Simpan file Excel dan tampilkan ke output
-        $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
+        exit;
     }
 
-    // Untuk mengexport data per minggu
-    public function export_mingguan()
-    {
-        $start_date = $this->input->get('start_date');
-        $end_date = $this->input->get('end_date');
-
-        $id_admin = $this->session->userdata('id');
-
-        if ($start_date) {
-            $end_date = date('Y-m-d', strtotime($start_date . ' + 7 days'));
-
-            $admin_id = $this->session->userdata('id_admin');
-
-            $data['perminggu'] = $this->admin_model->getRekapPerMinggu(
-                $start_date,
-                $end_date,
-                $id_admin
-            );
-        } else {
-            $data['perminggu'] = [];
-        }
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        // Style untuk judul
-        $style_title = [
-            'font' => [
-                'bold' => true,
-                'size' => 18,
-                'color' => ['argb' => 'FFFFFF'],
-            ],
-            'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
-            ],
-        ];
-
-        // Style untuk header kolom
-        $style_header = [
-            'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']],
-            'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
-            ],
-        ];
-
-        // Style untuk baris data
-        $style_data = [
-            'alignment' => [
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-        ];
-
-        // Set judul
-        $sheet->setCellValue('A1', 'REKAP MINGGUAN')->mergeCells('A1:G1');
-        $sheet->getStyle('A1:G1')->applyFromArray($style_title);
-
-        // Set header kolom
-        $sheet->setCellValue('A3', 'NO');
-        $sheet->setCellValue('B3', 'NAMA');
-        $sheet->setCellValue('C3', 'TANGGAL');
-        $sheet->setCellValue('E3', 'JAM MASUK');
-        $sheet->setCellValue('F3', 'JAM PULANG');
-        $sheet->setCellValue('D3', 'KETERANGAN');
-        $sheet->setCellValue('G3', 'KEHADIRAN');
-        $sheet->getStyle('A3:G3')->applyFromArray($style_header);
-
-        $data_per_minggu = $this->admin_model->getRekapPerMinggu(
-            $start_date,
-            $end_date,
-            $id_admin
-        );
-
-        usort($data_per_minggu, function ($a, $b) {
-            return strcmp($a['username'], $b['username']);
-        });
-
-        // Set data
-        $no = 1;
-        $numrow = 4;
-        foreach ($data_per_minggu as $row) {
-            $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, nama_user($row['id_user']));
-            $sheet->setCellValue('C' . $numrow, $row['tanggal_absen']);
-            $sheet->setCellValue('E' . $numrow, $row['jam_masuk']);
-            $sheet->setCellValue('F' . $numrow, $row['jam_pulang']);
-            $sheet->setCellValue('D' . $numrow, $row['keterangan_izin']);
-            $sheet->setCellValue('G' . $numrow, $row['status_absen']);
-
-            if ($row['status_absen'] == 'Terlambat') {
-                $sheet
-                    ->getStyle('A' . $numrow . ':G' . $numrow)
-                    ->applyFromArray([
-                        'fill' => [
-                            'fillType' =>
-                                \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'startColor' => ['argb' => 'FAF3AD'],
-                        ],
-                    ]);
-            }
-
-            // Tambahkan warna untuk baris yang memiliki jam masuk "00:00:00"
-            if ($row['jam_masuk'] == '00:00:00') {
-                $sheet
-                    ->getStyle('A' . $numrow . ':G' . $numrow)
-                    ->applyFromArray([
-                        'fill' => [
-                            'fillType' =>
-                                \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'startColor' => ['argb' => 'BDD7EE'],
-                        ],
-                    ]);
-            }
-
-            $no++;
-            $numrow++;
-        }
-
-        // Atur lebar kolom
-        $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->getColumnDimension('B')->setWidth(25);
-        $sheet->getColumnDimension('C')->setWidth(25);
-        $sheet->getColumnDimension('D')->setWidth(20);
-        $sheet->getColumnDimension('E')->setWidth(30);
-        $sheet->getColumnDimension('F')->setWidth(30);
-        $sheet->getColumnDimension('G')->setWidth(30);
-
-        // Atur tinggi baris secara otomatis
-        $sheet->getDefaultRowDimension()->setRowHeight(-1);
-
-        // Atur orientasi dan judul halaman
-        $sheet
-            ->getPageSetup()
-            ->setOrientation(
-                \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
-            );
-        $sheet->setTitle('REKAP MINGGUAN');
-
-        // Set header untuk file Excel
-        header(
-            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header(
-            'Content-Disposition: attachment; filename="REKAP MINGGUAN.xlsx"'
-        );
-        header('Cache-Control: max-age=0');
-
-        // Simpan file Excel dan tampilkan ke output
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
-    }
 
     // Untuk mengexport data per hari
     public function export_harian()
@@ -2140,15 +2181,15 @@ class Admin extends CI_Controller
 
     public function kehadiran()
     {
-        $user_id = $this->session->userdata('id');
-        $data['admin'] = $this->admin_model->getAdminByID($user_id);
         // Mendapatkan id_admin yang sedang login (contoh: menggunakan sesi)
         $id_admin = $this->session->userdata('id_admin');
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
 
         // Mendapatkan id_user yang terkait dengan id_admin
         $id_user = $this->admin_model->getIdUserByIdAdmin($id_admin);
 
-        $data['user'] = $this->admin_model->getKehadiranData($id_admin);
+        $data['user'] = $this->admin_model->getKehadiranDataPage($id_admin);
         $this->load->view('page/admin/kehadiran/kehadiran', $data);
     }
 
@@ -2173,407 +2214,284 @@ class Admin extends CI_Controller
         $this->load->view('page/admin/absen/history_absen', $data);
     }
 
-    // Untuk mengexport data simpel per bulanan
-    public function export_simple()
-    {
-        $bulan = $this->session->flashdata('bulan');
-        $admin_id = $this->session->userdata('id_admin');
-        // var_dump($bulan);
+public function export_simple()
+{
+    $bulan = $this->session->userdata('bulan');
+    $tahun = date('Y');
+    $admin_id = $this->session->userdata('id_admin');
 
-        // $data = $this->admin_model->get_bulanan($bulan, $admin_id);
+    if (!$bulan) {
+        $bulan = date('m');
+    }
 
-        $list_user = $this->admin_model->get_user_by_id_admin($admin_id);
-        // var_dump("ini list user --------------->", $list_user, "<br>");
-        foreach ($list_user as $user) {
-            $id_user = $user->id_user;
-            $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
-            // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
-        }
+    $list_user = $this->admin_model->get_user_by_id_admin($admin_id);
 
-        usort($data, function ($a, $b) {
-            return strcmp(nama_user($a->id_user), nama_user($b->id_user));
-        });
+    $temp = [];
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+    foreach ($list_user as $user) {
+        $id_user = $user->id_user;
+        $shift = $this->admin_model->getShiftByIdUser($user->id_shift);
+        $shift_start_time = $shift ? $shift[0]->jam_masuk : '00:00:00';
 
-        // Style untuk judul
-        $style_title = [
-            'font' => [
-                'bold' => true,
-                'size' => 18,
-                'color' => ['argb' => 'FFFFFF'],
-            ],
-            'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
-            ],
-        ];
+        $data = $this->admin_model->get_perkaryawan($admin_id, $id_user, $bulan, $tahun);
 
-        // Style untuk header kolom
-        $style_header = [
-            'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']],
-            'alignment' => [
-                'horizontal' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '4F81BD'],
-            ],
-        ];
+        if (!empty($data)) {
+            $day = new DateTime($data[0]->tanggal_absen);
 
-        $style_izin = [
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '0000FF'],
-            ],
-            'borders' => [
-                'outline' => [
-                    'borderStyle' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
+            for ($i = 0; $i < count($data); $i++) {
+                $now = new DateTime($data[$i]->tanggal_absen);
+                if ($now->format('d-m-Y') == $day->format('d-m-Y')) {
+                    array_push($temp, $data[$i]);
+                    $day->modify('+1 day');
+                } else {
+                    $selisih = $now->diff($day)->days;
+                    for ($j = 0; $j < $selisih; $j++) {
+                        $object = new stdClass();
+                        $object->id_user = $id_user;
+                        $object->tanggal_absen = $day->format('d-m-Y');
+                        $object->keterangan_izin = '-';
+                        $object->jam_masuk = '-';
+                        $object->foto_masuk = '-';
+                        $object->lokasi_masuk = '-';
+                        $object->jam_pulang = '-';
+                        $object->foto_pulang = '-';
+                        $object->lokasi_pulang = '-';
+                        $object->status = '0';
+                        $object->status_absen = 'Tidak masuk';
+                        $object->keterangan_terlambat = '-';
+                        $object->keterangan_pulang_awal = '-';
+                        $object->shift_start_time = $shift_start_time;
 
-        $style_telat = [
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FFFF00'],
-            ],
-            'borders' => [
-                'outline' => [
-                    'borderStyle' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
-
-        $style_lupa = [
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => '964B00'],
-            ],
-            'borders' => [
-                'outline' => [
-                    'borderStyle' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
-
-        $style_alpa = [
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FF0000'],
-            ],
-            'borders' => [
-                'outline' => [
-                    'borderStyle' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
-
-        // Style untuk baris data
-        $style_data = [
-            'alignment' => [
-                'vertical' =>
-                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-        ];
-
-        // Set judul
-        $sheet->setCellValue('A1', 'REKAP BULANAN')->mergeCells('A1:G1');
-        $sheet->getStyle('A1:J1')->applyFromArray($style_title);
-
-        // Set header kolom
-        $sheet->setCellValue('A3', 'NO');
-        $sheet->setCellValue('B3', 'NAMA');
-        $sheet->setCellValue('C3', 'TANGGAL');
-        $sheet->setCellValue('D3', 'IJIN');
-        $sheet->setCellValue('E3', 'TANGGAL');
-        $sheet->setCellValue('F3', 'TERLAMBAT');
-        $sheet->setCellValue('G3', 'TANGGAL');
-        $sheet->setCellValue('H3', 'TIDAK ABSEN PULANG');
-        $sheet->setCellValue('I3', 'TANGGAL');
-        $sheet->setCellValue('J3', 'TANPA KETERANGAN');
-        $sheet->getStyle('A3:J3')->applyFromArray($style_header);
-
-        // Set data
-        $no = 1;
-        $row = 4;
-
-        $no1 = 1;
-        $row2 = 4;
-        $temp = [];
-        foreach ($list_user as $user) {
-            // var_dump($user);
-            $id_user = $user->id_user;
-            // $tanggal = $user->tanggal_absen;
-            // var_dump("ini tanggal ------->", $tanggal, "<br>");
-            // var_dump("ini id ------------>",$id_user, "<br>");
-            $data = $this->admin_model->get_perkaryawan($admin_id, $id_user);
-            // var_dump('ini id nya ------------------->', $user->id_user, 'ini list absennya ----------------->', $data, "<br>");
-            foreach ($data as $d) {
-                // var_dump("lohhh", $d->tanggal_absen);
-                $day = new DateTime($d->tanggal_absen);
-                // var_dump($day);
-
-                for ($i = 0; $i < count($data); $i++) {
-                    $now = new DateTime($data[$i]->tanggal_absen);
-                    if ($now->format('Y/m/d') == $day->format('Y/m/d')) {
-                        array_push($temp, $data[$i]);
                         $day->modify('+1 day');
-                    } else {
-                        $selisih = $now->diff($day)->days;
-                        for ($j = 0; $j < $selisih; $j++) {
-                            $object = new stdClass();
-                            $object->id_user = $id_user;
-                            $object->tanggal_absen = $day->format('Y/m/d');
-                            $object->keterangan_izin = '-';
-                            $object->jam_masuk = '-';
-                            $object->foto_masuk = '-';
-                            $object->lokasi_masuk = '-';
-                            $object->jam_pulang = '-';
-                            $object->foto_pulang = '-';
-                            $object->lokasi_pulang = '-';
-                            $object->status = '0';
-                            $object->status_absen = 'Tidak masuk';
-                            $object->keterangan_terlambat = '-';
-                            $object->keterangan_pulang_awal = '-';
 
-                            $day->modify('+1 day');
+                        array_push($temp, $object);
+                    }
 
-                            array_push($temp, $object);
-                        }
-
-                        // Periksa apakah $i + 1 adalah indeks yang valid sebelum mengaksesnya
-                        if ($i + 1 < count($data)) {
-                            $day->modify($data[$i + 1]->tanggal_absen);
-                            // var_dump($data[$i + 1]->tanggal_absen);
-                        }
+                    if ($i + 1 < count($data)) {
+                        $day = new DateTime($data[$i + 1]->tanggal_absen);
                     }
                 }
             }
         }
+    }
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $row = 4;
+    $no = 1;
+
+    $style_title = [
+        'font' => [
+            'bold' => true,
+            'size' => 18,
+            'color' => ['argb' => 'FFFFFF'],
+        ],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => '003366'],
+        ],
+    ];
+
+    $style_header = [
+        'font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => '003366'],
+        ],
+    ];
+
+    $style_izin = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => '99CCFF'],
+        ],
+        'borders' => [
+            'outline' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => '000000'],
+            ],
+        ],
+    ];
+
+    $style_telat = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => 'FFFF99'],
+        ],
+        'borders' => [
+            'outline' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => '000000'],
+            ],
+        ],
+    ];
+
+    $style_lupa = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => 'D9B38C'],
+        ],
+        'borders' => [
+            'outline' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => '000000'],
+            ],
+        ],
+    ];
+
+    $style_alpa = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => 'FF9999'],
+        ],
+        'borders' => [
+            'outline' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['argb' => '000000'],
+            ],
+        ],
+    ];
+
+    $style_data = [
+        'alignment' => [
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        ],
+    ];
+
+    $sheet->setCellValue('A1', 'REKAP BULANAN')->mergeCells('A1:J1');
+    $sheet->getStyle('A1:J1')->applyFromArray($style_title);
+
+    $sheet->setCellValue('A3', 'NO');
+    $sheet->setCellValue('B3', 'NAMA');
+    $sheet->setCellValue('C3', 'TANGGAL');
+    $sheet->setCellValue('D3', 'KETERANGAN IZIN');
+    $sheet->setCellValue('E3', 'TERLAMBAT');
+    $sheet->setCellValue('F3', 'TANGGAL');
+    $sheet->setCellValue('G3', 'TIDAK ABSEN PULANG');
+    $sheet->setCellValue('H3', 'TANGGAL');
+    $sheet->setCellValue('I3', 'TANPA KETERANGAN');
+    $sheet->setCellValue('J3', 'TANGGAL');
+    $sheet->getStyle('A3:J3')->applyFromArray($style_header);
+
+    foreach ($list_user as $user) {
+        $id_user = $user->id_user;
+        $absen = array_filter($temp, function ($item) use ($id_user) {
+            return $item->id_user == $id_user;
+        });
 
         $alpa = [];
         $telat = [];
         $lupa = [];
         $izin = [];
-        foreach ($temp as $item) {
-            // var_dump("id user ---------------->", $item->id_user, "status absen ------------>", $item->status_absen, "<br>");
-            // echo'<br />';
+        $keterangan_izin = [];
+
+        foreach ($absen as $item) {
+            $date = DateTime::createFromFormat('d-m-Y', $item->tanggal_absen);
+            $tanggal_absen = $date !== false ? $date->format('d-m-Y') : $item->tanggal_absen;
+
+            if ($item->jam_pulang === '00:00:00') {
+                $lupa[] = $tanggal_absen;
+            } else {
+                // Hapus tanggal dari $lupa jika sudah ada jam_pulang
+                $key = array_search($tanggal_absen, $lupa);
+                if ($key !== false) {
+                    unset($lupa[$key]);
+                }
+            }
+
             if ($item->status_absen === 'Tidak masuk') {
-                array_push($alpa, $item->id_user, $item->tanggal_absen);
-                // var_dump('ini alpa -------------------------------->',$alpa);
-                // echo'<br />';
+                $alpa[] = $tanggal_absen;
             } elseif ($item->status_absen === 'Terlambat') {
-                array_push(
-                    $telat,
-                    $item->id_user,
-                    $item->tanggal_absen,
-                    $item->keterangan_terlambat
-                );
-                // var_dump('ini telat -------------------------------->',$telat);
-                // echo'<br />';
-            } elseif ($item->status_absen === 'Lupa') {
-                array_push($lupa, $item->id_user, $item->tanggal_absen);
-                // var_dump('ini lupa ---------------------------------->',$lupa);
-                // echo'<br />';
+                $late_diff = strtotime($item->jam_masuk) - strtotime($shift_start_time);
+                $late_hours = floor($late_diff / (60 * 60));
+                $late_minutes = floor(($late_diff - $late_hours * 60 * 60) / 60);
+                $late_seconds = $late_diff % 60;
+                $telat[] = $tanggal_absen . ' (' . sprintf('%02d:%02d:%02d', $late_hours, $late_minutes, $late_seconds) . ')';
             } elseif ($item->status_absen === 'Izin') {
-                array_push(
-                    $izin,
-                    $item->id_user,
-                    $item->tanggal_absen,
-                    $item->keterangan_izin
-                );
-                // var_dump('ini izin ----------------------------------->',$izin);
-                // echo'<br />';
-                // var_dump($item->tanggal_absen, $item->keterangan_izin);
+                $izin[] = $tanggal_absen;
+                $keterangan_izin[] = $item->keterangan_izin;
             }
         }
 
-        foreach ($list_user as $nama) {
-            // var_dump($nama->id_user);
-            $id = $nama->id_user;
-            // var_dump($id);
-            $sheet->setCellValue('A' . $row, $no);
-            $sheet->setCellValue(
-                'B' . $row,
-                toTitleCase(nama_user($nama->id_user))
-            );
+        $sheet->setCellValue('A' . $row, $no);
+        $sheet->setCellValue('B' . $row, toTitleCase(nama_user($user->id_user)));
 
-            // $shift_jam_masuk = $this->admin_model->getShiftJamMasuk($item->tanggal_absen);
-            // $selisih_jam = strtotime($item->jam_masuk) - strtotime($shift_jam_masuk);
-            // $selisih_format = gmdate('H:i:s', abs($selisih_jam));
+        // Tanggal di kolom C
+        $sheet->setCellValue('C' . $row, implode(",\n", $izin));
+        $sheet->getStyle('C' . $row)->getAlignment()->setWrapText(true);
 
-            $sheet->getStyle('D' . $row, $no)->applyFromArray($style_izin);
-            $sheet->getStyle('F' . $row, $no)->applyFromArray($style_telat);
-            $sheet->getStyle('H' . $row, $no)->applyFromArray($style_lupa);
-            $sheet->getStyle('J' . $row, $no)->applyFromArray($style_alpa);
+        // Keterangan izin di kolom D
+        $sheet->setCellValue('D' . $row, implode(",\n", $keterangan_izin));
+        $sheet->getStyle('D' . $row)->getAlignment()->setWrapText(true);
+        $sheet->getStyle('D' . $row)->applyFromArray($style_izin);
 
-            // var_dump($izin[0]);
-            if (!empty($alpa) && $id === $alpa[0]) {
-                // var_dump("halo alpa ----->", $alpa, "<br>");
-                $est = implode(', ', $alpa) . "\n";
-                $sheet->setCellValue('I' . $row, $est);
-                $sheet->setCellValue('J' . $row, 'Tanpa Keterangan');
-                $sheet
-                    ->getStyle('I' . $row)
-                    ->getAlignment()
-                    ->setWrapText(true);
-            }
-            if (!empty($telat) && $id === $telat[0]) {
-                // var_dump("saya telat ---->", $telat, "<br>");
-                $est2 = implode(', ', $telat) . "\n";
-                $sheet->setCellValue('E' . $row, $est2);
-                $sheet->setCellValue('F' . $row, 'Contoh Terlambat');
-                $sheet
-                    ->getStyle('E' . $row)
-                    ->getAlignment()
-                    ->setWrapText(true);
-            }
-            if (!empty($izin) && $id === $izin[0]) {
-                // var_dump("aduh izin ------>", $izin, "<br>");
-                $est3 = implode(', ', $izin) . "\n";
-                $sheet->setCellValue('C' . $row, $est3);
-                $sheet->setCellValue('D' . $row, 'Contoh Izin');
-                // var_dump('ini tetetetetet ', $nama->keterangan_izin);
-                $sheet
-                    ->getStyle('C' . $row)
-                    ->getAlignment()
-                    ->setWrapText(true);
-            }
-            if (!empty($lupa) && $id === $lupa[0]) {
-                // var_dump("aku lupa deh --------->", $lupa, "<br>");
-                $est4 = implode(', ', $lupa) . "\n";
-                $sheet->setCellValue('G' . $row, $est4);
-                $sheet->setCellValue('H' . $row, 'Contoh Lupa absen');
-                $sheet
-                    ->getStyle('G' . $row)
-                    ->getAlignment()
-                    ->setWrapText(true);
-            }
-
-            // $est3 = implode(", ", $izin)."\n";
-            // // var_dump('ini izin ---------------->', $est3);
-            // // echo'<br />';
-            // $sheet->setCellValue('C' . $row, $est3);
-            // $sheet->getStyle('C'.$row)->getAlignment()->setWrapText(true);
-
-            // $est2 = implode(", ", $telat)."\n";
-            // // var_dump('ini telat ---------------->',$est2);
-            // // echo'<br />';
-            // $sheet->setCellValue('E' . $row, $est2);
-            // $sheet->getStyle('E'.$row)->getAlignment()->setWrapText(true);
-
-            // $est4 = implode(", ", $lupa)."\n";
-            // // var_dump('ini lupa ------------------>', $est4);
-            // // echo'<br />';
-            // $sheet->setCellValue('G' . $row, $est4);
-            // $sheet->getStyle('G'.$row)->getAlignment()->setWrapText(true);
-
-            // $est = implode(", ", $alpa)."\n";
-            // // var_dump('ini alpa ------------------->', $est);
-            // // echo'<br />';
-            // $sheet->setCellValue('I' . $row, $est);
-            // $sheet->getStyle('I'.$row)->getAlignment()->setWrapText(true);
-
-            // if ($item->keterangan_izin == '-') {
-            //     $sheet->setCellValue('C' . $row, ''); // Jika keterangan_izin adalah "-", biarkan kolom kosong
-            // } else {
-            //     $sheet->setCellValue(
-            //         'C' . $row,
-            //         convDate($item->tanggal_absen)
-            //     );
-            // }
-            // $sheet->setCellValue('D' . $row, $item->keterangan_izin);
-
-            // if ($item->status_absen == 'Terlambat') {
-            //     $sheet->setCellValue(
-            //         'E' . $row,
-            //         convDate($item->tanggal_absen)
-            //     );
-            // } else {
-            //     $sheet->setCellValue('E' . $row, '');
-            // }
-            // $sheet->setCellValue('F' . $row, $selisih_format);
-
-            // if ($item->keterangan_izin == '-') {
-            //     $sheet->setCellValue('G' . $row, '');
-            //     $sheet->setCellValue('H' . $row, '');
-            //     $sheet->setCellValue('I' . $row, '');
-            //     $sheet->setCellValue('J' . $row, '');
-            // } else {
-            //     $sheet->setCellValue(
-            //         'G' . $row,
-            //         convDate($item->tanggal_absen)
-            //     );
-            //     $sheet->setCellValue('H' . $row, $item->status_absen);
-            //     $sheet->setCellValue(
-            //         'I' . $row,
-            //         convDate($item->tanggal_absen)
-            //     );
-            //     $sheet->setCellValue('J' . $row, $item->status_absen);
-            // }
-            $no++;
-            $row++;
+        if (!empty($telat)) {
+            $sheet->setCellValue('E' . $row, implode(",\n", $telat));
+            $sheet->setCellValue('F' . $row, 'Terlambat');
+            $sheet->getStyle('E' . $row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('F' . $row)->applyFromArray($style_telat);
+        } else {
+            $sheet->setCellValue('E' . $row, '');
+            $sheet->getStyle('F' . $row)->applyFromArray($style_telat);
         }
 
-        // Atur lebar kolom
-        $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->getColumnDimension('B')->setWidth(40);
-        $sheet->getColumnDimension('C')->setWidth(25);
-        $sheet->getColumnDimension('D')->setWidth(20);
-        $sheet->getColumnDimension('E')->setWidth(30);
-        $sheet->getColumnDimension('F')->setWidth(30);
-        $sheet->getColumnDimension('G')->setWidth(30);
-        $sheet->getColumnDimension('H')->setWidth(30);
-        $sheet->getColumnDimension('I')->setWidth(30);
-        $sheet->getColumnDimension('J')->setWidth(30);
+        if (!empty($lupa)) {
+            $sheet->setCellValue('G' . $row, implode(",\n", $lupa));
+            $sheet->setCellValue('H' . $row, 'Tidak Absen Pulang');
+            $sheet->getStyle('G' . $row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('H' . $row)->applyFromArray($style_lupa);
+        } else {
+            $sheet->setCellValue('G' . $row, '');
+            $sheet->getStyle('H' . $row)->applyFromArray($style_lupa);
+        }
 
-        // Atur tinggi baris secara otomatis
-        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        if (!empty($alpa)) {
+            $sheet->setCellValue('I' . $row, implode(",\n", $alpa));
+            $sheet->setCellValue('J' . $row, 'Tanpa Keterangan');
+            $sheet->getStyle('I' . $row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('J' . $row)->applyFromArray($style_alpa);
+        } else {
+            $sheet->setCellValue('I' . $row, '');
+            $sheet->getStyle('J' . $row)->applyFromArray($style_alpa);
+        }
 
-        // try {
-        // Atur orientasi dan judul halaman
-        $sheet
-            ->getPageSetup()
-            ->setOrientation(
-                \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
-            );
-        $sheet->setTitle('Rekap Simpel');
+        $sheet->getStyle('A' . $row . ':J' . $row)->applyFromArray($style_data);
 
-        // Set header untuk file Excel
-        header(
-            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        header(
-            'Content-Disposition: attachment; filename="REKAP BULANAN.xlsx"'
-        );
-        header('Cache-Control: max-age=0');
-
-        // Simpan file Excel dan tampilkan ke output
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
-        // } catch (\Throwable $th) {
-        //throw $th;
-        // var_dump($th);
-        // }
+        $no++;
+        $row++;
     }
 
+    // Sesuaikan lebar kolom otomatis
+    foreach (range('A', 'J') as $columnID) {
+        $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    }
+
+    // Pengaturan orientasi halaman
+    $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+    // Nama file unduhan
+    $filename = 'rekap-bulanan-' . date('Y-m-d-H-i-s') . '.xlsx';
+
+    // Header unduhan
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save('php://output');
+}
+
+
+
+  
     public function laporan_surat_lembur($id_lembur)
     {
         $this->load->library('mypdf');
@@ -2612,6 +2530,25 @@ class Admin extends CI_Controller
         }
 
         $this->mypdf->generate('/page/admin/laporan/laporan_lembur', $data);
+    }
+    
+    public function rekap_simple()
+    {
+        $user_id = $this->session->userdata('id');
+        $data['admin'] = $this->admin_model->getAdminByID($user_id);
+        $id_admin = $this->session->userdata('id_admin');
+        $bulan = $this->input->get('bulan');
+        $tahun = $this->input->get('tahun');
+
+        $data['absensi'] = $this->admin_model->get_all_karyawan(
+            $id_admin,
+            $bulan,
+            $tahun
+        );
+        usort($data['absensi'], function ($a, $b) {
+            return strtotime($b->tanggal_absen) - strtotime($a->tanggal_absen);
+        });
+        $this->load->view('page/admin/rekap/rekap_bulanan', $data);
     }
 }
 

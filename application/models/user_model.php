@@ -370,37 +370,29 @@ class User_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    // public function edit_user($id_user, $data)
-    // {
-    //     // Lakukan pembaruan data Admin
-    //     $this->db->where('id_user', $id_user);
-    //     $this->db->update('user', $data);
-    // }
-
     public function edit_user($id_user, $data)
-{
-    try {
-        // Lakukan pembaruan data User
-        $this->db->trans_start(); // Mulai transaksi database
+    {
+        try {
+            // Lakukan pembaruan data User
+            $this->db->trans_start(); // Mulai transaksi database
 
-        $this->db->where('id_user', $id_user);
-        $this->db->update('user', $data);
+            $this->db->where('id_user', $id_user);
+            $this->db->update('user', $data);
 
-        $this->db->trans_complete(); // Akhiri transaksi database
+            $this->db->trans_complete(); // Akhiri transaksi database
 
-        if ($this->db->trans_status() === FALSE) {
-            // Jika transaksi gagal, lakukan rollback
-            $this->db->trans_rollback();
-        } else {
-            // Jika transaksi berhasil, lakukan commit
-            $this->db->trans_commit();
+            if ($this->db->trans_status() === FALSE) {
+                // Jika transaksi gagal, lakukan rollback
+                $this->db->trans_rollback();
+            } else {
+                // Jika transaksi berhasil, lakukan commit
+                $this->db->trans_commit();
+            }
+        } catch (Exception $e) {
+            // Tangkap exception jika terjadi kesalahan
+            echo 'Error: ' . $e->getMessage();
         }
-    } catch (Exception $e) {
-        // Tangkap exception jika terjadi kesalahan
-        echo 'Error: ' . $e->getMessage();
     }
-}
-
 
     // Memperbarui gambar pengguna
     public function update_image($user_id, $new_image)
@@ -468,21 +460,8 @@ class User_model extends CI_Model
         return $query->row(); // Mengembalikan satu baris hasil query
     }
 
-    // public function updateStatusAbsenPulang($tanggal, $data)
-    // {
-    //     $this->db->update('absensi', $data);
-    //     return $this->db->affected_rows(); // Mengembalikan jumlah baris yang terpengaruh oleh query
-    // }
-
     public function updateStatusAbsenPulang($id_user, $tanggal, $data_pulang)
     {
-        // Debug: Menampilkan payload yang dikirimkan
-        // echo "Payload for UpdateStatusAbsenPulang:<br>";
-        // echo "ID User: $id_user<br>";
-        // echo "Tanggal: $tanggal<br>";
-        // echo "Data Pulang:<br>";
-        // var_dump($data_pulang);
-
         $this->db->where('id_user', $id_user);
         $this->db->where('tanggal_absen', $tanggal);
         $this->db->update('absensi', $data_pulang);
@@ -521,24 +500,18 @@ class User_model extends CI_Model
 
     public function hapus_cuti($id_cuti)
     {
-        // Misalnya, menggunakan query database untuk menghapus data cuti berdasarkan ID
-        // Gantilah bagian ini sesuai dengan struktur tabel dan kebutuhan aplikasi Anda
         $this->db->where('id_cuti', $id_cuti);
         $this->db->delete('cuti'); // Gantilah 'nama_tabel_organisasi' dengan nama tabel sebenarnya
     }
 
     public function hapus_lembur($id_lembur)
     {
-        // Misalnya, menggunakan query database untuk menghapus data lembur berdasarkan ID
-        // Gantilah bagian ini sesuai dengan struktur tabel dan kebutuhan aplikasi Anda
         $this->db->where('id_lembur', $id_lembur);
         $this->db->delete('lembur'); // Gantilah 'nama_tabel_organisasi' dengan nama tabel sebenarnya
     }
 
     public function cancel_permission($id_absensi)
     {
-        // Tambahkan logika pembatalan izin di sini
-        // Misalnya, ubah status izin menjadi "batal" dan keterangan izin menjadi "masuk kembali" di database
         $this->db->where('id_absensi', $id_absensi);
         $this->db->update('absensi', [
             'status' => 'batal',
@@ -556,7 +529,6 @@ class User_model extends CI_Model
             ->get($table);
     }
 
-    // Mendapatkan data absen berdasarkan tabel dan karyawan
     function get_absen($table, $id_user)
     {
         return $this->db
@@ -565,7 +537,6 @@ class User_model extends CI_Model
             ->get($table);
     }
 
-    // Mendapatkan data absen berdasarkan tabel dan karyawan
     function get_cuti($table, $id_user)
     {
         return $this->db->where('id_user', $id_user)->get($table);
@@ -732,6 +703,73 @@ class User_model extends CI_Model
             return $result->nama_jabatan;
         } else {
             return 'Jabatan Tidak Ditemukan'; // Atau kembalikan nilai default lainnya
+        }
+    }
+    
+    public function getShiftByIdUser($id_user)
+    {
+        $this->db->select('shift.*');
+        $this->db->from('user');
+        $this->db->join('shift', 'user.id_shift = shift.id_shift');
+        $this->db->where('user.id_user', $id_user);
+
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    
+    public function getJabatanByIdUser($id_user)
+    {
+        $this->db->select('jabatan.*');
+        $this->db->from('user');
+        $this->db->join('jabatan', 'user.id_jabatan = jabatan.id_jabatan');
+        $this->db->where('user.id_user', $id_user);
+
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+
+    public function cek_absen_alpa()
+    {
+        // Mengambil ID pengguna dari session
+        $id_user = $this->session->userdata('id');
+
+        // Mengatur zona waktu menjadi Asia/Jakarta dan mendapatkan tanggal saat ini
+        date_default_timezone_set('Asia/Jakarta');
+        $tanggal = date('Y-m-d');
+
+        // Memeriksa apakah pengguna sudah melakukan absen pada hari tersebut
+        $already_absent = $this->user_model->cek_absen_masuk($id_user, $tanggal);
+
+        // Jika pengguna belum melakukan absen pada hari tersebut
+        if (!$already_absent) {
+            // Data absensi untuk disimpan ke dalam database dengan status "Alpa"
+            $data = [
+                'id_user' => $id_user,
+                'tanggal_absen' => $tanggal,
+                'keterangan_izin' => '-',
+                'jam_masuk' => '00:00:00',
+                'foto_masuk' => '-',
+                'lokasi_masuk' => '-',
+                'keterangan_terlambat' => '-',
+                'jam_pulang' => '00:00:00',
+                'foto_pulang' => '-',
+                'lokasi_pulang' => '-',
+                'status' => 0,
+                'status_absen' => 'Alpa', // Menyimpan status absen sebagai "Alpa"
+            ];
+
+            // Menyisipkan data absensi ke dalam database
+            $inserted = $this->user_model->tambah_data('absensi', $data);
+
+            // Menampilkan pesan berhasil atau gagal kepada pengguna
+            if ($inserted) {
+                $this->session->set_flashdata('berhasil_absen', 'Berhasil Absen.');
+            } else {
+                $this->session->set_flashdata('gagal_absen', 'Gagal Absen. Silakan coba lagi.');
+            }
         }
     }
 }

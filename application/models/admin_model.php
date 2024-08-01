@@ -212,11 +212,11 @@ class Admin_model extends CI_Model
 
     public function getUserDetails($user_id)
     {
-        $this->db->where('id_user', $user_id); // Sesuaikan kolom yang merepresentasikan ID pengguna
-        $query = $this->db->get('user'); // Sesuaikan 'users' dengan nama tabel pengguna
+        $this->db->where('id_user', $user_id);
+        $query = $this->db->get('user');
 
         if ($query->num_rows() > 0) {
-            return $query->row(); // Mengembalikan satu baris data user
+            return $query->row();
         } else {
             return false; // Mengembalikan false jika tidak ada data ditemukan
         }
@@ -570,21 +570,29 @@ class Admin_model extends CI_Model
     }
 
     public function getKehadiranData($id_admin)
-    {
-        $query = $this->db
-            ->select(
-                'user.username, jabatan.id_jabatan, 
-                   COUNT(CASE WHEN absensi.status_absen = "Terlambat" THEN 1 END) AS jumlah_terlambat, 
-                   COUNT(CASE WHEN absensi.status_absen = "Lebih Awal" THEN 1 END) AS jumlah_lebih_awal'
-            )
-            ->from('user')
-            ->join('absensi', 'user.id_user = absensi.id_user', 'left') // Menggunakan left join agar semua user tetap ditampilkan
-            ->join('jabatan', 'user.id_jabatan = jabatan.id_jabatan') // Sesuaikan dengan kolom yang menunjukkan hubungan antara user dan jabatan
-            ->where('user.id_admin', $id_admin)
-            ->group_by('user.id_user'); // Mengelompokkan data berdasarkan id_user
+{
+    $query = $this->db
+        ->select(
+            'user.username, 
+            jabatan.id_jabatan, 
+            COUNT(absensi.id_absensi) AS total_absensi,
+            COUNT(CASE WHEN absensi.status_absen = "Terlambat" THEN 1 END) AS jumlah_terlambat, 
+            COUNT(CASE WHEN absensi.status_absen = "Lebih Awal" THEN 1 END) AS jumlah_lebih_awal'
+        )
+        ->from('user')
+        ->join('absensi', 'user.id_user = absensi.id_user', 'left')
+        ->join('jabatan', 'user.id_jabatan = jabatan.id_jabatan')
+        ->where('user.id_admin', $id_admin)
+        ->group_by('user.id_user')
+        ->order_by('(COUNT(CASE WHEN absensi.status_absen = "Lebih Awal" THEN 1 END) / COUNT(absensi.id_absensi))', 'DESC')
+        ->limit(5);
 
-        return $query->get()->result_array();
-    }
+    return $query->get()->result_array();
+}
+
+    
+
+
 
     // Mendapatkan data per hari berdasarkan tanggal
     public function getRekapHarian($tanggal, $id_admin)
@@ -739,19 +747,29 @@ class Admin_model extends CI_Model
         return $query->result();
     }
 
-    public function get_perkaryawan($admin_id, $user_id)
-    {
-        $this->db->select('absensi.*');
-        $this->db->from('absensi');
-        $this->db->join('user', 'user.id_user = absensi.id_user');
-        $this->db->join('admin', 'admin.id_admin = user.id_admin');
-        $this->db->where('admin.id_admin', $admin_id);
-        $this->db->where('user.id_user', $user_id);
-        $this->db->order_by('user.username', 'ASC');
+public function get_perkaryawan($admin_id, $user_id, $bulan = null, $tahun = null)
+{
+    $this->db->select('absensi.*');
+    $this->db->from('absensi');
+    $this->db->join('user', 'user.id_user = absensi.id_user');
+    $this->db->join('admin', 'admin.id_admin = user.id_admin');
+    $this->db->where('admin.id_admin', $admin_id);
+    $this->db->where('user.id_user', $user_id);
 
-        $query = $this->db->get();
-        return $query->result();
+    // Filter berdasarkan bulan dan tahun
+    if ($bulan && $tahun) {
+        $this->db->where('MONTH(absensi.tanggal_absen)', $bulan);
+        $this->db->where('YEAR(absensi.tanggal_absen)', $tahun);
     }
+
+    $this->db->order_by('absensi.tanggal_absen', 'ASC'); // Urutkan berdasarkan tanggal
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+
+
 
     public function get_all_karyawan($admin_id, $bulan, $tahun)
     {
@@ -777,7 +795,7 @@ class Admin_model extends CI_Model
             $result_array = $query->result_array();
             return $result_array;
         } else {
-            return [];
+            return []; 
         }
     }
 
@@ -857,10 +875,10 @@ class Admin_model extends CI_Model
         return $query->num_rows(); // Mengembalikan jumlah baris yang cocok dengan kondisi
     }
 
-    public function updateAdminPhoto($user_id, $data)
+    public function updateAdminPhoto($admin_id, $data)
     {
         $update_result = $this->db->update('admin', $data, [
-            'id_admin' => $user_id,
+            'id_admin' => $admin_id,
         ]);
 
         return $update_result ? true : false;
@@ -1275,16 +1293,126 @@ class Admin_model extends CI_Model
         $this->db->delete('absensi');
         $this->db->where('id_user', $id_user);
         $this->db->delete('cuti');
+        $this->db->where('id_user', $id_user);
+        $this->db->delete('lembur');
     }
 
-    public function getUserByID($id)
+    public function tambah_absen_alpa()
     {
-        $this->db->select('*');
-        $this->db->from('admin');
-        $this->db->where('id_admin', $id);
+        // Mengatur zona waktu menjadi Asia/Jakarta dan mendapatkan tanggal saat ini
+        date_default_timezone_set('Asia/Jakarta');
+        $tanggal = date('Y-m-d');
+
+        // Mendapatkan daftar semua pengguna
+        $all_users = $this->db->get('user')->result();
+
+        // Loop melalui semua pengguna dan tambahkan absen "Alpa" jika belum melakukan absen pada hari itu
+        foreach ($all_users as $user) {
+            $id_user = $user->id_user;
+
+            // Memeriksa apakah pengguna sudah melakukan absen pada hari tersebut
+            $already_absent = $this->user_model->cek_absen_masuk($id_user, $tanggal);
+
+            // Jika pengguna belum melakukan absen pada hari tersebut
+            if (!$already_absent) {
+                // Data absensi untuk disimpan ke dalam database dengan status "Alpa"
+                $data = [
+                    'id_user' => $id_user,
+                    'tanggal_absen' => $tanggal,
+                    'keterangan_izin' => '-',
+                    'jam_masuk' => '00:00:00',
+                    'foto_masuk' => '-',
+                    'lokasi_masuk' => '-',
+                    'keterangan_terlambat' => '-',
+                    'jam_pulang' => '00:00:00',
+                    'foto_pulang' => '-',
+                    'lokasi_pulang' => '-',
+                    'status' => 0,
+                    'status_absen' => 'Alpa', // Menyimpan status absen sebagai "Alpa"
+                ];
+
+                // Menyisipkan data absensi ke dalam database
+                $this->db->insert('absensi', $data);
+            }
+        }
+    }
+
+    // public function get_early_attendance_by_user($id_admin)
+    // {
+    //     $this->db->select(
+    //         'u.username, j.nama_jabatan, COUNT(*) as early_attendance_count'
+    //     );
+    //     $this->db->from('absensi a');
+    //     $this->db->join('user u', 'a.id_user = u.id_user', 'left');
+    //     $this->db->join('jabatan j', 'u.id_jabatan = j.id_jabatan', 'left');
+    //     $this->db->join('admin adm', 'u.id_admin = adm.id_admin', 'left');
+    //     $this->db->where('adm.id_admin', $id_admin);
+    //     $this->db->where('a.status_absen', 'Lebih Awal');
+    //     $this->db->group_by('u.username, j.nama_jabatan');
+    //     $this->db->order_by('early_attendance_count', 'DESC');
+    //     return $this->db->get()->result_array();
+    // }
+
+    public function get_late_attendance_by_user($admin_id) {
+    $this->db->select('u.username, COUNT(a.id_absensi) as late_attendance_count');
+    $this->db->from('absensi a');
+    $this->db->join('user u', 'a.id_user = u.id_user'); // Pastikan kolom 'id_user' sesuai dengan nama kolom di tabel user
+    $this->db->join('admin adm', 'u.id_admin = adm.id_admin', 'left');
+    $this->db->where('adm.id_admin', $admin_id); // Ganti '$id_admin' dengan '$admin_id'
+    $this->db->where('a.status_absen', 'Terlambat');
+    $this->db->group_by('a.id_user'); // Ganti 'a.id_user' dengan 'a.user_id'
+    $this->db->order_by('late_attendance_count', 'DESC');
+    $this->db->limit(5);
+    $query = $this->db->get();
+    return $query->result_array();
+}
+public function getKehadiranDataPage($id_admin)
+{
+    $query = $this->db
+        ->select(
+            'user.username, 
+            jabatan.id_jabatan, 
+            COUNT(absensi.id_absensi) AS total_absensi,
+            COUNT(CASE WHEN absensi.status_absen = "Terlambat" THEN 1 END) AS jumlah_terlambat, 
+            COUNT(CASE WHEN absensi.status_absen = "Lebih Awal" THEN 1 END) AS jumlah_lebih_awal'
+        )
+        ->from('user')
+        ->join('absensi', 'user.id_user = absensi.id_user', 'left')
+        ->join('jabatan', 'user.id_jabatan = jabatan.id_jabatan')
+        ->where('user.id_admin', $id_admin)
+        ->group_by('user.id_user')
+        ->order_by('(COUNT(CASE WHEN absensi.status_absen = "Lebih Awal" THEN 1 END) / COUNT(absensi.id_absensi))', 'DESC');
+
+    return $query->get()->result_array();
+}
+
+public function get_perkaryawan_by_bulan($admin_id, $user_id, $bulan, $tahun)
+{
+    $this->db->select('absensi.*');
+    $this->db->from('absensi');
+    $this->db->join('user', 'user.id_user = absensi.id_user');
+    $this->db->join('admin', 'admin.id_admin = user.id_admin');
+    $this->db->where('admin.id_admin', $admin_id);
+    $this->db->where('user.id_user', $user_id);
+    $this->db->where('MONTH(absensi.tanggal_absen)', $bulan);
+    $this->db->where('YEAR(absensi.tanggal_absen)', $tahun);
+    $this->db->order_by('user.username', 'ASC');
+
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function getShiftByIdUser($id_user)
+    {
+        $this->db->select('shift.*');
+        $this->db->from('user');
+        $this->db->join('shift', 'user.id_shift = shift.id_shift');
+        $this->db->where('user.id_user', $id_user);
+
         $query = $this->db->get();
 
-        return $query->row();
+        return $query->result();
     }
+
 }
 ?>
